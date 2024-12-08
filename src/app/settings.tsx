@@ -11,4 +11,8 @@ const Settings = () => {
 
 export default Settings;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+});

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   buttons: {
-    width: "16%",
+    width: "20%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
