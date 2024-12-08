@@ -7,15 +7,13 @@ const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
   return (
     <Link href={`/teachers/${teacher.id}`} asChild>
       <Pressable style={styles.item}>
-        <View>
-          <Image source={teacher.avatarImage} style={styles.avatar} />
-          <View style={styles.names}>
-            <Text style={styles.name}>{teacher.Name}</Text>
-            <Text style={styles.surname}>{teacher.Surname}</Text>
-          </View>
-          <Text>5.0</Text>
-          <Text>3 lessons</Text>
+        <Image source={teacher.avatarImage} style={styles.avatar} />
+        <View style={styles.names}>
+          <Text style={styles.name}>{teacher.Name}</Text>
+          <Text style={styles.surname}>{teacher.Surname}</Text>
         </View>
+        <Text>5.0</Text>
+        <Text>3 lessons</Text>
       </Pressable>
     </Link>
   );
