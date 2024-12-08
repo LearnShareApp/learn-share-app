@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Redirect, useLocalSearchParams } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams } from "expo-router";
 import { TEACHERS } from "../../../assets/teachers";
 
 const TeacherProfile = () => {
@@ -12,6 +12,7 @@ const TeacherProfile = () => {
 
   return (
     <View>
+      <Stack.Screen options={{ title: `${teacher.Name} ${teacher.Surname}` }} />
       <Text>{teacher.Name}</Text>
     </View>
   );

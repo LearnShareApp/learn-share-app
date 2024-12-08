@@ -22,4 +22,18 @@ export const TEACHERS: Teacher[] = [
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
   },
+  {
+    id: 4,
+    Name: "Grigorij",
+    Surname: "Gusev",
+    phoneNumber: "676482764",
+    avatarImage: require("./icon.png"),
+  },
+  {
+    id: 5,
+    Name: "Grigorij",
+    Surname: "Gusev",
+    phoneNumber: "676482764",
+    avatarImage: require("./icon.png"),
+  },
 ];

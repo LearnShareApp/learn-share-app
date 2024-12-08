@@ -36,19 +36,24 @@ const Home = () => {
         <View style={styles.infoStats}>
           <View style={styles.infoSection}>
             <Text style={styles.infoNumber}>24</Text>
-            <Text style={{ color: "#888" }}>finished</Text>
+            <Text style={{ color: "#888", width: 100, textAlign: "center" }}>
+              successfully finished
+            </Text>
           </View>
-          <View style={styles.infoLine} />
           <View style={styles.infoSection}>
             <Text style={styles.infoNumber}>3</Text>
-            <Text style={{ color: "#888" }}>approving</Text>
+            <Text style={{ color: "#888", width: 100, textAlign: "center" }}>
+              need to be approved
+            </Text>
           </View>
-          <View style={styles.infoLine} />
           <View style={styles.infoSection}>
             <Text style={styles.infoNumber}>2</Text>
-            <Text style={{ color: "#888" }}>waiting</Text>
+            <Text style={{ color: "#888", width: 100, textAlign: "center" }}>
+              waiting for you to join
+            </Text>
           </View>
         </View>
+        <View style={styles.nextLessons}></View>
       </View>
       <Text style={styles.sectionText}>Your previous teachers:</Text>
       <FlatList
@@ -89,19 +94,19 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 8,
     paddingHorizontal: 16,
-    paddingVertical: 4,
+    paddingVertical: 8,
+    gap: 8,
   },
   infoStats: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
+    justifyContent: "space-around",
     paddingVertical: 4,
   },
   infoSection: {
     alignItems: "center",
   },
   infoNumber: {
-    fontSize: 32,
+    fontSize: 24,
   },
   infoLine: {
     width: 1,
@@ -111,6 +116,12 @@ const styles = StyleSheet.create({
   sectionText: {
     paddingLeft: 8,
     fontSize: 18,
+  },
+  nextLessons: {
+    width: "100%",
+    height: 100,
+    backgroundColor: "#888",
+    borderRadius: 12,
   },
   listContainer: {
     gap: 4,
