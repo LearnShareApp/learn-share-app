@@ -5,9 +5,9 @@ import { Link } from "expo-router";
 
 const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
   return (
-    <Link href={`/teachers/${teacher.id}`} style={styles.item}>
-      <Pressable>
-        <View style={styles.item}>
+    <Link href={`/teachers/${teacher.id}`} asChild>
+      <Pressable style={styles.item}>
+        <View>
           <Image source={teacher.avatarImage} style={styles.avatar} />
           <View style={styles.names}>
             <Text style={styles.name}>{teacher.Name}</Text>
@@ -25,13 +25,11 @@ export default TeacherListItem;
 
 const styles = StyleSheet.create({
   item: {
-    flexDirection: "row",
     backgroundColor: "white",
     width: "100%",
     paddingHorizontal: 8,
     paddingVertical: 4,
-    gap: 8,
-    borderRadius: 4,
+    borderRadius: 8,
     minHeight: 100,
   },
   avatar: {

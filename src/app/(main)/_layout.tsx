@@ -35,7 +35,31 @@ const TabsLayout = () => {
             },
           }}
         />
-        <Tabs.Screen name="profile" options={{ headerShown: false }} />
+        <Tabs.Screen
+          name="search"
+          options={{
+            title: "Main",
+            tabBarIcon(props) {
+              return <TabBarIcon {...props} name="search" />;
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="chats"
+          options={{
+            tabBarIcon(props) {
+              return <TabBarIcon {...props} name="comment" />;
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            tabBarIcon(props) {
+              return <TabBarIcon {...props} name="user" />;
+            },
+          }}
+        />
       </Tabs>
     </SafeAreaView>
   );
