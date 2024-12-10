@@ -16,6 +16,6 @@ npm i
 
 ```npm
 npx expo start
-or
+//or
 npx expo start -c
 ```

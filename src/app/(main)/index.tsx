@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 8,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 12,
     gap: 8,
   },
   infoStats: {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   nextLessons: {
     width: "100%",
     height: 100,
-    backgroundColor: "#888",
+    backgroundColor: "#eee",
     borderRadius: 12,
   },
   listContainer: {
