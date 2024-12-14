@@ -4,15 +4,17 @@ import HeaderElement from "../../components/header-element";
 
 const Profile = () => {
   return (
-    <View style={styles.container}>
+    <>
       <HeaderElement
         text="I am"
         requireCalendar={false}
         requireChanges
         requireSettings
       />
-      <Text>Profile</Text>
-    </View>
+      <View style={styles.container}>
+        <Text>Profile</Text>
+      </View>
+    </>
   );
 };
 

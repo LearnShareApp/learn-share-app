@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 const Chats = () => {
   return (
     <View>
-      <Text>Chats</Text>
+      <FlatList data={[3, 3, 3]} renderItem={(item) => <Text>item</Text>} />
     </View>
   );
 };

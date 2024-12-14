@@ -14,55 +14,66 @@ import HeaderElement from "../../components/header-element";
 
 const Home = () => {
   return (
-    <View style={styles.container}>
+    <>
       <HeaderElement
-        text="Hello, Eliot!"
+        text="Hello, Elliot!"
         requireCalendar
         requireSettings
         requireChanges={false}
       />
-      <Link href="/search" asChild>
-        <Pressable style={styles.search}>
-          <Text style={styles.searchText}>Try to find teacher</Text>
-          <FontAwesome
-            size={24}
-            name="arrow-right"
-            style={{ color: "#C9A977" }}
+      <ScrollView>
+        <View style={styles.container}>
+          <Link href="/search" asChild>
+            <Pressable style={styles.search}>
+              <Text style={styles.searchText}>Try to find teacher</Text>
+              <FontAwesome
+                size={24}
+                name="arrow-right"
+                style={{ color: "#C9A977" }}
+              />
+            </Pressable>
+          </Link>
+          <View style={styles.info}>
+            <Text>Your lessons</Text>
+            <View style={styles.infoStats}>
+              <View style={styles.infoSection}>
+                <Text style={styles.infoNumber}>24</Text>
+                <Text
+                  style={{ color: "#888", width: 100, textAlign: "center" }}
+                >
+                  successfully finished
+                </Text>
+              </View>
+              <View style={styles.infoSection}>
+                <Text style={styles.infoNumber}>3</Text>
+                <Text
+                  style={{ color: "#888", width: 100, textAlign: "center" }}
+                >
+                  need to be approved
+                </Text>
+              </View>
+              <View style={styles.infoSection}>
+                <Text style={styles.infoNumber}>2</Text>
+                <Text
+                  style={{ color: "#888", width: 100, textAlign: "center" }}
+                >
+                  waiting for you to join
+                </Text>
+              </View>
+            </View>
+            <View style={styles.nextLessons}></View>
+          </View>
+          <Text style={styles.sectionText}>Your previous teachers:</Text>
+          <FlatList
+            data={TEACHERS}
+            renderItem={({ item }) => <TeacherListItem teacher={item} />}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={styles.listContainer}
+            stickyHeaderHiddenOnScroll
           />
-        </Pressable>
-      </Link>
-      <View style={styles.info}>
-        <Text>Your lessons</Text>
-        <View style={styles.infoStats}>
-          <View style={styles.infoSection}>
-            <Text style={styles.infoNumber}>24</Text>
-            <Text style={{ color: "#888", width: 100, textAlign: "center" }}>
-              successfully finished
-            </Text>
-          </View>
-          <View style={styles.infoSection}>
-            <Text style={styles.infoNumber}>3</Text>
-            <Text style={{ color: "#888", width: 100, textAlign: "center" }}>
-              need to be approved
-            </Text>
-          </View>
-          <View style={styles.infoSection}>
-            <Text style={styles.infoNumber}>2</Text>
-            <Text style={{ color: "#888", width: 100, textAlign: "center" }}>
-              waiting for you to join
-            </Text>
-          </View>
         </View>
-        <View style={styles.nextLessons}></View>
-      </View>
-      <Text style={styles.sectionText}>Your previous teachers:</Text>
-      <FlatList
-        data={TEACHERS}
-        renderItem={({ item }) => <TeacherListItem teacher={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
-      />
-    </View>
+      </ScrollView>
+    </>
   );
 };
 
@@ -125,5 +136,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 4,
+    overflow: "visible",
   },
 });
