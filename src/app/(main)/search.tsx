@@ -7,7 +7,11 @@ import { useLocalSearchParams } from "expo-router";
 
 const Search = () => {
   const [text, onChangeText] = React.useState("");
-  const teachers = TEACHERS.filter((teacher) => teacher.Name.includes(text));
+  const teachers = TEACHERS.filter((teacher) =>
+    `${teacher.Name.toLowerCase()} ${teacher.Surname.toLowerCase()}`.includes(
+      text.toLowerCase()
+    )
+  );
 
   return (
     <View style={styles.container}>
