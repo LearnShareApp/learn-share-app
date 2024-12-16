@@ -27,11 +27,17 @@ const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
             style={styles.skillsList}
             renderItem={(item) => <SkillBadge text={item.item} />}
           />
-          <Text>3 lessons</Text>
         </View>
         <View style={styles.grades}>
-          <FontAwesome size={24} name="star" style={{ color: "#C9A977" }} />
-          <Text>5.0</Text>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            {teacher.grade.toFixed(1)}{" "}
+            <FontAwesome size={24} name="star" style={{ color: "#C9A977" }} />
+          </Text>
           <Text>3 lessons</Text>
         </View>
       </Pressable>
@@ -59,6 +65,7 @@ const styles = StyleSheet.create({
   },
   teacherInfo: {
     flex: 1,
+    gap: 8,
   },
   names: {
     flexDirection: "row",

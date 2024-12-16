@@ -8,6 +8,7 @@ export const TEACHERS: Teacher[] = [
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
     skills: ["programming"],
+    grade: 5.0,
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ export const TEACHERS: Teacher[] = [
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
     skills: ["programming", "cooking"],
+    grade: 4.2,
   },
   {
     id: 3,
@@ -24,6 +26,7 @@ export const TEACHERS: Teacher[] = [
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
     skills: ["programming", "guitar"],
+    grade: 4.8,
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ export const TEACHERS: Teacher[] = [
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
     skills: ["cooking", "guitar"],
+    grade: 3.9,
   },
   {
     id: 5,
@@ -40,5 +44,6 @@ export const TEACHERS: Teacher[] = [
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
     skills: ["game-dev", "guitar"],
+    grade: 4.5,
   },
 ];

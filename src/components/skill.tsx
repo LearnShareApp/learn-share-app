@@ -14,11 +14,13 @@ export default SkillBadge;
 const styles = StyleSheet.create({
   skillContainer: {
     backgroundColor: "#FFDFAF",
-    padding: 4,
+    padding: 8,
     borderRadius: 4,
+    flexShrink: 1,
   },
   text: {
-    color: "#555",
+    textAlign: "center",
+    color: "#444",
     fontSize: 12,
   },
 });

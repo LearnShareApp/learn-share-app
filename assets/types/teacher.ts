@@ -7,4 +7,5 @@ export type Teacher = {
   phoneNumber: string;
   avatarImage: ImageSourcePropType;
   skills: string[];
+  grade: number;
 };
