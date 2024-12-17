@@ -1,10 +1,11 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
+import FontProvider from "../providers/FontProvider";
 
 export default function RootLayout() {
   return (
-    <>
+    <FontProvider>
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       <Stack>
         <Stack.Screen
@@ -20,6 +21,6 @@ export default function RootLayout() {
           options={{ headerShown: true, title: "Settings" }}
         />
       </Stack>
-    </>
+    </FontProvider>
   );
 }

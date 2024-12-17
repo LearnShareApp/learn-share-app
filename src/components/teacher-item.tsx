@@ -6,7 +6,6 @@ import {
   Text,
   View,
 } from "react-native";
-import React from "react";
 import { Teacher } from "../../assets/types/teacher";
 import { Link } from "expo-router";
 import SkillBadge from "./skill";
