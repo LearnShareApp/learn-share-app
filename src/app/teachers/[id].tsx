@@ -6,6 +6,7 @@ import SkillBadge from "../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
 import { useVideoPlayer, VideoView  } from "expo-video";
 import { useEvent } from "expo";
+import Line from "../../components/line";
 
 
 const TeacherProfile = () => {
@@ -32,23 +33,30 @@ const TeacherProfile = () => {
         <View style={styles.contentContainer}>
           <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
         </View>
-        <View style={styles.white}>
-          <Image source={teacher.avatarImage} style={styles.image}/>
-          <View style={styles.teacherInfo}>
-            <Text>{teacher.Name} {teacher.Surname}</Text>
-            <FlatList
-              data={teacher.skills}
-              style={styles.skillsList}
-              renderItem={(item) => <SkillBadge text={item.item} />}
-            />
+        <View style={{paddingHorizontal: 16, gap: 8}}>
+          <View style={[styles.white, styles.mainCard]}>
+            <Image source={teacher.avatarImage} style={styles.image}/>
+            <View style={styles.teacherInfo}>
+              <Text>{teacher.Name} {teacher.Surname}</Text>
+              <View style={{flexDirection: 'row', gap: 8, flexWrap: 'wrap'}}>
+                {teacher.skills.map((item) => <SkillBadge text={item} />)}
+              </View>
+              
+            </View>
+            <View>
+              <Link href={'/report'} asChild>
+                <Pressable style={{ width: 40, height: 40, alignItems: 'center' }}>
+                  <FontAwesome size={24} name="exclamation" style={{ color: "#C9A977" }} />
+                </Pressable>
+              </Link>
+            </View>
           </View>
-          <View>
-            <Link href={'/report'} asChild>
-              <Pressable style={{ width: 40, height: 40, alignItems: 'center' }}>
-                <FontAwesome size={24} name="exclamation" style={{ color: "#C9A977" }} />
-              </Pressable>
-            </Link>
+          <View style={styles.white}>
+            <Text style={{ fontSize: 18}}>About me:</Text>
+            <Line />
+            <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat repellat commodi harum voluptatem inventore nemo. Non pariatur, repellendus cum saepe, quo distinctio quis unde perferendis perspiciatis quaerat animi, cumque tenetur.</Text>
           </View>
+
         </View>
       </ScrollView>
       
@@ -69,10 +77,12 @@ const styles = StyleSheet.create({
   white: {
     backgroundColor: 'white',
     borderRadius: 8,
-    flexDirection: 'row',
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  mainCard:{
+    flexDirection: 'row',
   },
   image: {
     width: 64,

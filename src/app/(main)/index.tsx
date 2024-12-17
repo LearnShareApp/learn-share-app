@@ -11,6 +11,7 @@ import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import HeaderElement from "../../components/header-element";
+import Line from "../../components/line";
 
 const Home = () => {
   return (
@@ -35,6 +36,7 @@ const Home = () => {
           </Link>
           <View style={styles.info}>
             <Text>Your lessons</Text>
+            <Line />
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
                 <Text style={styles.infoNumber}>24</Text>

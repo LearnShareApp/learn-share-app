@@ -11,6 +11,7 @@ import * as Clipboard from "expo-clipboard";
 import HeaderElement from "../../components/header-element";
 import { FontAwesome } from "@expo/vector-icons";
 import SkillBadge from "../../components/skill";
+import Line from "../../components/line";
 
 const Profile = () => {
   const copyToClipboard = async () => {
@@ -42,7 +43,7 @@ const Profile = () => {
             <Text style={{ width: "80%", fontSize: 16 }}>
               Studying progress
             </Text>
-            <View style={styles.line} />
+            <Line />
             <View style={styles.infoSections}>
               <View style={styles.infoSection}>
                 <Text style={{ textAlign: "center" }}>Hours of studying</Text>
@@ -56,7 +57,7 @@ const Profile = () => {
               </View>
             </View>
             <Text>Skills you've been learning:</Text>
-            <View style={styles.line} />
+            <Line />
             <View style={styles.skillList}>
               <SkillBadge text="programming" />
               <SkillBadge text="cooking" />
@@ -66,7 +67,7 @@ const Profile = () => {
 
           <View style={[styles.object, styles.huge]}>
             <Text style={{ width: "80%", fontSize: 16 }}>Your Wallet</Text>
-            <View style={styles.line} />
+            <Line />
             <Text style={{ fontSize: 10 }}>Ballance</Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -166,11 +167,6 @@ const styles = StyleSheet.create({
   },
   huge: {
     gap: 8,
-  },
-  line: {
-    width: "100%",
-    height: 1,
-    backgroundColor: "#ddd",
   },
   infoSections: {
     flexDirection: "row",
