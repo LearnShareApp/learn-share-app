@@ -1,13 +1,23 @@
-import { Button, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import { Link, Redirect, Stack, useLocalSearchParams } from "expo-router";
 import { TEACHERS } from "../../../assets/teachers";
 import SkillBadge from "../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
-import { useVideoPlayer, VideoView  } from "expo-video";
+import { useVideoPlayer, VideoView } from "expo-video";
 import { useEvent } from "expo";
 import Line from "../../components/line";
-
+import ReviewItem from "../../components/review-item";
+import { REVIEWS } from "../../../assets/reviews";
 
 const TeacherProfile = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,50 +26,93 @@ const TeacherProfile = () => {
 
   if (!teacher) return <Redirect href="/" />;
 
-  const videoSource =
-  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+  const reviews = REVIEWS.filter((review) => review.teacherId === Number(id));
 
-  const player = useVideoPlayer(videoSource, player => {
+  const videoSource =
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+  const player = useVideoPlayer(videoSource, (player) => {
     player.loop = false;
     player.play();
   });
 
-  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  });
 
   return (
     <View>
       <Stack.Screen options={{ title: `${teacher.Name} ${teacher.Surname}` }} />
       <ScrollView>
-        <View style={styles.contentContainer}>
-          <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
-        </View>
-        <View style={{paddingHorizontal: 16, gap: 8}}>
+        <View style={{ paddingHorizontal: 16, gap: 16 }}>
+          <View style={styles.contentContainer}>
+            <VideoView
+              style={styles.video}
+              player={player}
+              allowsFullscreen
+              allowsPictureInPicture
+            />
+          </View>
           <View style={[styles.white, styles.mainCard]}>
-            <Image source={teacher.avatarImage} style={styles.image}/>
+            <Image source={teacher.avatarImage} style={styles.image} />
             <View style={styles.teacherInfo}>
-              <Text>{teacher.Name} {teacher.Surname}</Text>
-              <View style={{flexDirection: 'row', gap: 8, flexWrap: 'wrap'}}>
-                {teacher.skills.map((item) => <SkillBadge text={item} />)}
+              <Text>
+                {teacher.Name} {teacher.Surname}
+              </Text>
+              <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+                {teacher.skills.map((item) => (
+                  <SkillBadge text={item} key={item} />
+                ))}
               </View>
-              
-            </View>
-            <View>
-              <Link href={'/report'} asChild>
-                <Pressable style={{ width: 40, height: 40, alignItems: 'center' }}>
-                  <FontAwesome size={24} name="exclamation" style={{ color: "#C9A977" }} />
-                </Pressable>
-              </Link>
             </View>
           </View>
           <View style={styles.white}>
-            <Text style={{ fontSize: 18}}>About me:</Text>
+            <Text style={{ fontSize: 18 }}>About me:</Text>
             <Line />
-            <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat repellat commodi harum voluptatem inventore nemo. Non pariatur, repellendus cum saepe, quo distinctio quis unde perferendis perspiciatis quaerat animi, cumque tenetur.</Text>
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat
+              repellat commodi harum voluptatem inventore nemo. Non pariatur,
+              repellendus cum saepe, quo distinctio quis unde perferendis
+              perspiciatis quaerat animi, cumque tenetur.
+            </Text>
           </View>
-
+          <View style={[styles.white, styles.rate]}>
+            <View style={styles.rates}>
+              <Text style={{ color: "#C9A977" }}>
+                <FontAwesome size={18} name="star" style={{ color: "gold" }} />{" "}
+                {teacher.grade.toFixed(1)}
+              </Text>
+              <Text style={{ color: "#777" }}>rate</Text>
+            </View>
+            <View style={styles.rates}>
+              <Text>
+                <FontAwesome
+                  size={18}
+                  name="graduation-cap"
+                  style={{ color: "#ccc" }}
+                />{" "}
+                1345
+              </Text>
+              <Text style={{ color: "#777" }}>lessons</Text>
+            </View>
+            <View style={styles.rates}>
+              <Text>
+                <FontAwesome size={18} name="user" style={{ color: "#ccc" }} />{" "}
+                234
+              </Text>
+              <Text style={{ color: "#777" }}>students</Text>
+            </View>
+          </View>
+          <Text style={{ paddingHorizontal: 16, fontSize: 18 }}>
+            Reviews ({reviews.length})
+          </Text>
+          <FlatList
+            data={reviews}
+            renderItem={({ item }) => <ReviewItem review={item} />}
+            keyExtractor={(item) => item.id.toString()}
+          />
         </View>
       </ScrollView>
-      
     </View>
   );
 };
@@ -68,21 +121,22 @@ export default TeacherProfile;
 
 const styles = StyleSheet.create({
   contentContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   video: {
-    width: '100%',
-    height: 200,
+    width: "100%",
+    height: 180,
+    // borderRadius: 16,
   },
   white: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  mainCard:{
-    flexDirection: 'row',
+  mainCard: {
+    flexDirection: "row",
   },
   image: {
     width: 64,
@@ -95,6 +149,15 @@ const styles = StyleSheet.create({
   skillsList: {
     gap: 5,
     flexDirection: "row",
-    width: '100%',
+    width: "100%",
+  },
+  rate: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "space-around",
+  },
+  rates: {
+    alignItems: "center",
   },
 });
