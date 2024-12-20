@@ -36,15 +36,15 @@ const TeacherProfile = () => {
     player.play();
   });
 
-  const { isPlaying } = useEvent(player, "playingChange", {
-    isPlaying: player.playing,
-  });
+  // const { isPlaying } = useEvent(player, "playingChange", {
+  //   isPlaying: player.playing,
+  // });
 
   return (
     <View>
       <Stack.Screen options={{ title: `${teacher.Name} ${teacher.Surname}` }} />
       <ScrollView>
-        <View style={{ paddingHorizontal: 16, gap: 16 }}>
+        <View style={{ paddingHorizontal: 16, gap: 16, paddingBottom: 16 }}>
           <View style={styles.contentContainer}>
             <VideoView
               style={styles.video}
@@ -110,6 +110,7 @@ const TeacherProfile = () => {
             data={reviews}
             renderItem={({ item }) => <ReviewItem review={item} />}
             keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={{ gap: 8 }}
           />
         </View>
       </ScrollView>
@@ -126,7 +127,6 @@ const styles = StyleSheet.create({
   video: {
     width: "100%",
     height: 180,
-    // borderRadius: 16,
   },
   white: {
     backgroundColor: "white",
