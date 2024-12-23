@@ -13,7 +13,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
           <Text>{review.userId}</Text>
         </View>
         <View style={styles.horizontal}>
-          <Text>{review.grade}</Text>
+          <Text>{review.grade.toFixed(1)}</Text>
           <FontAwesome size={18} name="star" style={{ color: "gold" }} />
         </View>
       </View>
