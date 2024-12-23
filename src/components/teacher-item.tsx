@@ -35,7 +35,7 @@ const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
             }}
           >
             {teacher.grade.toFixed(1)}{" "}
-            <FontAwesome size={24} name="star" style={{ color: "#C9A977" }} />
+            <FontAwesome size={24} name="star" style={{ color: "gold" }} />
           </Text>
           <Text>3 lessons</Text>
         </View>
