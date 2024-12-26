@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 import FontProvider from "../providers/FontProvider";
 import { ToastProvider } from "react-native-toast-notifications";
 

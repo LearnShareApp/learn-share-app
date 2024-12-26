@@ -35,7 +35,9 @@
           "supportsPictureInPicture": true
         }
       ],
-      "expo-font"
+      "expo-font",
+      "@livekit/react-native-expo-plugin",
+      "@config-plugins/react-native-webrtc"
     ],
     "extra": {
       "router": {

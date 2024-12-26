@@ -63,7 +63,11 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={styles.nextLessons}></View>
+            <View style={styles.nextLessons}>
+              <Link href="/rooms/" asChild>
+                <Text>Go toooo</Text>
+              </Link>
+            </View>
           </View>
           <Text style={styles.sectionText}>Your previous teachers:</Text>
           <FlatList
