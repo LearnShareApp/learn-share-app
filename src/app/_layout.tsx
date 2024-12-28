@@ -19,6 +19,10 @@ export default function RootLayout() {
             options={{ headerShown: false, title: "auth" }}
           />
           <Stack.Screen
+            name="rooms"
+            options={{ headerShown: true, title: "Your Lessons" }}
+          />
+          <Stack.Screen
             name="settings"
             options={{ headerShown: true, title: "Settings" }}
           />
