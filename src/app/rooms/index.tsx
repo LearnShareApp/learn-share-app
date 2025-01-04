@@ -6,7 +6,11 @@ import LessonItem from "../../components/lesson-item";
 const Rooms = () => {
   return (
     <View style={styles.container}>
-      <FlatList data={[3, 3, 3]} renderItem={(item) => <LessonItem />} />
+      <FlatList
+        data={[3, 3, 3]}
+        renderItem={(item) => <LessonItem />}
+        columnWrapperStyle={{ gap: 8 }}
+      />
     </View>
   );
 };
