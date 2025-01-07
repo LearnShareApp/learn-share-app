@@ -70,6 +70,11 @@ const Home = () => {
             </View>
           </View>
           <Text style={styles.sectionText}>Your previous teachers:</Text>
+          {/* <View style={styles.listContainer}>
+            {TEACHERS.map((teacher) => (
+              <TeacherListItem teacher={teacher} key={teacher.id} />
+            ))}
+          </View> */}
           <FlatList
             data={TEACHERS}
             renderItem={({ item }) => <TeacherListItem teacher={item} />}

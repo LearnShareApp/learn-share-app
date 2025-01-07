@@ -2,14 +2,15 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Link, Stack } from "expo-router";
 import LessonItem from "../../components/lesson-item";
+import { LESSONS } from "../../../assets/lessons";
 
 const Rooms = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={[3, 3, 3]}
-        renderItem={(item) => <LessonItem />}
-        columnWrapperStyle={{ gap: 8 }}
+        data={LESSONS}
+        renderItem={(item) => <LessonItem lesson={item.item} />}
+        contentContainerStyle={{ gap: 8 }}
       />
     </View>
   );
