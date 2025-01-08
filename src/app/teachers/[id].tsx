@@ -36,10 +36,6 @@ const TeacherProfile = () => {
     player.play();
   });
 
-  // const { isPlaying } = useEvent(player, "playingChange", {
-  //   isPlaying: player.playing,
-  // });
-
   return (
     <View>
       <Stack.Screen options={{ title: `${teacher.Name} ${teacher.Surname}` }} />

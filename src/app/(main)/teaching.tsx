@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 const Teaching = () => {
   return (
     <View style={styles.container}>
-      <Text>Want not only to be teached?</Text>
+      <Text>You are not a teacher, but you can become one</Text>
       <Link href={"/"} asChild>
         <Pressable style={styles.btn}>
           <Text style={styles.text}>Start sharing my skills</Text>

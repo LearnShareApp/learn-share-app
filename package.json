@@ -35,6 +35,8 @@
     "react-native-screens": "~4.1.0",
     "react-native-sticky-parallax-header": "^1.0.0-rc.9",
     "react-native-toast-notifications": "^3.4.0",
+    "react-native-webview": "^13.12.5",
+    "react-native-youtube-iframe": "^2.3.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
