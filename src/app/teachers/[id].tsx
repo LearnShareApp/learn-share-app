@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   image: {
     width: 64,
     height: 64,
+    borderRadius: 10,
   },
   teacherInfo: {
     flex: 1,

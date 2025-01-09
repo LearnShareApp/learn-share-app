@@ -70,18 +70,18 @@ const Home = () => {
             </View>
           </View>
           <Text style={styles.sectionText}>Your previous teachers:</Text>
-          {/* <View style={styles.listContainer}>
+          <View style={styles.listContainer}>
             {TEACHERS.map((teacher) => (
               <TeacherListItem teacher={teacher} key={teacher.id} />
             ))}
-          </View> */}
-          <FlatList
+          </View>
+          {/* <FlatList
             data={TEACHERS}
             renderItem={({ item }) => <TeacherListItem teacher={item} />}
             keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={styles.listContainer}
             stickyHeaderHiddenOnScroll
-          />
+          /> */}
         </View>
       </ScrollView>
     </>

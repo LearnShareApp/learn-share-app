@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "expo-router";
 import { TEACHERS } from "../../assets/teachers";
 import { Lesson } from "../../assets/types/lesson";
+import SkillBadge from "./skill";
 
 const LessonItem = ({ lesson }: { lesson: Lesson }) => {
   const teacher = TEACHERS.find((teacher) => teacher.id === lesson.teacherId);
@@ -18,11 +19,11 @@ const LessonItem = ({ lesson }: { lesson: Lesson }) => {
         </Pressable>
       </Link>
 
-      <View>
+      <View style={{ alignItems: "flex-start", gap: 8 }}>
         <Text>
           {teacher.Name} {teacher.Surname}
         </Text>
-        <Text>{lesson.category}</Text>
+        <SkillBadge text={lesson.category} />
       </View>
 
       <View style={{ marginLeft: "auto", alignItems: "center" }}>
@@ -34,7 +35,10 @@ const LessonItem = ({ lesson }: { lesson: Lesson }) => {
             </Pressable>
           </Link>
         ) : (
-          <Text style={styles.noEnter}>Join Lesson</Text>
+          <>
+            <Text style={styles.noEnter}>Join Lesson</Text>
+            <Text style={{ color: "#bbb" }}>in 2 days</Text>
+          </>
         )}
         <Link href="/rooms/dede" asChild>
           <Pressable></Pressable>
