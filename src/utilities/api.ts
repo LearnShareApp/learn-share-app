@@ -34,3 +34,32 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
+
+/*
+import apiClient from './utils/api';
+
+const fetchUserData = async () => {
+  try {
+    const response = await apiClient.get('/user'); // Укажите нужный эндпоинт
+    console.log('User data:', response.data);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+};
+
+
+
+
+const loginUser = async (email, password) => {
+  try {
+    const payload = { email, password };
+    const response = await apiClient.post('/auth/login', payload); // Укажите нужный эндпоинт
+    console.log('Login successful:', response.data);
+
+    // Сохранение токена в Secure Store
+    await SecureStore.setItemAsync('authToken', response.data.token);
+  } catch (error) {
+    console.error('Error during login:', error);
+  }
+};
+*/

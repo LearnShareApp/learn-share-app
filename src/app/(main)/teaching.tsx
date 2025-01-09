@@ -5,43 +5,55 @@ import { FontAwesome } from "@expo/vector-icons";
 import Line from "../../components/line";
 import { LESSONS } from "../../../assets/lessons";
 import LessonItem from "../../components/lesson-item";
+import HeaderElement from "../../components/header-element";
 
 const Teaching = () => {
   if (true)
     return (
-      <View
-        style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
-      >
-        <View style={styles.topNav}>
-          <Link href={"/"} asChild>
-            <Pressable style={styles.navBtn}>
-              <FontAwesome size={24} name="bell" style={{ color: "#C9A977" }} />
-              <Text style={{ textAlign: "center" }}>New requests (0)</Text>
-            </Pressable>
-          </Link>
-
-          <Link href={"/"} asChild>
-            <Pressable style={styles.navBtn}>
-              <FontAwesome
-                size={24}
-                name="pie-chart"
-                style={{ color: "#C9A977" }}
-              />
-              <Text style={{ textAlign: "center" }}>View stats</Text>
-            </Pressable>
-          </Link>
-        </View>
-        <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
-          Your next lessons:
-        </Text>
-        <FlatList
-          data={LESSONS}
-          renderItem={(item) => <LessonItem lesson={item.item} />}
-          contentContainerStyle={{ gap: 8 }}
+      <>
+        <HeaderElement
+          text="Teaching"
+          requireCalendar={false}
+          requireChanges
+          requireSettings
         />
-      </View>
-    );
+        <View
+          style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
+        >
+          <View style={styles.topNav}>
+            <Link href={"/"} asChild>
+              <Pressable style={styles.navBtn}>
+                <FontAwesome
+                  size={24}
+                  name="bell"
+                  style={{ color: "#C9A977" }}
+                />
+                <Text style={{ textAlign: "center" }}>New requests (0)</Text>
+              </Pressable>
+            </Link>
 
+            <Link href={"/"} asChild>
+              <Pressable style={styles.navBtn}>
+                <FontAwesome
+                  size={24}
+                  name="pie-chart"
+                  style={{ color: "#C9A977" }}
+                />
+                <Text style={{ textAlign: "center" }}>View stats</Text>
+              </Pressable>
+            </Link>
+          </View>
+          <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
+            Your next lessons:
+          </Text>
+          <FlatList
+            data={LESSONS}
+            renderItem={(item) => <LessonItem lesson={item.item} />}
+            contentContainerStyle={{ gap: 8 }}
+          />
+        </View>
+      </>
+    );
   return (
     <View style={styles.container}>
       <Text>You are not a teacher, but you can become one</Text>

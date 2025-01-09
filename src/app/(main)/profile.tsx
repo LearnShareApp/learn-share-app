@@ -72,7 +72,7 @@ const Profile = () => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ width: "50%", fontSize: 18 }}>340,23 RSD</Text>
+              <Text style={{ width: "50%", fontSize: 18 }}>---,-- RSD</Text>
               <Pressable
                 style={{
                   backgroundColor: "#FFDFAF",
