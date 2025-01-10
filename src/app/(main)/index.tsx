@@ -9,12 +9,15 @@ import {
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
 import { useCallback, useEffect } from "react";
+import { useToken } from "../../providers/tokenProvider";
 
 const Home = () => {
+  const { token, setToken } = useToken();
+  if (!token) return <Redirect href={"/auth"} />;
   return (
     <>
       <HeaderElement

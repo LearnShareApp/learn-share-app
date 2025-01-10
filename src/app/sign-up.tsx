@@ -1,5 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import {
+  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -10,11 +11,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
-// import { useNavigation } from "@react-navigation/native";
-
 import axios from "axios";
 import { Link, Redirect } from "expo-router";
 import { useToken } from "../providers/tokenProvider";
+import { useState } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
 const BACKEND_URL = "http://192.168.1.8:8080";
 
 const authSchema = zod.object({
@@ -22,24 +23,32 @@ const authSchema = zod.object({
   password: zod
     .string()
     .min(4, { message: "Password must be at least 8 characters long" }),
+  name: zod.string(),
+  surname: zod.string(),
+  birthdate: zod.date(),
 });
 
-const Auth = () => {
+const SignUp = () => {
   const { token, setToken } = useToken();
 
   if (token) return <Redirect href={"/"} />;
+
+  const [showPicker, setShowPicker] = useState(false);
 
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
       email: "",
       password: "",
+      name: "",
+      surname: "",
+      birthdate: new Date(),
     },
   });
 
-  const signIn = async (data: zod.infer<typeof authSchema>) => {
+  const signUp = async (data: zod.infer<typeof authSchema>) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/login`, data);
+      const response = await axios.post(`${BACKEND_URL}/api/signup`, data);
       console.log(response.data);
       Toast.show("Signed in successfully", {
         type: "success",
@@ -49,28 +58,10 @@ const Auth = () => {
       setToken(response.data);
     } catch (error) {
       console.error("Error sending data:", error);
-      // alert(error.message);
     }
   };
 
-  const signUp = async (data: zod.infer<typeof authSchema>) => {
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/register`, data);
-      console.log(response.data);
-      Toast.show("Signed in successfully", {
-        type: "success",
-        placement: "top",
-        duration: 1500,
-      });
-    } catch (error) {
-      console.error("Error sending data:", error);
-      Toast.show("Error", {
-        type: "error",
-        placement: "top",
-        duration: 1500,
-      });
-    }
-  };
+  console.log(new Date());
 
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
@@ -125,17 +116,96 @@ const Auth = () => {
           )}
         />
 
+        <Controller
+          control={control}
+          name="email"
+          render={({
+            field: { value, onChange, onBlur },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                placeholder="name"
+                style={styles.input}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholderTextColor="#aaa"
+                autoCapitalize="none"
+                editable={!formState.isSubmitting}
+              />
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="email"
+          render={({
+            field: { value, onChange, onBlur },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                placeholder="surname"
+                style={styles.input}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholderTextColor="#aaa"
+                autoCapitalize="none"
+                editable={!formState.isSubmitting}
+              />
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="birthdate"
+          rules={{
+            required: "Date of birth is required",
+          }}
+          render={({
+            field: { value, onChange, onBlur },
+            fieldState: { error },
+          }) => (
+            <>
+              <Button
+                title={value ? value.toString() : "Select Date of Birth"}
+                onPress={() => setShowPicker(true)}
+              />
+              {showPicker && (
+                <DateTimePicker
+                  value={value || new Date()}
+                  mode="date"
+                  display="default"
+                  onChange={(event, selectedDate) => {
+                    setShowPicker(false);
+                    if (selectedDate) {
+                      onChange(selectedDate);
+                    }
+                  }}
+                />
+              )}
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
+
         <TouchableOpacity
           style={styles.button}
-          onPress={handleSubmit(signIn)}
+          onPress={handleSubmit(signUp)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Link href={"/sign-up"}>
+        <Link href={"/auth"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            or Sign Up
+            or Sign In
           </Text>
         </Link>
       </View>
@@ -143,7 +213,7 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,10 +1,10 @@
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
-import { useCallback, useEffect } from "react";
-import FontProvider from "../providers/FontProvider";
+import { useCallback, useContext, useEffect } from "react";
 import { ToastProvider } from "react-native-toast-notifications";
+import { TokenProvider } from "../providers/tokenProvider";
 
 export default function RootLayout() {
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function RootLayout() {
 
   return (
     <ToastProvider>
-      <FontProvider>
+      <TokenProvider>
         <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
         <Stack>
           <Stack.Screen
@@ -23,6 +23,10 @@ export default function RootLayout() {
           <Stack.Screen
             name="auth"
             options={{ headerShown: false, title: "auth" }}
+          />
+          <Stack.Screen
+            name="sign-up"
+            options={{ headerShown: false, title: "sign-up" }}
           />
           <Stack.Screen
             name="new-skill"
@@ -37,7 +41,7 @@ export default function RootLayout() {
             options={{ headerShown: true, title: "Settings" }}
           />
         </Stack>
-      </FontProvider>
+      </TokenProvider>
     </ToastProvider>
   );
 }
