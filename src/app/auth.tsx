@@ -11,11 +11,14 @@ import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
 
+import axios from "axios";
+const BACKEND_URL = "http://192.168.1.8:8080";
+
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
   password: zod
     .string()
-    .min(8, { message: "Password must be at least 8 characters long" }),
+    .min(4, { message: "Password must be at least 8 characters long" }),
 });
 
 const Auth = () => {
@@ -28,19 +31,37 @@ const Auth = () => {
   });
 
   const signIn = async (data: zod.infer<typeof authSchema>) => {
-    Toast.show("Signed in successfully", {
-      type: "success",
-      placement: "top",
-      duration: 1500,
-    });
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/login`, data);
+      console.log(response.data);
+      Toast.show("Signed in successfully", {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+    } catch (error) {
+      console.error("Error sending data:", error);
+      // alert(error.message);
+    }
   };
 
   const signUp = async (data: zod.infer<typeof authSchema>) => {
-    Toast.show("Signed up successfully", {
-      type: "success",
-      placement: "top",
-      duration: 1500,
-    });
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/register`, data);
+      console.log(response.data);
+      Toast.show("Signed in successfully", {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+    } catch (error) {
+      console.error("Error sending data:", error);
+      Toast.show("Error", {
+        type: "error",
+        placement: "top",
+        duration: 1500,
+      });
+    }
   };
 
   return (

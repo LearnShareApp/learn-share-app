@@ -12,6 +12,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
+import { useCallback, useEffect } from "react";
 
 const Home = () => {
   return (

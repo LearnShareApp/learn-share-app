@@ -37,7 +37,14 @@
       ],
       "expo-font",
       "@livekit/react-native-expo-plugin",
-      "@config-plugins/react-native-webrtc"
+      "@config-plugins/react-native-webrtc",
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
+      ]
     ],
     "extra": {
       "router": {

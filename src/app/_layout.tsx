@@ -2,14 +2,14 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import FontProvider from "../providers/FontProvider";
 import { ToastProvider } from "react-native-toast-notifications";
 
 export default function RootLayout() {
-  // useEffect(() => {
-  //   NavigationBar.setVisibilityAsync("hidden");
-  // }, []);
+  useEffect(() => {
+    //   NavigationBar.setVisibilityAsync("hidden");
+  }, []);
 
   return (
     <ToastProvider>
