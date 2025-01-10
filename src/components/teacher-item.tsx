@@ -22,8 +22,8 @@ const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
             <Text>{teacher.Surname}</Text>
           </View>
           <View style={styles.skillsList}>
-            {teacher.skills.map((skill) => (
-              <SkillBadge text={skill} />
+            {teacher.skills.map((skill, index) => (
+              <SkillBadge text={skill} key={index} />
             ))}
           </View>
         </View>
