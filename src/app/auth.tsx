@@ -10,10 +10,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
-// import { useNavigation } from "@react-navigation/native";
-
+import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { Link, Redirect } from "expo-router";
+
+import apiClient from "../utilities/api";
 import { useToken } from "../providers/tokenProvider";
 const BACKEND_URL = "http://192.168.1.8:8080";
 
@@ -37,6 +38,24 @@ const Auth = () => {
     },
   });
 
+  // const signIn = async (data: zod.infer<typeof authSchema>) => {
+  //   try {
+  //     const response = await apiClient.post("/auth/login", data); // Укажите нужный эндпоинт
+  //     console.log("Login successful:", response.data);
+  //     Toast.show("Signed in successfully", {
+  //       type: "success",
+  //       placement: "top",
+  //       duration: 1500,
+  //     });
+
+  //     // Сохранение токена в Secure Store
+  //     await SecureStore.setItemAsync("authToken", response.data);
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //     alert(error);
+  //   }
+  // };
+
   const signIn = async (data: zod.infer<typeof authSchema>) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/api/login`, data);
@@ -49,7 +68,7 @@ const Auth = () => {
       setToken(response.data);
     } catch (error) {
       console.error("Error sending data:", error);
-      // alert(error.message);
+      alert(error);
     }
   };
 

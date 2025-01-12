@@ -2,10 +2,9 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import Line from "../../../components/line";
-import { LESSONS } from "../../../../assets/lessons";
-import LessonItem from "../../../components/lesson-item";
-import HeaderElement from "../../../components/header-element";
+import { LESSONS } from "../../../assets/lessons";
+import LessonItem from "../../components/lesson-item";
+import HeaderElement from "../../components/header-element";
 
 const Teaching = () => {
   if (true)
@@ -17,12 +16,11 @@ const Teaching = () => {
           requireChanges
           requireSettings
         />
-        r
         <View
           style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
         >
           <View style={styles.topNav}>
-            <Link href={"/"} asChild>
+            <Link href={"/requests"} asChild>
               <Pressable style={styles.navBtn}>
                 <FontAwesome
                   size={24}
@@ -33,7 +31,7 @@ const Teaching = () => {
               </Pressable>
             </Link>
 
-            <Link href={"/"} asChild>
+            <Link href={"/stats"} asChild>
               <Pressable style={styles.navBtn}>
                 <FontAwesome
                   size={24}

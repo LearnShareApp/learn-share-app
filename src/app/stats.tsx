@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
+
 const Stats = () => {
   return (
     <View>
-      <Text>About</Text>
+      <Text>Stats</Text>
     </View>
   );
 };

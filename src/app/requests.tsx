@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
-const Request = () => {
+
+const Requests = () => {
   return (
     <View>
-      <Text>About</Text>
+      <Text>requests</Text>
     </View>
   );
 };
 
-export default Request;
+export default Requests;
 
 const styles = StyleSheet.create({
   safeArea: {
