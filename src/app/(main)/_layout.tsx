@@ -53,7 +53,7 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="teaching"
+          name="teaching/index"
           options={{
             tabBarIcon(props) {
               return <TabBarIcon {...props} name="graduation-cap" />;

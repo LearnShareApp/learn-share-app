@@ -50,7 +50,7 @@ const SignUp = () => {
     try {
       const response = await axios.post(`${BACKEND_URL}/api/signup`, data);
       console.log(response.data);
-      Toast.show("Signed in successfully", {
+      Toast.show("Signed up successfully", {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -67,7 +67,7 @@ const SignUp = () => {
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
         <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.subtitle}>Please Authenticate to continue</Text>
+        <Text style={styles.subtitle}>Please register to continue</Text>
 
         <Controller
           control={control}
@@ -118,7 +118,7 @@ const SignUp = () => {
 
         <Controller
           control={control}
-          name="email"
+          name="name"
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },
@@ -141,7 +141,7 @@ const SignUp = () => {
 
         <Controller
           control={control}
-          name="email"
+          name="surname"
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },
