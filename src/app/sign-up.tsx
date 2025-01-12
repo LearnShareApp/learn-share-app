@@ -61,8 +61,6 @@ const SignUp = () => {
     }
   };
 
-  console.log(new Date());
-
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>

@@ -79,13 +79,6 @@ const Home = () => {
               <TeacherListItem teacher={teacher} key={teacher.id} />
             ))}
           </View>
-          {/* <FlatList
-            data={TEACHERS}
-            renderItem={({ item }) => <TeacherListItem teacher={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.listContainer}
-            stickyHeaderHiddenOnScroll
-          /> */}
         </View>
       </ScrollView>
     </>

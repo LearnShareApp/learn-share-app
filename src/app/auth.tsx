@@ -72,25 +72,6 @@ const Auth = () => {
     }
   };
 
-  const signUp = async (data: zod.infer<typeof authSchema>) => {
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/register`, data);
-      console.log(response.data);
-      Toast.show("Signed in successfully", {
-        type: "success",
-        placement: "top",
-        duration: 1500,
-      });
-    } catch (error) {
-      console.error("Error sending data:", error);
-      Toast.show("Error", {
-        type: "error",
-        placement: "top",
-        duration: 1500,
-      });
-    }
-  };
-
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>

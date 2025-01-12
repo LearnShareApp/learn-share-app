@@ -6,6 +6,6 @@ export type Teacher = {
   Surname: string;
   phoneNumber: string;
   avatarImage: ImageSourcePropType;
-  skills: string[];
+  categories: string[];
   grade: number;
 };

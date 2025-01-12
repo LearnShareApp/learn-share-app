@@ -1,17 +1,51 @@
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
+import axios from "axios";
+const BACKEND_URL = "http://192.168.1.8:8080";
 
 const Search = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/api/categories`);
+        setCategories(response.data);
+        console.log(response.data);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          setError(error.message);
+        } else {
+          setError("unknown error");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const [text, onChangeText] = React.useState("");
   const teachers = TEACHERS.filter((teacher) =>
     `${teacher.Name.toLowerCase()} ${teacher.Surname.toLowerCase()}`.includes(
       text.toLowerCase()
     )
   );
+
+  if (loading) {
+    return <Text>Загрузка...</Text>;
+  }
+
+  if (error) {
+    return <Text>Ошибка: {error}</Text>;
+  }
 
   return (
     <View style={styles.container}>
@@ -24,6 +58,8 @@ const Search = () => {
         />
         <FontAwesome size={24} name="search" style={{ color: "#C9A977" }} />
       </View>
+
+      <View></View>
 
       <FlatList
         data={teachers}
