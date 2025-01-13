@@ -69,6 +69,52 @@ const SignUp = () => {
 
         <Controller
           control={control}
+          name="name"
+          render={({
+            field: { value, onChange, onBlur },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                placeholder="name"
+                style={styles.input}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholderTextColor="#aaa"
+                autoCapitalize="none"
+                editable={!formState.isSubmitting}
+              />
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="surname"
+          render={({
+            field: { value, onChange, onBlur },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                placeholder="surname"
+                style={styles.input}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholderTextColor="#aaa"
+                autoCapitalize="none"
+                editable={!formState.isSubmitting}
+              />
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
+
+        <Controller
+          control={control}
           name="email"
           render={({
             field: { value, onChange, onBlur },
@@ -116,52 +162,6 @@ const SignUp = () => {
 
         <Controller
           control={control}
-          name="name"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
-            <>
-              <TextInput
-                placeholder="name"
-                style={styles.input}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholderTextColor="#aaa"
-                autoCapitalize="none"
-                editable={!formState.isSubmitting}
-              />
-              {error && <Text style={styles.error}>{error.message}</Text>}
-            </>
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="surname"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
-            <>
-              <TextInput
-                placeholder="surname"
-                style={styles.input}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholderTextColor="#aaa"
-                autoCapitalize="none"
-                editable={!formState.isSubmitting}
-              />
-              {error && <Text style={styles.error}>{error.message}</Text>}
-            </>
-          )}
-        />
-
-        <Controller
-          control={control}
           name="birthdate"
           rules={{
             required: "Date of birth is required",
@@ -170,14 +170,32 @@ const SignUp = () => {
             field: { value, onChange, onBlur },
             fieldState: { error },
           }) => (
-            <>
+            <View
+              style={{
+                flexDirection: "row-reverse",
+                alignItems: "center",
+                alignSelf: "flex-start",
+                paddingHorizontal: 24,
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
               <Button
-                title={value ? value.toString() : "Select Date of Birth"}
+                color="#C9A977"
+                title={value ? value.toDateString() : "select Date of Birth"}
                 onPress={() => setShowPicker(true)}
               />
+              <Text
+                style={{
+                  color: "#999",
+                  fontSize: 16,
+                }}
+              >
+                your birthdate
+              </Text>
               {showPicker && (
                 <DateTimePicker
-                  value={value || new Date()}
+                  value={value}
                   mode="date"
                   display="default"
                   onChange={(event, selectedDate) => {
@@ -189,7 +207,7 @@ const SignUp = () => {
                 />
               )}
               {error && <Text style={styles.error}>{error.message}</Text>}
-            </>
+            </View>
           )}
         />
 
@@ -201,7 +219,7 @@ const SignUp = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Link href={"/auth"}>
+        <Link href={"/sign-in"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
             or Sign In
           </Text>
@@ -217,6 +235,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    gap: 8,
     alignItems: "center",
     padding: 16,
     width: "100%",
@@ -224,18 +243,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: "bold",
-    marginBottom: 8,
     color: "#A98957",
   },
   subtitle: {
     fontSize: 18,
     color: "#aaa",
-    marginBottom: 32,
+    marginBottom: 16,
   },
   input: {
     width: "90%",
     padding: 12,
-    marginBottom: 16,
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 8,
     fontSize: 16,
@@ -245,7 +262,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#C9A977",
     padding: 16,
     borderRadius: 8,
-    marginBottom: 16,
+    marginTop: 8,
     width: "90%",
     alignItems: "center",
   },

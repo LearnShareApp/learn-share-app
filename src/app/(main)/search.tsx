@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+// import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import SkillBadge from "../../components/skill";
 

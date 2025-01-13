@@ -17,7 +17,7 @@ import { useToken } from "../../providers/tokenProvider";
 
 const Home = () => {
   const { token, setToken } = useToken();
-  if (!token) return <Redirect href={"/auth"} />;
+  if (!token) return <Redirect href={"/sign-in"} />;
   return (
     <>
       <HeaderElement
@@ -28,7 +28,7 @@ const Home = () => {
       />
       <ScrollView>
         <View style={styles.container}>
-          <Link href="/auth" asChild>
+          <Link href="/sign-in" asChild>
             <Pressable style={styles.search}>
               <Text style={styles.searchText}>Try to find teacher</Text>
               <FontAwesome
