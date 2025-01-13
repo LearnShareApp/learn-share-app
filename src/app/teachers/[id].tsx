@@ -9,12 +9,11 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { Link, Redirect, Stack, useLocalSearchParams } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams } from "expo-router";
 import { TEACHERS } from "../../../assets/teachers";
 import SkillBadge from "../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
 import { useVideoPlayer, VideoView } from "expo-video";
-import { useEvent } from "expo";
 import Line from "../../components/line";
 import ReviewItem from "../../components/review-item";
 import { REVIEWS } from "../../../assets/reviews";
@@ -36,10 +35,6 @@ const TeacherProfile = () => {
     player.play();
   });
 
-  // const { isPlaying } = useEvent(player, "playingChange", {
-  //   isPlaying: player.playing,
-  // });
-
   return (
     <View>
       <Stack.Screen options={{ title: `${teacher.Name} ${teacher.Surname}` }} />
@@ -60,7 +55,7 @@ const TeacherProfile = () => {
                 {teacher.Name} {teacher.Surname}
               </Text>
               <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                {teacher.skills.map((item) => (
+                {teacher.categories.map((item) => (
                   <SkillBadge text={item} key={item} />
                 ))}
               </View>
@@ -141,6 +136,7 @@ const styles = StyleSheet.create({
   image: {
     width: 64,
     height: 64,
+    borderRadius: 10,
   },
   teacherInfo: {
     flex: 1,

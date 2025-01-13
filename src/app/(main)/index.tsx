@@ -9,11 +9,15 @@ import {
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
+import { useCallback, useEffect } from "react";
+import { useToken } from "../../providers/tokenProvider";
 
 const Home = () => {
+  const { token, setToken } = useToken();
+  if (!token) return <Redirect href={"/sign-in"} />;
   return (
     <>
       <HeaderElement
@@ -24,7 +28,7 @@ const Home = () => {
       />
       <ScrollView>
         <View style={styles.container}>
-          <Link href="/authауау" asChild>
+          <Link href="/sign-in" asChild>
             <Pressable style={styles.search}>
               <Text style={styles.searchText}>Try to find teacher</Text>
               <FontAwesome
@@ -63,16 +67,18 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={styles.nextLessons}></View>
+            <View style={styles.nextLessons}>
+              <Link href="/rooms/" asChild>
+                <Text>Go toooo</Text>
+              </Link>
+            </View>
           </View>
           <Text style={styles.sectionText}>Your previous teachers:</Text>
-          <FlatList
-            data={TEACHERS}
-            renderItem={({ item }) => <TeacherListItem teacher={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.listContainer}
-            stickyHeaderHiddenOnScroll
-          />
+          <View style={styles.listContainer}>
+            {TEACHERS.map((teacher) => (
+              <TeacherListItem teacher={teacher} key={teacher.id} />
+            ))}
+          </View>
         </View>
       </ScrollView>
     </>

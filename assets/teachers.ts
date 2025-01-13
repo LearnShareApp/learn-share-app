@@ -7,7 +7,7 @@ export const TEACHERS: Teacher[] = [
     Surname: "Eroshenkov",
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
-    skills: ["programming"],
+    categories: ["programming"],
     grade: 5.0,
   },
   {
@@ -16,7 +16,7 @@ export const TEACHERS: Teacher[] = [
     Surname: "Khairulin",
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
-    skills: ["programming", "cooking"],
+    categories: ["programming", "cooking"],
     grade: 4.2,
   },
   {
@@ -25,7 +25,7 @@ export const TEACHERS: Teacher[] = [
     Surname: "Gusev",
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
-    skills: ["programming", "guitar"],
+    categories: ["programming", "guitar"],
     grade: 4.8,
   },
   {
@@ -34,7 +34,7 @@ export const TEACHERS: Teacher[] = [
     Surname: "Homon",
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
-    skills: ["cooking", "guitar"],
+    categories: ["cooking", "guitar"],
     grade: 3.9,
   },
   {
@@ -43,7 +43,7 @@ export const TEACHERS: Teacher[] = [
     Surname: "Loski",
     phoneNumber: "676482764",
     avatarImage: require("./icon.png"),
-    skills: ["game-dev", "guitar"],
+    categories: ["game-dev", "guitar"],
     grade: 4.5,
   },
 ];

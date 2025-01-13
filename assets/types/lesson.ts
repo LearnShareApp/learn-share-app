@@ -3,7 +3,7 @@ export type Lesson = {
   userId: number;
   teacherId: number;
   price: number;
-  date: Date;
-  skill: string;
+  date: string;
+  category: string;
   status: "finished" | "ongoing" | "canceled" | "planed" | "verification";
 };

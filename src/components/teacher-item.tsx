@@ -21,11 +21,11 @@ const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
             <Text>{teacher.Name}</Text>
             <Text>{teacher.Surname}</Text>
           </View>
-          <FlatList
-            data={teacher.skills}
-            style={styles.skillsList}
-            renderItem={(item) => <SkillBadge text={item.item} />}
-          />
+          <View style={styles.skillsList}>
+            {teacher.categories.map((skill, index) => (
+              <SkillBadge text={skill} key={index} />
+            ))}
+          </View>
         </View>
         <View style={styles.grades}>
           <Text
@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   teacherInfo: {
-    flex: 1,
     gap: 8,
   },
   names: {
@@ -73,9 +72,12 @@ const styles = StyleSheet.create({
   },
   skillsList: {
     gap: 5,
+    flexWrap: "wrap",
+    alignItems: "flex-start",
     flexDirection: "row",
   },
   grades: {
     alignItems: "center",
+    marginLeft: "auto",
   },
 });

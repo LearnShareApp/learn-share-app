@@ -72,7 +72,7 @@ const Profile = () => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ width: "50%", fontSize: 18 }}>340,23 RSD</Text>
+              <Text style={{ width: "50%", fontSize: 18 }}>---,-- RSD</Text>
               <Pressable
                 style={{
                   backgroundColor: "#FFDFAF",
@@ -94,16 +94,22 @@ const Profile = () => {
             </View>
           </View>
 
-          <View style={[styles.object, styles.oneLine]}>
-            <Text style={{ width: "80%", fontSize: 16 }}>Become teacher</Text>
-            <View style={styles.iconContainer}>
-              <FontAwesome
-                size={24}
-                name="graduation-cap"
-                style={{ color: "#C9A977" }}
-              />
-            </View>
-          </View>
+          <Link href="/teaching" asChild>
+            <Pressable>
+              <View style={[styles.object, styles.oneLine]}>
+                <Text style={{ width: "80%", fontSize: 16 }}>
+                  Become teacher
+                </Text>
+                <View style={styles.iconContainer}>
+                  <FontAwesome
+                    size={24}
+                    name="graduation-cap"
+                    style={{ color: "#C9A977" }}
+                  />
+                </View>
+              </View>
+            </Pressable>
+          </Link>
 
           <Link href="/settings" asChild>
             <Pressable>
