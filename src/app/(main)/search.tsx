@@ -30,7 +30,6 @@ const Search = () => {
           `${BACKEND_URL}/api/categories`
         );
         setCategories(response.data.categories);
-        console.log("Categories:", response.data.categories);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           setError(error.message);

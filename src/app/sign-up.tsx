@@ -12,11 +12,15 @@ import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
 import axios from "axios";
-import { Link, Redirect } from "expo-router";
-import { useToken } from "../providers/tokenProvider";
+import { Link, Redirect, router } from "expo-router";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useAuth } from "../providers/auth-provider";
 const BACKEND_URL = "http://192.168.1.8:8080";
+
+interface SignUpResponse {
+  token: string;
+}
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
@@ -28,14 +32,15 @@ const authSchema = zod.object({
   birthdate: zod.date(),
 });
 
-const SignUp = () => {
-  const { token, setToken } = useToken();
+type AuthFormData = zod.infer<typeof authSchema>;
 
+const SignUp = () => {
+  const { token, signIn } = useAuth();
   if (token) return <Redirect href={"/"} />;
 
   const [showPicker, setShowPicker] = useState(false);
 
-  const { control, handleSubmit, formState } = useForm({
+  const { control, handleSubmit, formState } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     defaultValues: {
       email: "",
@@ -46,18 +51,33 @@ const SignUp = () => {
     },
   });
 
-  const signUp = async (data: zod.infer<typeof authSchema>) => {
+  const signUp = async (data: AuthFormData) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/signup`, data);
-      console.log(response.data);
-      Toast.show("Signed up successfully", {
-        type: "success",
-        placement: "top",
-        duration: 1500,
-      });
-      setToken(response.data);
+      const response = await axios.post<SignUpResponse>(
+        `${BACKEND_URL}/api/signup`,
+        data
+      );
+      console.log("Sign Up response:", response.data.token);
+
+      if (response.data.token) {
+        await signIn(response.data.token);
+
+        Toast.show("Signed in successfully", {
+          type: "success",
+          placement: "top",
+          duration: 1500,
+        });
+      } else {
+        throw new Error("Token not received from server");
+      }
     } catch (error) {
-      console.error("Error sending data:", error);
+      console.error("Error during login:", error);
+
+      Toast.show(error.response?.data?.message || "Failed to sign in", {
+        type: "error",
+        placement: "top",
+        duration: 3000,
+      });
     }
   };
 

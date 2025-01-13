@@ -13,10 +13,10 @@ import { Link, Redirect } from "expo-router";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
 import { useCallback, useEffect } from "react";
-import { useToken } from "../../providers/tokenProvider";
+import { useAuth } from "../../providers/auth-provider";
 
 const Home = () => {
-  const { token, setToken } = useToken();
+  const { token, signIn, signOut } = useAuth();
   if (!token) return <Redirect href={"/sign-in"} />;
   return (
     <>

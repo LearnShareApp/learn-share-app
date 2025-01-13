@@ -1,10 +1,10 @@
-import { Redirect, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
-import { useCallback, useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { ToastProvider } from "react-native-toast-notifications";
-import { TokenProvider } from "../providers/tokenProvider";
+import { AuthProvider } from "../providers/auth-provider";
 
 export default function RootLayout() {
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function RootLayout() {
 
   return (
     <ToastProvider>
-      <TokenProvider>
+      <AuthProvider>
         <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
         <Stack>
           <Stack.Screen
@@ -49,7 +49,7 @@ export default function RootLayout() {
             options={{ headerShown: true, title: "Settings" }}
           />
         </Stack>
-      </TokenProvider>
+      </AuthProvider>
     </ToastProvider>
   );
 }
