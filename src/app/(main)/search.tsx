@@ -5,17 +5,13 @@ import axios from "axios";
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import SkillBadge from "../../components/skill";
+import { apiService } from "../../utilities/api";
 
 interface Category {
   id: number;
   min_age: number;
   name: string;
 }
-
-interface ApiResponse {
-  categories: Category[];
-}
-const BACKEND_URL = "http://192.168.1.8:8080";
 
 const Search = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -25,17 +21,11 @@ const Search = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get<ApiResponse>(
-          `${BACKEND_URL}/api/categories`
-        );
-        setCategories(response.data.categories);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          setError(error.message);
-        } else {
-          setError("unknown error");
-        }
-        setCategories([]);
+        setLoading(true);
+        const categories = await apiService.getCategories();
+        setCategories(categories);
+      } catch (error) {
+        setError("Failed to fetch categories");
       } finally {
         setLoading(false);
       }

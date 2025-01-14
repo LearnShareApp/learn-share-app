@@ -13,14 +13,26 @@ import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
+import { useProfile } from "../../utilities/profile-hook";
 
 const Home = () => {
   const { token } = useAuth();
   if (!token) return <Redirect href={"/sign-in"} />;
+
+  const { profile, loading, error } = useProfile();
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
+
   return (
     <>
       <HeaderElement
-        text="Hello, Elliot!"
+        text={`Hello, ${profile?.name}`}
         requireCalendar
         requireSettings
         requireChanges={false}

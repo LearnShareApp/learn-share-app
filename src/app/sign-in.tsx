@@ -10,16 +10,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
-import axios from "axios";
-import { Link, Redirect, router } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import { useAuth } from "../providers/auth-provider";
-
-const BACKEND_URL = "http://192.168.1.8:8080";
-
-// Определяем типы для ответа API
-interface LoginResponse {
-  token: string;
-}
+import { apiService } from "../utilities/api";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
@@ -44,28 +37,15 @@ const Auth = () => {
 
   const signInFunction = async (data: AuthFormData) => {
     try {
-      const response = await axios.post<LoginResponse>(
-        `${BACKEND_URL}/api/login`,
-        data
-      );
-
-      console.log("Login response:", response.data.token);
-
-      if (response.data.token) {
-        await signIn(response.data.token);
-
-        Toast.show("Signed in successfully", {
-          type: "success",
-          placement: "top",
-          duration: 1500,
-        });
-      } else {
-        throw new Error("Token not received from server");
-      }
+      const response = await apiService.login(data);
+      await signIn(response.token);
+      Toast.show("Signed in successfully", {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
     } catch (error) {
-      console.error("Error during login:", error);
-
-      Toast.show(error.response?.data?.message || "Failed to sign in", {
+      Toast.show("Failed to sign in", {
         type: "error",
         placement: "top",
         duration: 3000,

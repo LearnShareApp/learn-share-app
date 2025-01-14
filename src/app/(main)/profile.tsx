@@ -12,8 +12,19 @@ import HeaderElement from "../../components/header-element";
 import { FontAwesome } from "@expo/vector-icons";
 import SkillBadge from "../../components/skill";
 import Line from "../../components/line";
+import { useProfile } from "../../utilities/profile-hook";
 
 const Profile = () => {
+  const { profile, loading, error } = useProfile();
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
+
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync("https://youtube.com");
   };
@@ -34,7 +45,9 @@ const Profile = () => {
               style={styles.image}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.user_name}>Michael Jackson</Text>
+              <Text style={styles.user_name}>
+                {profile?.name} {profile?.surname}
+              </Text>
               <Text>200d since joining the study world</Text>
             </View>
           </View>

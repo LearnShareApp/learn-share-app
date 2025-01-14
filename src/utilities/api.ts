@@ -1,65 +1,98 @@
-import axios from "axios";
+// services/api.ts
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
-// Базовая конфигурация Axios
-const apiClient = axios.create({
-  baseURL: "https://your-api-url.com/api",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const BACKEND_URL = "http://192.168.1.8:8080";
 
-// Добавление интерцептора для авторизации
-apiClient.interceptors.request.use(
-  async (config) => {
-    const token = await SecureStore.getItemAsync("authToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface SignUpData extends LoginData {
+  name: string;
+  surname: string;
+  birthdate: Date;
+}
+
+export interface LoginResponse {
+  token: string;
+}
+
+export interface Category {
+  id: number;
+  min_age: number;
+  name: string;
+}
+
+export interface CategoriesResponse {
+  categories: Category[];
+}
+
+export interface UserProfile {
+  id: number;
+  email: string;
+  name: string;
+  surname: string;
+  birthdate: string;
+}
+
+class ApiService {
+  private api: AxiosInstance;
+
+  constructor() {
+    this.api = axios.create({
+      baseURL: BACKEND_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Добавляем перехватчик для установки токена авторизации
+    this.api.interceptors.request.use(async (config) => {
+      const token = await SecureStore.getItemAsync("userToken");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
   }
-);
 
-// Обработка ошибок (опционально)
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error("API Error:", error.response?.data || error.message);
-    return Promise.reject(error.response?.data || error.message);
+  // Auth endpoints
+  async login(data: LoginData): Promise<LoginResponse> {
+    const response = await this.api.post<LoginResponse>(
+      "/api/auth/login",
+      data
+    );
+    return response.data;
   }
-);
 
-export default apiClient;
-
-/*
-import apiClient from './utils/api';
-
-const fetchUserData = async () => {
-  try {
-    const response = await apiClient.get('/user'); // Укажите нужный эндпоинт
-    console.log('User data:', response.data);
-  } catch (error) {
-    console.error('Error fetching user data:', error);
+  async signUp(data: SignUpData): Promise<LoginResponse> {
+    const response = await this.api.post<LoginResponse>(
+      "/api/auth/signup",
+      data
+    );
+    return response.data;
   }
-};
 
-
-
-
-const loginUser = async (email, password) => {
-  try {
-    const payload = { email, password };
-    const response = await apiClient.post('/auth/login', payload); // Укажите нужный эндпоинт
-    console.log('Login successful:', response.data);
-
-    // Сохранение токена в Secure Store
-    await SecureStore.setItemAsync('authToken', response.data.token);
-  } catch (error) {
-    console.error('Error during login:', error);
+  // Categories endpoints
+  async getCategories(): Promise<Category[]> {
+    const response = await this.api.get<CategoriesResponse>("/api/categories");
+    return response.data.categories;
   }
-};
-*/
+
+  // User profile endpoints
+  async getUserProfile(): Promise<UserProfile> {
+    const response = await this.api.get<UserProfile>("/api/user/profile");
+    return response.data;
+  }
+
+  // Общий метод для выполнения запросов
+  async request<T>(config: AxiosRequestConfig): Promise<T> {
+    const response = await this.api.request<T>(config);
+    return response.data;
+  }
+}
+
+// Создаем и экспортируем единственный экземпляр сервиса
+export const apiService = new ApiService();

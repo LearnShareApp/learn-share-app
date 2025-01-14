@@ -1,9 +1,11 @@
 // providers/auth-provider.tsx
 import { createContext, useContext, useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
+import { User } from "../../assets/types/user";
 
 interface AuthContextType {
   token: string | null;
+  user: User | null;
   signIn: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -12,6 +14,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     // Загружаем токен при инициализации
@@ -50,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, signIn, signOut }}>
+    <AuthContext.Provider value={{ token, user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
