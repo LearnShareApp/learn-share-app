@@ -35,14 +35,6 @@ const SkillAdding = () => {
     });
   };
 
-  // const signUp = async (data: zod.infer<typeof authSchema>) => {
-  //   Toast.show("Signed up successfully", {
-  //     type: "success",
-  //     placement: "top",
-  //     duration: 1500,
-  //   });
-  // };
-
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -125,16 +117,6 @@ const SkillAdding = () => {
         >
           <Text style={styles.buttonText}>Add Skill</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          style={[styles.button, styles.signUpButton]}
-          onPress={handleSubmit(signUp)}
-          disabled={formState.isSubmitting}
-        >
-          <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            Sign Up
-          </Text>
-        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

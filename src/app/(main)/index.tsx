@@ -6,17 +6,16 @@ import {
   Text,
   View,
 } from "react-native";
-import { TEACHERS } from "../../../assets/teachers";
-import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, Redirect } from "expo-router";
+import { useAuth } from "../../providers/auth-provider";
+import { TEACHERS } from "../../../assets/teachers";
+import TeacherListItem from "../../components/teacher-item";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
-import { useCallback, useEffect } from "react";
-import { useAuth } from "../../providers/auth-provider";
 
 const Home = () => {
-  const { token, signIn, signOut } = useAuth();
+  const { token } = useAuth();
   if (!token) return <Redirect href={"/sign-in"} />;
   return (
     <>

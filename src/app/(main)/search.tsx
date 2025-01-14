@@ -1,10 +1,9 @@
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import axios from "axios";
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
-import { FontAwesome } from "@expo/vector-icons";
-// import { useLocalSearchParams } from "expo-router";
-import axios from "axios";
 import SkillBadge from "../../components/skill";
 
 interface Category {
@@ -59,7 +58,6 @@ const Search = () => {
   if (error) {
     return <Text>Ошибка: {error}</Text>;
   }
-  console.log(categories);
   return (
     <View style={styles.container}>
       <View style={styles.search}>
