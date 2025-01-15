@@ -18,7 +18,7 @@ const Profile = () => {
   const { profile, loading, error } = useProfile();
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <HeaderElement text="Loading..." requireChanges requireSettings />;
   }
 
   if (error) {

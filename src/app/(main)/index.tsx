@@ -22,7 +22,7 @@ const Home = () => {
   const { profile, loading, error } = useProfile();
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <HeaderElement text="Loading..." requireCalendar requireSettings />;
   }
 
   if (error) {
@@ -35,7 +35,6 @@ const Home = () => {
         text={`Hello, ${profile?.name}`}
         requireCalendar
         requireSettings
-        requireChanges={false}
       />
       <ScrollView>
         <View style={styles.container}>

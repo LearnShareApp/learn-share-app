@@ -9,9 +9,9 @@ const HeaderElement = ({
   requireChanges,
 }: {
   text: string;
-  requireSettings: boolean;
-  requireCalendar: boolean;
-  requireChanges: boolean;
+  requireSettings?: boolean;
+  requireCalendar?: boolean;
+  requireChanges?: boolean;
 }) => {
   return (
     <View style={styles.header}>
