@@ -38,7 +38,7 @@ const Teaching = () => {
                   name="pie-chart"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>View stats</Text>
+                <Text style={{ textAlign: "center" }}>My skills</Text>
               </Pressable>
             </Link>
           </View>

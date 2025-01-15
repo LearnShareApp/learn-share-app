@@ -1,9 +1,7 @@
 import {
-  Button,
   FlatList,
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -18,7 +16,6 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import Line from "../../components/line";
 import ReviewItem from "../../components/review-item";
 import { REVIEWS } from "../../../assets/reviews";
-import WebView from "react-native-webview";
 
 const TeacherProfile = () => {
   const { id } = useLocalSearchParams<{ id: string }>();

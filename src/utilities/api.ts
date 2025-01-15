@@ -75,6 +75,11 @@ class ApiService {
     return response.data;
   }
 
+  async becomeTeacher(data: SignUpData): Promise<String> {
+    const response = await this.api.post("/api/teacher", data);
+    return response.statusText;
+  }
+
   // Categories endpoints
   async getCategories(): Promise<Category[]> {
     const response = await this.api.get<CategoriesResponse>("/api/categories");

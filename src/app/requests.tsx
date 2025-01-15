@@ -1,17 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text } from "react-native";
 
 const Requests = () => {
   return (
-    <View>
-      <Text>requests</Text>
-    </View>
+    <FlatList
+      data={[3, 3, 3, 3, 3, 3]}
+      renderItem={() => <Text>skill</Text>}
+      contentContainerStyle={styles.skillsList}
+    />
   );
 };
 
 export default Requests;
 
 const styles = StyleSheet.create({
-  safeArea: {
+  skillsList: {
     flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+    overflow: "scroll",
   },
 });
