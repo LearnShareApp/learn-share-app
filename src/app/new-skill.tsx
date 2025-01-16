@@ -10,6 +10,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useEffect, useState } from "react";
+import { apiService, Category, Skill } from "../utilities/api";
 
 const authSchema = zod.object({
   skillName: zod.string(),
@@ -18,6 +21,39 @@ const authSchema = zod.object({
 });
 
 const SkillAdding = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const categories = await apiService.getCategories();
+        setCategories(categories);
+      } catch (error) {
+        setError("Failed to fetch categories");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const [items, setItems] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    setItems(
+      categories.map((category) => ({
+        label: category.name,
+        value: category.id.toString(),
+      }))
+    );
+  }, [categories]);
+
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -33,6 +69,7 @@ const SkillAdding = () => {
       placement: "top",
       duration: 1500,
     });
+    console.log(data);
   };
 
   return (
@@ -49,15 +86,15 @@ const SkillAdding = () => {
             fieldState: { error },
           }) => (
             <>
-              <TextInput
-                placeholder="skill name"
-                style={styles.input}
+              <DropDownPicker
+                open={open}
                 value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholderTextColor="#aaa"
-                autoCapitalize="none"
-                editable={!formState.isSubmitting}
+                items={items}
+                setOpen={setOpen}
+                setValue={onChange}
+                setItems={setItems}
+                placeholder="Choose skill"
+                style={styles.dropDown}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>
@@ -151,6 +188,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     color: "#000",
+  },
+  dropDown: {
+    width: "90%",
+    marginBottom: 16,
+    borderRadius: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    color: "#000",
+    fontSize: 16,
+    alignSelf: "center",
   },
   button: {
     backgroundColor: "#C9A977",

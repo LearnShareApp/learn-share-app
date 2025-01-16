@@ -25,6 +25,11 @@ export interface Category {
   name: string;
 }
 
+export interface Skill {
+  label: string;
+  value: string;
+}
+
 export interface CategoriesResponse {
   categories: Category[];
 }

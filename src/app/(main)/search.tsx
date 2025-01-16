@@ -5,13 +5,7 @@ import axios from "axios";
 import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import SkillBadge from "../../components/skill";
-import { apiService } from "../../utilities/api";
-
-interface Category {
-  id: number;
-  min_age: number;
-  name: string;
-}
+import { apiService, Category, Skill } from "../../utilities/api";
 
 const Search = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -33,6 +27,18 @@ const Search = () => {
 
     fetchCategories();
   }, []);
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState<Skill[]>([]);
+  useEffect(() => {
+    setItems(
+      categories.map((category) => ({
+        label: category.name,
+        value: category.id.toString(),
+      }))
+    );
+  }, [categories]);
 
   const [text, onChangeText] = React.useState("");
   const teachers = TEACHERS.filter((teacher) =>
@@ -77,6 +83,16 @@ const Search = () => {
           categories.map((category) => (
             <SkillBadge key={category.id} text={category.name} />
           ))}
+
+        {/* <DropDownPicker
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          placeholder="Выберите вариант"
+        /> */}
       </View>
 
       <FlatList

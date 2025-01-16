@@ -7,7 +7,7 @@ import LessonItem from "../../components/lesson-item";
 import HeaderElement from "../../components/header-element";
 
 const Teaching = () => {
-  if (true)
+  if (false)
     return (
       <>
         <HeaderElement

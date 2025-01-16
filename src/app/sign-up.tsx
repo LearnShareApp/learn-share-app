@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, Form, useForm } from "react-hook-form";
 import {
   Button,
   StyleSheet,
@@ -61,6 +61,7 @@ const SignUp = () => {
         placement: "top",
         duration: 3000,
       });
+      console.log(error);
     }
   };
 
@@ -194,7 +195,7 @@ const SignUp = () => {
                   fontSize: 16,
                 }}
               >
-                your birthdate
+                Your birthdate:
               </Text>
               {showPicker && (
                 <DateTimePicker
