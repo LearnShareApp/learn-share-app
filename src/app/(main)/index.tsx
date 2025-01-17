@@ -16,7 +16,7 @@ import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
 
 const Home = () => {
-  const { token } = useAuth();
+  const { token, signOut } = useAuth();
   if (!token) return <Redirect href={"/sign-in"} />;
 
   const { profile, loading, error } = useProfile();
@@ -26,7 +26,11 @@ const Home = () => {
   }
 
   if (error) {
-    return <Text>Error: {error}</Text>;
+    return (
+      <Pressable onPress={signOut}>
+        <Text>Error: {error}</Text>
+      </Pressable>
+    );
   }
 
   return (

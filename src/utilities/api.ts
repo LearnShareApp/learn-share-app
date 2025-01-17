@@ -15,6 +15,12 @@ export interface SignUpData extends LoginData {
   birthdate: Date;
 }
 
+export interface AddSkillData {
+  about: string;
+  video_card_link: string;
+  category_id: number;
+}
+
 export interface LoginResponse {
   token: string;
 }
@@ -80,8 +86,8 @@ class ApiService {
     return response.data;
   }
 
-  async becomeTeacher(data: SignUpData): Promise<String> {
-    const response = await this.api.post("/api/teacher", data);
+  async addSkill(data: AddSkillData): Promise<String> {
+    const response = await this.api.post("/api/teacher/skill", data);
     return response.statusText;
   }
 

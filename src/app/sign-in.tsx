@@ -50,6 +50,7 @@ const Auth = () => {
         placement: "top",
         duration: 3000,
       });
+      console.log(error);
     }
   };
 

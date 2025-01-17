@@ -15,8 +15,8 @@ import { useEffect, useState } from "react";
 import { apiService, Category, Skill } from "../utilities/api";
 
 const authSchema = zod.object({
-  skillName: zod.string(),
-  link: zod.string(),
+  category_id: zod.string(),
+  video_card_link: zod.string(),
   about: zod.string(),
 });
 
@@ -57,30 +57,45 @@ const SkillAdding = () => {
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      skillName: "",
-      link: "",
+      category_id: "",
+      video_card_link: "",
       about: "",
     },
   });
 
   const skillAdd = async (data: zod.infer<typeof authSchema>) => {
-    Toast.show("Signed in successfully", {
-      type: "success",
-      placement: "top",
-      duration: 1500,
-    });
-    console.log(data);
+    try {
+      const postData = {
+        category_id: Number(data.category_id),
+        video_card_link: data.video_card_link,
+        about: data.about,
+      };
+      const response = await apiService.addSkill(postData);
+      console.log(response);
+      Toast.show("Signed in successfully", {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+    } catch (error) {
+      Toast.show("Failed to sign in", {
+        type: "error",
+        placement: "top",
+        duration: 3000,
+      });
+      console.log(error);
+    }
   };
 
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Add you skill</Text>
+        <Text style={styles.title}>Add your skill</Text>
         <Text style={styles.subtitle}>Please register your new skill:</Text>
 
         <Controller
           control={control}
-          name="skillName"
+          name="category_id"
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },
@@ -91,7 +106,11 @@ const SkillAdding = () => {
                 value={value}
                 items={items}
                 setOpen={setOpen}
-                setValue={onChange}
+                setValue={(callback) => {
+                  const newValue =
+                    typeof callback === "function" ? callback(value) : callback;
+                  onChange(newValue);
+                }}
                 setItems={setItems}
                 placeholder="Choose skill"
                 style={styles.dropDown}
@@ -103,7 +122,7 @@ const SkillAdding = () => {
 
         <Controller
           control={control}
-          name="link"
+          name="video_card_link"
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },

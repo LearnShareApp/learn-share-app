@@ -6,6 +6,7 @@ import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import SkillBadge from "../../components/skill";
 import { apiService, Category, Skill } from "../../utilities/api";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const Search = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -45,7 +46,8 @@ const Search = () => {
     `${teacher.Name.toLowerCase()} ${teacher.Surname.toLowerCase()}`.includes(
       text.toLowerCase()
     )
-  ).filter((teacher) => teacher.categories.includes("programming"));
+  );
+  if (value) teachers.filter((teacher) => teacher.categories.includes(value));
 
   if (loading) {
     return <Text>Загрузка...</Text>;
@@ -71,28 +73,21 @@ const Search = () => {
           gap: 8,
           alignItems: "flex-start",
           flexDirection: "row",
-          overflow: "scroll",
           paddingHorizontal: 16,
           paddingVertical: 8,
           backgroundColor: "white",
           borderRadius: 8,
         }}
       >
-        {categories &&
-          Array.isArray(categories) &&
-          categories.map((category) => (
-            <SkillBadge key={category.id} text={category.name} />
-          ))}
-
-        {/* <DropDownPicker
+        <DropDownPicker
           open={open}
           value={value}
           items={items}
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
-          placeholder="Выберите вариант"
-        /> */}
+          placeholder="Choose category"
+        />
       </View>
 
       <FlatList
