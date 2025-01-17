@@ -16,6 +16,7 @@ import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
+import axios from "axios";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
@@ -56,12 +57,23 @@ const SignUp = () => {
         duration: 1500,
       });
     } catch (error) {
-      Toast.show("Failed to sign up", {
-        type: "error",
-        placement: "top",
-        duration: 3000,
-      });
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show("An unexpected error occurred", {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
     }
   };
 

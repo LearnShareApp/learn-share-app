@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
@@ -29,7 +29,9 @@ const HeaderElement = ({
         )}
         {requireSettings && (
           <Link href="/settings" asChild>
-            <FontAwesome size={24} name="gear" style={{ color: "grey" }} />
+            <Pressable>
+              <FontAwesome size={24} name="gear" style={{ color: "grey" }} />
+            </Pressable>
           </Link>
         )}
       </View>

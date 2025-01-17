@@ -13,6 +13,8 @@ import { Toast } from "react-native-toast-notifications";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useEffect, useState } from "react";
 import { apiService, Category, Skill } from "../utilities/api";
+import axios from "axios";
+import { router } from "expo-router";
 
 const authSchema = zod.object({
   category_id: zod.string(),
@@ -71,19 +73,30 @@ const SkillAdding = () => {
         about: data.about,
       };
       const response = await apiService.addSkill(postData);
-      console.log(response);
       Toast.show("Signed in successfully", {
         type: "success",
         placement: "top",
         duration: 1500,
       });
+      router.back();
     } catch (error) {
-      Toast.show("Failed to sign in", {
-        type: "error",
-        placement: "top",
-        duration: 3000,
-      });
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show("An unexpected error occurred", {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
     }
   };
 

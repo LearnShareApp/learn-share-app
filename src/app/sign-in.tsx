@@ -13,6 +13,7 @@ import { Toast } from "react-native-toast-notifications";
 import { Link, Redirect } from "expo-router";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
+import axios from "axios";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
@@ -45,12 +46,24 @@ const Auth = () => {
         duration: 1500,
       });
     } catch (error) {
-      Toast.show("Failed to sign in", {
-        type: "error",
-        placement: "top",
-        duration: 3000,
-      });
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+          swipeEnabled: true,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show("An unexpected error occurred", {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
     }
   };
 
