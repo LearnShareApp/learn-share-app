@@ -16,10 +16,19 @@ import { apiService, Category, Skill } from "../utilities/api";
 import axios from "axios";
 import { router } from "expo-router";
 
+const youtubeUrlRegex =
+  /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
+
 const authSchema = zod.object({
-  category_id: zod.string(),
-  video_card_link: zod.string(),
-  about: zod.string(),
+  category_id: zod.string().min(1, "Select category"),
+  video_card_link: zod
+    .string()
+    .url("Have to be a link")
+    .refine(
+      (url) => youtubeUrlRegex.test(url),
+      "Have to be a link to your YouTube video"
+    ),
+  about: zod.string().min(8, "Describe yourself for students!"),
 });
 
 const SkillAdding = () => {
