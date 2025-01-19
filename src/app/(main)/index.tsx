@@ -14,21 +14,23 @@ import TeacherListItem from "../../components/teacher-item";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
+import { useCategories } from "../../utilities/category-hook";
 
 const Home = () => {
   const { token, signOut } = useAuth();
   if (!token) return <Redirect href={"/sign-in"} />;
 
-  const { profile, loading, error } = useProfile();
+  const { profile, loadingProfile, errorProfile } = useProfile();
+  const { loadingCategories, errorCategories } = useCategories();
 
-  if (loading) {
+  if (loadingProfile || loadingCategories) {
     return <HeaderElement text="Loading..." requireCalendar requireSettings />;
   }
 
-  if (error) {
+  if (errorProfile || errorCategories) {
     return (
       <Pressable onPress={signOut}>
-        <Text>Error: {error}</Text>
+        <Text>Error: {errorProfile || errorCategories}</Text>
       </Pressable>
     );
   }

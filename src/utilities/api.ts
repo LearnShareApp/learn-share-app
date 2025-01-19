@@ -2,7 +2,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
-const BACKEND_URL = "http://192.168.1.8:8080";
+const BACKEND_URL = "http://192.168.1.8:81";
 
 export interface LoginData {
   email: string;
@@ -46,6 +46,25 @@ export interface UserProfile {
   name: string;
   surname: string;
   birthdate: string;
+}
+
+export interface TeacherSkill {
+  about: string;
+  category_id: number;
+  rate: number;
+  skill_id: number;
+  video_card_link: string;
+}
+
+export interface TeacherProfile {
+  user_id: number;
+  teacher_id: number;
+  registration_date: Date;
+  email: string;
+  name: string;
+  surname: string;
+  birthdate: string;
+  skills: TeacherSkill[];
 }
 
 class ApiService {
@@ -100,6 +119,11 @@ class ApiService {
   // User profile endpoints
   async getUserProfile(): Promise<UserProfile> {
     const response = await this.api.get<UserProfile>("/api/user/profile");
+    return response.data;
+  }
+
+  async getTeacherProfile(): Promise<TeacherProfile> {
+    const response = await this.api.get<TeacherProfile>("/api/teacher");
     return response.data;
   }
 

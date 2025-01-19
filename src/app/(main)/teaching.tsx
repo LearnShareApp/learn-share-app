@@ -13,17 +13,19 @@ import { FontAwesome } from "@expo/vector-icons";
 import { LESSONS } from "../../../assets/lessons";
 import LessonItem from "../../components/lesson-item";
 import HeaderElement from "../../components/header-element";
+import { useTeacher } from "../../utilities/teacher-hook";
 
 const Teaching = () => {
-  if (false)
+  const { teacher, loading, error } = useTeacher();
+
+  if (loading) {
+    return <HeaderElement text="Loading..." requireChanges requireSettings />;
+  }
+
+  if (teacher)
     return (
       <>
-        <HeaderElement
-          text="Teaching"
-          requireCalendar={false}
-          requireChanges
-          requireSettings
-        />
+        <HeaderElement text="Teaching" requireChanges requireSettings />
         <View
           style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
         >
@@ -63,12 +65,7 @@ const Teaching = () => {
     );
   return (
     <>
-      <HeaderElement
-        text="Teaching"
-        requireCalendar={false}
-        requireChanges
-        requireSettings
-      />
+      <HeaderElement text="Teaching" requireChanges requireSettings />
       <ScrollView contentContainerStyle={styles.container}>
         <View style={[styles.card]}>
           <View style={styles.imagePart}>

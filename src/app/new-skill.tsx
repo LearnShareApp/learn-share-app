@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { apiService, Category, Skill } from "../utilities/api";
 import axios from "axios";
 import { router } from "expo-router";
+import { useTeacher } from "../utilities/teacher-hook";
 
 const youtubeUrlRegex =
   /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
@@ -32,22 +33,24 @@ const authSchema = zod.object({
 });
 
 const SkillAdding = () => {
+  const { teacher, loading, error } = useTeacher();
+
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingCategory, setLoadingCategory] = useState(true);
+  const [errorCategory, setErrorCategory] = useState<string | null>(null);
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        setLoading(true);
+        setLoadingCategory(true);
         const categories = await apiService.getCategories();
         setCategories(categories);
       } catch (error) {
-        setError("Failed to fetch categories");
+        setErrorCategory("Failed to fetch categories");
       } finally {
-        setLoading(false);
+        setLoadingCategory(false);
       }
     };
 

@@ -15,14 +15,14 @@ import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
 
 const Profile = () => {
-  const { profile, loading, error } = useProfile();
+  const { profile, loadingProfile, errorProfile } = useProfile();
 
-  if (loading) {
+  if (loadingProfile) {
     return <HeaderElement text="Loading..." requireChanges requireSettings />;
   }
 
-  if (error) {
-    return <Text>Error: {error}</Text>;
+  if (errorProfile) {
+    return <Text>Error: {errorProfile}</Text>;
   }
 
   const copyToClipboard = async () => {
