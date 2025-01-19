@@ -19,15 +19,11 @@ const Search = () => {
 
   const { categories, loadingCategories } = useCategories();
 
-  // Загрузка учителей
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
         setLoading(true);
         const response = await apiService.getTeachers();
-        console.log("API Response:", response); // Смотрим что приходит
-        console.log("Response type:", typeof response); // Проверяем тип данных
-        console.log("Is Array:", Array.isArray(response));
         setTeachers(response || []);
       } catch (err) {
         console.error("Error details:", err);
@@ -37,7 +33,7 @@ const Search = () => {
           placement: "top",
           duration: 3000,
         });
-        setTeachers([]); // Устанавливаем пустой массив при ошибке
+        setTeachers([]);
       } finally {
         setLoading(false);
       }

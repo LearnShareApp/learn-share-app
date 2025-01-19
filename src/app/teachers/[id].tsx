@@ -6,9 +6,8 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useCallback, useState } from "react";
-import { Redirect, Stack, useLocalSearchParams } from "expo-router";
-import { TEACHERS } from "../../../assets/teachers";
+import React, { useCallback, useEffect, useState } from "react";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import SkillBadge from "../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
 import { useVideoPlayer, VideoView } from "expo-video";
@@ -16,13 +15,38 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import Line from "../../components/line";
 import ReviewItem from "../../components/review-item";
 import { REVIEWS } from "../../../assets/reviews";
+import { apiService, TeacherProfile } from "../../utilities/api";
+import { Toast } from "react-native-toast-notifications";
 
-const TeacherProfile = () => {
+const TeacherProfilePage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const teacher = TEACHERS.find((teacher) => teacher.id === Number(id));
+  const [teacher, setTeacher] = useState<TeacherProfile>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!teacher) return <Redirect href="/" />;
+  useEffect(() => {
+    const fetchTeacher = async () => {
+      try {
+        setLoading(true);
+        const response = await apiService.getTeacherById(id);
+        setTeacher(response || []);
+      } catch (err) {
+        console.error("Error details:", err);
+        setError("Failed to fetch teachers");
+        Toast.show("Failed to load teachers", {
+          type: "error",
+          placement: "top",
+          duration: 3000,
+        });
+        router.replace("/404");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeacher();
+  }, []);
 
   const [playing, setPlaying] = useState(false);
 
@@ -34,9 +58,11 @@ const TeacherProfile = () => {
 
   const reviews = REVIEWS.filter((review) => review.teacherId === Number(id));
 
+  if (!teacher) return null;
+
   return (
     <View>
-      <Stack.Screen options={{ title: `${teacher.Name} ${teacher.Surname}` }} />
+      <Stack.Screen options={{ title: `${teacher.name} ${teacher.surname}` }} />
       <FlatList
         data={reviews}
         ListHeaderComponent={
@@ -51,16 +77,22 @@ const TeacherProfile = () => {
               />
             </View>
             <View style={[styles.white, styles.mainCard]}>
-              <Image source={teacher.avatarImage} style={styles.image} />
+              <Image
+                source={require("../../../assets/icon.png")}
+                style={styles.image}
+              />
               <View style={styles.teacherInfo}>
                 <Text>
-                  {teacher.Name} {teacher.Surname}
+                  {teacher.name} {teacher.surname}
                 </Text>
                 <View
                   style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
                 >
-                  {teacher.categories.map((item) => (
-                    <SkillBadge text={item} key={item} />
+                  {teacher.skills.map((item) => (
+                    <SkillBadge
+                      text={item.category_id.toString()}
+                      key={item.skill_id}
+                    />
                   ))}
                 </View>
               </View>
@@ -83,7 +115,7 @@ const TeacherProfile = () => {
                     name="star"
                     style={{ color: "gold" }}
                   />{" "}
-                  {teacher.grade.toFixed(1)}
+                  {teacher.skills[0].rate.toFixed(1)}
                 </Text>
                 <Text style={{ color: "#777" }}>rate</Text>
               </View>
@@ -127,7 +159,7 @@ const TeacherProfile = () => {
   );
 };
 
-export default TeacherProfile;
+export default TeacherProfilePage;
 
 const styles = StyleSheet.create({
   contentContainer: {

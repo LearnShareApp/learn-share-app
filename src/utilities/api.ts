@@ -156,12 +156,15 @@ class ApiService {
     return response.data.teachers || [];
   }
 
-  // Общий метод для выполнения запросов
+  async getTeacherById(id: string): Promise<TeacherProfile> {
+    const response = await this.api.get<TeacherProfile>(`/api/teachers/${id}`);
+    return response.data;
+  }
+
   async request<T>(config: AxiosRequestConfig): Promise<T> {
     const response = await this.api.request<T>(config);
     return response.data;
   }
 }
 
-// Создаем и экспортируем единственный экземпляр сервиса
 export const apiService = new ApiService();
