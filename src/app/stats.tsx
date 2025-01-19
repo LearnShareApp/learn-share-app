@@ -11,18 +11,10 @@ const Stats = () => {
 
   if (!categories || !teacher) return <Text>error</Text>;
 
-  const renderItem = ({ item }: { item: TeacherSkill }) => {
-    const skillName =
-      categories.find((category) => category.id === item.category_id)?.name ||
-      "";
-
-    return <TeacherSkillListItem skill={item} skillName={skillName} />;
-  };
-
   return (
     <FlatList
       data={teacher.skills}
-      renderItem={renderItem}
+      renderItem={(skill) => <TeacherSkillListItem skill={skill.item} />}
       contentContainerStyle={styles.skillsList}
       ListFooterComponent={
         <Link href={"/new-skill"} asChild>

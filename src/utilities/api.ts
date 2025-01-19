@@ -51,6 +51,7 @@ export interface UserProfile {
 export interface TeacherSkill {
   about: string;
   category_id: number;
+  category_name: string;
   rate: number;
   skill_id: number;
   video_card_link: string;
@@ -65,26 +66,6 @@ export interface TeacherProfile {
   surname: string;
   birthdate: string;
   skills: TeacherSkill[];
-}
-
-export interface TimeTeacherSkill {
-  about: string;
-  category_id: number;
-  category_name: string;
-  rate: number;
-  skill_id: number;
-  video_card_link: string;
-}
-
-export interface TimeTeacherProfile {
-  user_id: number;
-  teacher_id: number;
-  registration_date: Date;
-  email: string;
-  name: string;
-  surname: string;
-  birthdate: string;
-  skills: TimeTeacherSkill[];
 }
 
 export interface TeachersResponse {

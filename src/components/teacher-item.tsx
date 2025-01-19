@@ -27,7 +27,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
             {teacher.skills?.length > 0 ? (
               teacher.skills.map((skill, index) => (
                 <SkillBadge
-                  text={skill.category_id.toString()}
+                  text={skill.category_name}
                   key={`${skill.about}-${index}`}
                 />
               ))

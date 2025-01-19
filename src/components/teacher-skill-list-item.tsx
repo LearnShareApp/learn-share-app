@@ -5,13 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { TeacherSkill } from "../utilities/api";
 import { useTeacher } from "../utilities/teacher-hook";
 
-const TeacherSkillListItem = ({
-  skill,
-  skillName,
-}: {
-  skill: TeacherSkill;
-  skillName: string;
-}) => {
+const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
   const { teacher } = useTeacher();
 
   return (
@@ -19,7 +13,7 @@ const TeacherSkillListItem = ({
       <Pressable style={styles.item}>
         <View style={styles.teacherInfo}>
           <View style={styles.skillsList}>
-            <SkillBadge text={skillName} />
+            <SkillBadge text={skill.category_name} />
           </View>
           <View style={styles.grades}>
             <Text

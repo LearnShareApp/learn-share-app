@@ -33,8 +33,6 @@ const authSchema = zod.object({
 });
 
 const SkillAdding = () => {
-  useTeacher();
-
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategory, setLoadingCategory] = useState(true);
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
@@ -110,6 +108,9 @@ const SkillAdding = () => {
         });
       }
     }
+
+    const { teacher } = useTeacher();
+    if (teacher) null;
   };
 
   return (

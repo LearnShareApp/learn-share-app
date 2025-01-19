@@ -58,7 +58,7 @@ const TeacherProfilePage = () => {
 
   const reviews = REVIEWS.filter((review) => review.teacherId === Number(id));
 
-  if (!teacher) return null;
+  if (!teacher) return <Stack.Screen options={{ title: `Loading...` }} />;
 
   return (
     <View>
