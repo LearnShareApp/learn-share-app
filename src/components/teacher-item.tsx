@@ -1,30 +1,39 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { Teacher } from "../../assets/types/teacher";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
 import SkillBadge from "./skill";
 import { FontAwesome } from "@expo/vector-icons";
+import { TeacherProfile } from "../utilities/api";
 
-const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
+const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
+  if (!teacher) {
+    return null;
+  }
+
+  const firstSkillRate = teacher.skills?.[0]?.rate ?? 0;
+
   return (
-    <Link href={`/teachers/${teacher.id}`} asChild>
+    <Link href={`/teachers/${teacher.teacher_id}`} asChild>
       <Pressable style={styles.item}>
-        <Image source={teacher.avatarImage} style={styles.avatar} />
+        <Image
+          source={require("../../assets/icon.png")}
+          style={styles.avatar}
+        />
         <View style={styles.teacherInfo}>
           <View style={styles.names}>
-            <Text>{teacher.Name}</Text>
-            <Text>{teacher.Surname}</Text>
+            <Text>{teacher.name}</Text>
+            <Text>{teacher.surname}</Text>
           </View>
           <View style={styles.skillsList}>
-            {teacher.categories.map((skill, index) => (
-              <SkillBadge text={skill} key={index} />
-            ))}
+            {teacher.skills?.length > 0 ? (
+              teacher.skills.map((skill, index) => (
+                <SkillBadge
+                  text={skill.category_id.toString()}
+                  key={`${skill.about}-${index}`}
+                />
+              ))
+            ) : (
+              <Text>No skills listed</Text>
+            )}
           </View>
         </View>
         <View style={styles.grades}>
@@ -34,7 +43,7 @@ const TeacherListItem = ({ teacher }: { teacher: Teacher }) => {
               fontWeight: "bold",
             }}
           >
-            {teacher.grade.toFixed(1)}{" "}
+            {firstSkillRate.toFixed(1)}{" "}
             <FontAwesome size={24} name="star" style={{ color: "gold" }} />
           </Text>
           <Text>3 lessons</Text>

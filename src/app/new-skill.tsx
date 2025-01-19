@@ -33,7 +33,7 @@ const authSchema = zod.object({
 });
 
 const SkillAdding = () => {
-  const { teacher, loading, error } = useTeacher();
+  useTeacher();
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategory, setLoadingCategory] = useState(true);
@@ -241,6 +241,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     alignSelf: "center",
+    borderColor: "transparent",
   },
   button: {
     backgroundColor: "#C9A977",

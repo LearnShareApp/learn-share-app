@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
 import SkillBadge from "./skill";
 import { FontAwesome } from "@expo/vector-icons";
@@ -18,25 +18,23 @@ const TeacherSkillListItem = ({
     <Link href={`/teachers/${teacher?.teacher_id}`} asChild>
       <Pressable style={styles.item}>
         <View style={styles.teacherInfo}>
-          <View style={styles.names}></View>
           <View style={styles.skillsList}>
             <SkillBadge text={skillName} />
           </View>
-        </View>
-        <View style={styles.grades}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "bold",
-              color: "red",
-            }}
-          >
-            {skill?.rate}{" "}
-            <FontAwesome size={24} name="star" style={{ color: "gold" }} />
-          </Text>
+          <View style={styles.grades}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              {skill.rate ? skill.rate.toFixed(1) : "No reviews"}{" "}
+              <FontAwesome size={24} name="star" style={{ color: "gold" }} />
+            </Text>
+          </View>
         </View>
         <View>
-          <Text>{skill?.about}</Text>
+          <Text>{skill.about}</Text>
         </View>
       </Pressable>
     </Link>
@@ -62,11 +60,7 @@ const styles = StyleSheet.create({
   },
   teacherInfo: {
     gap: 8,
-  },
-  names: {
     flexDirection: "row",
-    color: "white",
-    gap: 4,
   },
   skillsList: {
     gap: 5,
