@@ -12,7 +12,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
   const firstSkillRate = teacher.skills?.[0]?.rate ?? 0;
 
   return (
-    <Link href={`/teachers/${teacher.teacher_id}`} asChild>
+    <Link href={`/teacher/${teacher.teacher_id}`} asChild>
       <Pressable style={styles.item}>
         <Image
           source={require("../../assets/icon.png")}
@@ -43,8 +43,14 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
               fontWeight: "bold",
             }}
           >
-            {firstSkillRate.toFixed(1)}{" "}
-            <FontAwesome size={24} name="star" style={{ color: "gold" }} />
+            {firstSkillRate ? (
+              <>
+                {firstSkillRate.toFixed(1)}
+                <FontAwesome size={24} name="star" style={{ color: "gold" }} />
+              </>
+            ) : (
+              "No reviews"
+            )}{" "}
           </Text>
           <Text>3 lessons</Text>
         </View>

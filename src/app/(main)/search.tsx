@@ -1,4 +1,11 @@
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import TeacherListItem from "../../components/teacher-item";
@@ -70,7 +77,32 @@ const Search = () => {
   }, [teachers, searchText, selectedCategory]);
 
   if (loading || loadingCategories) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.container}>
+        <View style={styles.search}>
+          <TextInput
+            style={styles.input}
+            placeholder="Try to find a teacher"
+            onChangeText={setSearchText}
+            value={searchText}
+          />
+          <FontAwesome size={24} name="search" style={{ color: "#C9A977" }} />
+        </View>
+        <View style={styles.dropdownContainer}>
+          <DropDownPicker
+            open={open}
+            value={selectedCategory}
+            items={[]}
+            setOpen={setOpen}
+            setValue={setSelectedCategory}
+            setItems={setDropdownItems}
+            placeholder="Loading..."
+            style={styles.dropdown}
+          />
+        </View>
+        <ActivityIndicator size="large" color="#C9A977" />
+      </View>
+    );
   }
 
   if (error) {

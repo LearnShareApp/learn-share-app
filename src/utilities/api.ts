@@ -21,6 +21,13 @@ export interface AddSkillData {
   category_id: number;
 }
 
+export interface LessonRequestData {
+  teacher_id: number;
+  user_id: number;
+  category_id: number;
+  date: Date;
+}
+
 export interface LoginResponse {
   token: string;
 }
@@ -113,6 +120,12 @@ class ApiService {
   async addSkill(data: AddSkillData): Promise<String> {
     const response = await this.api.post("/api/teacher/skill", data);
     return response.statusText;
+  }
+
+  async lessonRequest(data: LessonRequestData): Promise<String> {
+    return data.category_id.toString();
+    // const response = await this.api.post("/api/teacher/skill", data);
+    // return response.statusText;
   }
 
   // Categories endpoints
