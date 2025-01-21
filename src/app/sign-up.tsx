@@ -65,9 +65,9 @@ const SignUp = () => {
           placement: "top",
           duration: 3000,
         });
-        console.log(errorMessage);
+        alert("Unexpected error:" + errorMessage.toString());
       } else {
-        console.error("Unexpected error:", error);
+        alert("Unexpected error:" + error?.toString());
         Toast.show("An unexpected error occurred", {
           type: "warning",
           placement: "top",

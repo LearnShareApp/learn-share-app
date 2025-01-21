@@ -128,13 +128,11 @@ class ApiService {
     // return response.statusText;
   }
 
-  // Categories endpoints
   async getCategories(): Promise<Category[]> {
     const response = await this.api.get<CategoriesResponse>("/api/categories");
     return response.data.categories;
   }
 
-  // User profile endpoints
   async getUserProfile(): Promise<UserProfile> {
     const response = await this.api.get<UserProfile>("/api/user/profile");
     return response.data;
