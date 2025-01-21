@@ -51,6 +51,10 @@ export interface CategoriesResponse {
   categories: Category[];
 }
 
+export interface TimesResponse {
+  datetimes: Date[];
+}
+
 export interface UserProfile {
   id: number;
   email: string;
@@ -129,6 +133,11 @@ class ApiService {
   async addTime(data: AddTimeData): Promise<String> {
     const response = await this.api.post("/api/teacher/schedule", data);
     return response.statusText;
+  }
+
+  async getTime(): Promise<Date[]> {
+    const response = await this.api.get<TimesResponse>("/api/teacher/schedule");
+    return response.data.datetimes;
   }
 
   async lessonRequest(data: LessonRequestData): Promise<String> {

@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  ActivityIndicator,
+  FlatList,
+} from "react-native";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
@@ -16,7 +24,6 @@ const authSchema = zod.object({
 type FormData = zod.infer<typeof authSchema>;
 
 export default function AddTime() {
-  // Используем отдельные состояния для даты и времени
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
 
@@ -29,8 +36,10 @@ export default function AddTime() {
 
   const [showPickerTime, setShowPickerTime] = useState(false);
   const [showPickerDate, setShowPickerDate] = useState(false);
+  const [times, setTimes] = useState<Date[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Функция для комбинирования даты и времени
   const combineDateAndTime = (date: Date, time: Date): Date => {
     const combined = new Date(date);
     combined.setHours(
@@ -42,23 +51,47 @@ export default function AddTime() {
     return combined;
   };
 
-  // Обновляем значение в форме при изменении даты или времени
   useEffect(() => {
     const combinedDateTime = combineDateAndTime(selectedDate, selectedTime);
     setValue("datetime", combinedDateTime);
   }, [selectedDate, selectedTime, setValue]);
+
+  const fetchTimes = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getTime();
+      const parsedTimes = (response || []).map((time: Date) => new Date(time));
+      setTimes(parsedTimes);
+    } catch (err) {
+      console.error("Error details:", err);
+      setError("Failed to fetch times");
+      Toast.show("Failed to load times", {
+        type: "error",
+        placement: "top",
+        duration: 3000,
+      });
+      setTimes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTimes();
+  }, []);
 
   const SendRequest = async (data: FormData) => {
     try {
       const postData = {
         datetime: data.datetime,
       };
-      const response = await apiService.addTime(postData);
-      Toast.show("Request sent successfully", {
+      await apiService.addTime(postData);
+      Toast.show("Time added successfully", {
         type: "success",
         placement: "top",
         duration: 1500,
       });
+      fetchTimes();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -80,6 +113,21 @@ export default function AddTime() {
     }
   };
 
+  const renderTimeItem = ({ item }: { item: Date }) => (
+    <View style={styles.timeItem}>
+      <Text style={styles.timeText}>
+        {item.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}
+      </Text>
+      <Text style={[styles.timeText, { color: "#888" }]}>
+        {item.toLocaleDateString()}
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Controller
@@ -90,7 +138,7 @@ export default function AddTime() {
         }}
         render={({ field: { value }, fieldState: { error } }) => (
           <View style={styles.dateTimeContainer}>
-            <Text style={{ paddingHorizontal: 16 }}>Add new time</Text>
+            <Text style={styles.sectionTitle}>Add new time</Text>
             <Line />
             <View style={styles.pickerContainer}>
               <Button
@@ -116,7 +164,15 @@ export default function AddTime() {
             <View style={styles.pickerContainer}>
               <Button
                 color="#C9A977"
-                title={selectedTime.toLocaleTimeString()}
+                title={
+                  "    " +
+                  selectedTime.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  }) +
+                  "    "
+                }
                 onPress={() => setShowPickerTime(true)}
               />
               <Text style={styles.labelText}>Select time:</Text>
@@ -146,6 +202,24 @@ export default function AddTime() {
       >
         <Text style={styles.buttonText}>Add Time</Text>
       </TouchableOpacity>
+
+      <Text style={[styles.sectionTitle, { paddingHorizontal: 16 }]}>
+        Your times
+      </Text>
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#C9A977" />
+      ) : (
+        <FlatList
+          data={times}
+          renderItem={renderTimeItem}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          horizontal={false}
+          numColumns={2}
+        />
+      )}
     </View>
   );
 }
@@ -155,7 +229,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     gap: 16,
-    alignItems: "center",
   },
   dateTimeContainer: {
     backgroundColor: "white",
@@ -192,9 +265,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#C9A977",
     padding: 16,
     borderRadius: 8,
-    marginBottom: 16,
     width: "100%",
-    maxWidth: 600,
     alignItems: "center",
+  },
+  sectionTitle: {
+    fontSize: 18,
+  },
+  timeItem: {
+    backgroundColor: "white",
+    padding: 16,
+    borderRadius: 8,
+    width: "49%",
+    marginRight: "2%",
+  },
+  timeText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  list: {
+    width: "100%",
+  },
+  listContent: {
+    paddingBottom: 16,
+    gap: 8,
+    justifyContent: "space-between",
   },
 });
