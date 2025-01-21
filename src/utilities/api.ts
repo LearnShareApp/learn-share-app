@@ -21,6 +21,10 @@ export interface AddSkillData {
   category_id: number;
 }
 
+export interface AddTimeData {
+  datetime: Date;
+}
+
 export interface LessonRequestData {
   teacher_id: number;
   user_id: number;
@@ -119,6 +123,11 @@ class ApiService {
 
   async addSkill(data: AddSkillData): Promise<String> {
     const response = await this.api.post("/api/teacher/skill", data);
+    return response.statusText;
+  }
+
+  async addTime(data: AddTimeData): Promise<String> {
+    const response = await this.api.post("/api/teacher/schedule", data);
     return response.statusText;
   }
 

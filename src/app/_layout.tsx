@@ -52,6 +52,10 @@ export default function RootLayout() {
             name="teacher"
             options={{ headerShown: false, title: "Settings" }}
           />
+          <Stack.Screen
+            name="schedule"
+            options={{ headerShown: true, title: "My schedule" }}
+          />
         </Stack>
       </AuthProvider>
     </ToastProvider>

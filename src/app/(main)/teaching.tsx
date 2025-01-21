@@ -41,17 +41,27 @@ const Teaching = () => {
               </Pressable>
             </Link>
 
-            <Link href={"/stats"} asChild>
+            <Link href={"/schedule"} asChild>
               <Pressable style={styles.navBtn}>
                 <FontAwesome
                   size={24}
-                  name="pie-chart"
+                  name="calendar"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>My skills</Text>
+                <Text style={{ textAlign: "center" }}>My schedule</Text>
               </Pressable>
             </Link>
           </View>
+          <Link href={"/stats"} asChild>
+            <Pressable style={styles.navBtnSkills}>
+              <FontAwesome
+                size={24}
+                name="pie-chart"
+                style={{ color: "#C9A977" }}
+              />
+              <Text style={{ textAlign: "center" }}>Manage my skills</Text>
+            </Pressable>
+          </Link>
           <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
             Your next lessons:
           </Text>
@@ -177,6 +187,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     gap: 8,
+    alignItems: "center",
+  },
+  navBtnSkills: {
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 24,
+    gap: 12,
+    flexDirection: "row",
     alignItems: "center",
   },
   imagePart: {
