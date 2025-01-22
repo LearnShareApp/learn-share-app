@@ -15,8 +15,8 @@ export const useTeacher = () => {
       setTeacher(data);
       setError(null);
     } catch (err) {
-      setError("Failed to fetch profile");
-      Toast.show("Failed to load profile", {
+      setError("Failed to fetch teacher profile");
+      Toast.show("You are not a teacher", {
         type: "error",
         placement: "top",
         duration: 1000,

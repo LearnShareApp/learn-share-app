@@ -27,9 +27,8 @@ export interface AddTimeData {
 
 export interface LessonRequestData {
   teacher_id: number;
-  user_id: number;
   category_id: number;
-  date: Date;
+  datetime_id: number;
 }
 
 export interface LoginResponse {
@@ -51,8 +50,13 @@ export interface CategoriesResponse {
   categories: Category[];
 }
 
+export interface DateTime {
+  datetime: Date;
+  is_available: boolean;
+  schedule_time_id: number;
+}
 export interface TimesResponse {
-  datetimes: Date[];
+  datetimes: DateTime[];
 }
 
 export interface UserProfile {
@@ -135,8 +139,15 @@ class ApiService {
     return response.statusText;
   }
 
-  async getTime(): Promise<Date[]> {
+  async getTime(): Promise<DateTime[]> {
     const response = await this.api.get<TimesResponse>("/api/teacher/schedule");
+    return response.data.datetimes;
+  }
+
+  async getTimeById(id: string): Promise<DateTime[]> {
+    const response = await this.api.get<TimesResponse>(
+      `/api/teachers/${id}/schedule`
+    );
     return response.data.datetimes;
   }
 

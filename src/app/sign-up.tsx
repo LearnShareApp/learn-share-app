@@ -213,7 +213,7 @@ const SignUp = () => {
                 <DateTimePicker
                   value={value}
                   mode="date"
-                  display="default"
+                  display="spinner"
                   onChange={(event, selectedDate) => {
                     setShowPicker(false);
                     if (selectedDate) {

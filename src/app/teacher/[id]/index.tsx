@@ -177,7 +177,7 @@ const TeacherProfilePage = () => {
             <Pressable
               style={styles.bookBtnMain}
               onPress={() => {
-                router.push(`/teacher/${id}/book`);
+                router.push(`/teacher/${id}/book?category_id=${1}`);
               }}
             >
               <Text style={styles.bookTextMain}>Book lesson</Text>

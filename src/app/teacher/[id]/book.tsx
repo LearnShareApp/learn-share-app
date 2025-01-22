@@ -4,7 +4,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as zod from "zod";
@@ -13,17 +12,29 @@ import { Toast } from "react-native-toast-notifications";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useProfile } from "../../../utilities/profile-hook";
-import { apiService, Skill, TeacherProfile } from "../../../utilities/api";
+import {
+  apiService,
+  DateTime,
+  Skill,
+  TeacherProfile,
+} from "../../../utilities/api";
 import axios from "axios";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 const authSchema = zod.object({
   teacher_id: zod.number(),
-  user_id: zod.number(),
   category_id: zod.number(),
-  date: zod.date(),
+  datetime_id: zod.number(),
 });
+
+// Функция форматирования даты
+const formatDateTime = (date: Date): string => {
+  return date.toLocaleString("srb-SRB", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 export default function BookLesson() {
   const { id, category_id } = useLocalSearchParams<{
@@ -32,61 +43,109 @@ export default function BookLesson() {
   }>();
   const router = useRouter();
 
-  const { profile } = useProfile();
-
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
+  const [availableTimes, setAvailableTimes] = useState<DateTime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
+
+  const [skillItems, setSkillItems] = useState<Skill[]>([]);
+  const [timeItems, setTimeItems] = useState<
+    { label: string; value: number }[]
+  >([]);
+  const [openSkill, setOpenSkill] = useState(false);
+  const [openTime, setOpenTime] = useState(false);
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(
+    category_id || null
+  );
+  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+
+  const { control, handleSubmit, formState } = useForm({
+    resolver: zodResolver(authSchema),
+    defaultValues: {
+      teacher_id: Number(id),
+      category_id: category_id ? Number(category_id) : -1,
+      datetime_id: -1,
+    },
+  });
 
   useEffect(() => {
-    const fetchTeacher = async () => {
+    const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        const response = await apiService.getTeacherById(id);
-        if (!response) {
+        // Загрузка данных учителя
+        const teacherResponse = await apiService.getTeacherById(id);
+        if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
-        setTeacher(response);
+        setTeacher(teacherResponse);
+
+        // Загрузка доступного времени
+        const timesResponse = await apiService.getTimeById(id);
+        const availableTimes = timesResponse.filter(
+          (time) => time.is_available
+        );
+
+        // availableTimes.sort(
+        //   (a, b) => a?.datetime.getTime() - b?.datetime.getTime()
+        // );
+        setAvailableTimes(availableTimes);
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch teacher";
-        setError(errorMessage);
         console.error("Error details:", err);
-        router.replace("/404");
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to fetch data";
+        setError(errorMessage);
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+          router.replace("/404");
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTeacher();
+    if (id) {
+      fetchTeacherData();
+    }
   }, [id, router]);
 
-  const { control, handleSubmit, formState } = useForm({
-    resolver: zodResolver(authSchema),
-    defaultValues: {
-      teacher_id: Number(id), // Исправление 1
-      user_id: -1,
-      category_id: -1,
-      date: new Date(),
-    },
-  });
+  useEffect(() => {
+    if (teacher?.skills) {
+      const items = teacher.skills.map((skill) => ({
+        label: skill.category_name,
+        value: skill.skill_id.toString(),
+      }));
+      setSkillItems(items);
+    }
+  }, [teacher]);
+
+  useEffect(() => {
+    if (availableTimes.length > 0) {
+      const items = availableTimes.map((time) => ({
+        label: formatDateTime(time.datetime),
+        value: time.schedule_time_id,
+      }));
+      setTimeItems(items);
+    }
+  }, [availableTimes]);
 
   const SendRequest = async (data: zod.infer<typeof authSchema>) => {
     try {
       const postData = {
         teacher_id: data.teacher_id,
-        user_id: data.user_id,
         category_id: data.category_id,
-        date: data.date,
+        datetime_id: data.datetime_id,
       };
-      const response = await apiService.lessonRequest(postData);
-      Toast.show("Request sended in successfully", {
+
+      console.log("Sending request with data:", postData);
+
+      await apiService.lessonRequest(postData);
+      Toast.show("Request sent successfully", {
         type: "success",
         placement: "top",
         duration: 1500,
       });
+      router.back();
     } catch (error) {
+      console.error("Request error:", error);
       if (axios.isAxiosError(error)) {
         const errorMessage =
           error.response?.data?.error || "An unknown error occurred";
@@ -95,9 +154,7 @@ export default function BookLesson() {
           placement: "top",
           duration: 3000,
         });
-        console.log(errorMessage);
       } else {
-        console.error("Unexpected error:", error);
         Toast.show("An unexpected error occurred", {
           type: "warning",
           placement: "top",
@@ -106,29 +163,6 @@ export default function BookLesson() {
       }
     }
   };
-
-  const [items, setItems] = useState<Skill[]>([]);
-  const [showPickerTime, setShowPickerTime] = useState(false);
-  const [showPickerDate, setShowPickerDate] = useState(false);
-
-  const [selectedSkill, setSelectedSkill] = useState<string | null>(
-    category_id || null
-  );
-
-  useEffect(() => {
-    setItems(
-      teacher?.skills?.map((skill) => ({
-        label: skill.category_name,
-        value: skill.skill_id.toString(),
-      })) || []
-    );
-  }, [teacher]);
-
-  useEffect(() => {
-    if (category_id) {
-      setSelectedSkill(category_id);
-    }
-  }, [category_id]);
 
   if (loading) {
     return (
@@ -151,28 +185,29 @@ export default function BookLesson() {
       <Controller
         control={control}
         name="category_id"
-        render={({
-          field: { value, onChange, onBlur },
-          fieldState: { error },
-        }) => (
+        render={({ field: { onChange }, fieldState: { error } }) => (
           <>
             <DropDownPicker
-              open={open}
+              open={openSkill}
               value={selectedSkill}
-              items={items}
-              setOpen={setOpen}
+              items={skillItems}
+              setOpen={setOpenSkill}
+              dropDownContainerStyle={{ borderColor: "transparent" }}
               setValue={(callback) => {
                 const newValue =
                   typeof callback === "function"
                     ? callback(selectedSkill)
                     : callback;
                 setSelectedSkill(newValue);
+                if (newValue) {
+                  onChange(Number(newValue));
+                }
               }}
-              setItems={setItems}
+              setItems={setSkillItems}
               placeholder="Choose skill"
               style={styles.dropDown}
+              zIndex={2000}
             />
-
             {error && <Text style={styles.error}>{error.message}</Text>}
           </>
         )}
@@ -180,106 +215,41 @@ export default function BookLesson() {
 
       <Controller
         control={control}
-        name="date"
-        rules={{
-          required: "Date of birth is required",
-        }}
-        render={({
-          field: { value, onChange, onBlur },
-          fieldState: { error },
-        }) => (
-          <View style={{}}>
-            <View
-              style={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-                alignSelf: "flex-start",
-                paddingHorizontal: 24,
-                justifyContent: "space-between",
-                width: "100%",
-                marginBottom: 16,
-              }}
-            >
-              <Button
-                color="#C9A977"
-                title={
-                  value ? value.toLocaleTimeString() : "select Date of Birth"
+        name="datetime_id"
+        render={({ field: { onChange }, fieldState: { error } }) => (
+          <>
+            <DropDownPicker
+              open={openTime}
+              value={selectedTime}
+              items={timeItems}
+              setOpen={setOpenTime}
+              dropDownContainerStyle={{ borderColor: "transparent" }}
+              setValue={(callback) => {
+                const newValue =
+                  typeof callback === "function"
+                    ? callback(selectedTime)
+                    : callback;
+                setSelectedTime(newValue);
+                if (newValue) {
+                  onChange(Number(newValue));
                 }
-                onPress={() => setShowPickerTime(true)}
-              />
-              <Text
-                style={{
-                  color: "#999",
-                  fontSize: 16,
-                }}
-              >
-                Select Date:
-              </Text>
-              {showPickerTime && (
-                <DateTimePicker
-                  value={value}
-                  mode="time"
-                  display="spinner"
-                  onChange={(event, selectedDate) => {
-                    setShowPickerTime(false);
-                    if (selectedDate) {
-                      onChange(selectedDate);
-                    }
-                  }}
-                />
-              )}
-              {error && <Text style={styles.error}>{error.message}</Text>}
-            </View>
-            <View
-              style={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-                alignSelf: "flex-start",
-                paddingHorizontal: 24,
-                justifyContent: "space-between",
-                width: "100%",
-                marginBottom: 16,
               }}
-            >
-              <Button
-                color="#C9A977"
-                title={
-                  value ? value.toLocaleTimeString() : "select Date of Birth"
-                }
-                onPress={() => setShowPickerTime(true)}
-              />
-              <Text
-                style={{
-                  color: "#999",
-                  fontSize: 16,
-                }}
-              >
-                Select time:
-              </Text>
-              {showPickerTime && (
-                <DateTimePicker
-                  value={value}
-                  mode="time"
-                  display="spinner"
-                  onChange={(event, selectedDate) => {
-                    setShowPickerTime(false);
-                    if (selectedDate) {
-                      onChange(selectedDate);
-                    }
-                  }}
-                />
-              )}
-              {error && <Text style={styles.error}>{error.message}</Text>}
-            </View>
-          </View>
+              setItems={setTimeItems}
+              placeholder="Choose time"
+              style={styles.dropDown}
+              zIndex={1000}
+            />
+            {error && <Text style={styles.error}>{error.message}</Text>}
+          </>
         )}
       />
+
       <TouchableOpacity
         style={styles.button}
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Add Skill</Text>
+        <Text style={styles.buttonText}>Book Lesson</Text>
       </TouchableOpacity>
     </View>
   );

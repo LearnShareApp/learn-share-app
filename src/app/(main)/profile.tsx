@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -18,7 +19,14 @@ const Profile = () => {
   const { profile, loadingProfile, errorProfile } = useProfile();
 
   if (loadingProfile) {
-    return <HeaderElement text="Loading..." requireChanges requireSettings />;
+    return (
+      <>
+        <HeaderElement text="Loading..." requireChanges requireSettings />;
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#C9A977" />
+        </View>
+      </>
+    );
   }
 
   if (errorProfile) {

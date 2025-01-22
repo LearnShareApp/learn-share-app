@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { apiService } from "../utilities/api";
+import { apiService, DateTime } from "../utilities/api";
 import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Line from "../components/line";
@@ -36,7 +36,7 @@ export default function AddTime() {
 
   const [showPickerTime, setShowPickerTime] = useState(false);
   const [showPickerDate, setShowPickerDate] = useState(false);
-  const [times, setTimes] = useState<Date[]>([]);
+  const [times, setTimes] = useState<DateTime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,7 +60,10 @@ export default function AddTime() {
     try {
       setLoading(true);
       const response = await apiService.getTime();
-      const parsedTimes = (response || []).map((time: Date) => new Date(time));
+      const parsedTimes = (response || []).map((time: DateTime) => ({
+        ...time,
+        datetime: new Date(time.datetime),
+      }));
       setTimes(parsedTimes);
     } catch (err) {
       console.error("Error details:", err);
@@ -113,20 +116,33 @@ export default function AddTime() {
     }
   };
 
-  const renderTimeItem = ({ item }: { item: Date }) => (
-    <View style={styles.timeItem}>
-      <Text style={styles.timeText}>
-        {item.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })}
-      </Text>
-      <Text style={[styles.timeText, { color: "#888" }]}>
-        {item.toLocaleDateString()}
-      </Text>
-    </View>
-  );
+  const renderTimeItem = ({ item }: { item: DateTime }) => {
+    if (!item.datetime) {
+      console.warn("DateTime is undefined for item:", item);
+      return null;
+    }
+
+    return (
+      <View
+        style={
+          !item.is_available
+            ? [styles.timeItem, styles.takenTime]
+            : styles.timeItem
+        }
+      >
+        <Text style={styles.timeText}>
+          {new Date(item.datetime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}
+        </Text>
+        <Text style={[styles.timeText, { color: "#888" }]}>
+          {new Date(item.datetime).toLocaleDateString()}
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -289,5 +305,9 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     gap: 8,
     justifyContent: "space-between",
+  },
+  takenTime: {
+    borderWidth: 2,
+    borderColor: "black",
   },
 });

@@ -93,6 +93,7 @@ const Search = () => {
             open={open}
             value={selectedCategory}
             items={[]}
+            dropDownContainerStyle={{ borderColor: "transparent" }}
             setOpen={setOpen}
             setValue={setSelectedCategory}
             setItems={setDropdownItems}
