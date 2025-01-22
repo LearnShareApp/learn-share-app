@@ -225,7 +225,7 @@ export default function AddTime() {
 
       {loading ? (
         <ActivityIndicator size="large" color="#C9A977" />
-      ) : (
+      ) : times.length ? (
         <FlatList
           data={times}
           renderItem={renderTimeItem}
@@ -235,6 +235,8 @@ export default function AddTime() {
           horizontal={false}
           numColumns={2}
         />
+      ) : (
+        <Text style={{ textAlign: "center" }}>You don't have any time</Text>
       )}
     </View>
   );
