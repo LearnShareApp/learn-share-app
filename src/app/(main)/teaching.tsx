@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React from "react";
@@ -140,9 +141,9 @@ const Teaching = () => {
         </View>
 
         <Link href={"/new-skill"} asChild>
-          <Pressable style={styles.btn}>
+          <TouchableOpacity activeOpacity={0.6} style={styles.btn}>
             <Text style={styles.text}>Start sharing my skills</Text>
-          </Pressable>
+          </TouchableOpacity>
         </Link>
       </ScrollView>
     </>

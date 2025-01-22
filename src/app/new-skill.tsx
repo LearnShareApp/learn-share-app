@@ -196,6 +196,7 @@ const SkillAdding = () => {
           style={styles.button}
           onPress={handleSubmit(skillAdd)}
           disabled={formState.isSubmitting}
+          activeOpacity={0.6}
         >
           <Text style={styles.buttonText}>Add Skill</Text>
         </TouchableOpacity>

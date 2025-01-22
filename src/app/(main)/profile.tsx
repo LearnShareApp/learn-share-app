@@ -20,12 +20,13 @@ const Profile = () => {
 
   if (loadingProfile) {
     return (
-      <>
-        <HeaderElement text="Loading..." requireChanges requireSettings />;
+      <View>
+        {/* <HeaderElement text="Loading..." requireChanges requireSettings />; */}
+        <Text>Loading...</Text>
         <View style={styles.container}>
           <ActivityIndicator size="large" color="#C9A977" />
         </View>
-      </>
+      </View>
     );
   }
 
@@ -93,7 +94,7 @@ const Profile = () => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ width: "50%", fontSize: 18 }}>---,-- RSD</Text>
+              <Text style={{ width: "50%", fontSize: 18 }}>in DEV</Text>
               <Pressable
                 style={{
                   backgroundColor: "#FFDFAF",

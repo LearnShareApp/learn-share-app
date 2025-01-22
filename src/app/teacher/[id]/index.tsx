@@ -6,6 +6,7 @@ import {
   Text,
   View,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -97,7 +98,8 @@ const TeacherProfilePage = () => {
         options={{
           title: `${teacher.name} ${teacher.surname}`,
           headerRight: () => (
-            <Pressable
+            <TouchableOpacity
+              activeOpacity={0.6}
               style={styles.bookBtn}
               onPress={() => {
                 console.log("Navigating to:", `/teacher/${id}/book`);
@@ -108,7 +110,7 @@ const TeacherProfilePage = () => {
               }}
             >
               <Text style={styles.bookText}>Book lesson</Text>
-            </Pressable>
+            </TouchableOpacity>
           ),
         }}
       />
