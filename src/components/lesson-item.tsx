@@ -5,22 +5,28 @@ import { TEACHERS } from "../../assets/teachers";
 import { Lesson } from "../../assets/types/lesson";
 import SkillBadge from "./skill";
 
-const date1 = new Date("2025-01-22T19:06:00");
-
-const LessonItem = ({ lesson }: { lesson: Lesson }) => {
+const LessonItem = ({
+  lesson,
+  forTeacher,
+}: {
+  lesson: Lesson;
+  forTeacher?: boolean;
+}) => {
   const teacher = TEACHERS.find((teacher) => teacher.id === lesson.teacherId);
   if (!teacher) return null;
+
+  const date1 = new Date("2025-01-29T19:06:00");
 
   const [differenceInSeconds, setDifferenceInSeconds] = useState<number>(0);
   const [differenceText, setDifferenceText] = useState<string>("");
 
-  const checkTime = (dif: number) => {
+  const remainingTime = (dif: number) => {
     if (dif / 60 / 60 / 24 > 1)
-      setDifferenceText("in" + (dif / 60 / 60 / 24).toFixed(0) + " days");
+      setDifferenceText("in " + (dif / 60 / 60 / 24).toFixed(0) + " days");
     else if (dif / 60 / 60 > 1)
-      setDifferenceText("in" + (dif / 60 / 60).toFixed(0) + " hours");
+      setDifferenceText("in " + (dif / 60 / 60).toFixed(0) + " hours");
     else if (dif / 60 > 1)
-      setDifferenceText("in" + (dif / 60).toFixed(0) + " minutes");
+      setDifferenceText("in " + (dif / 60).toFixed(0) + " minutes");
     else setDifferenceText("now");
   };
 
@@ -29,7 +35,7 @@ const LessonItem = ({ lesson }: { lesson: Lesson }) => {
       const date2 = new Date();
       const differenceInMilliseconds = date1.getTime() - date2.getTime();
       setDifferenceInSeconds(differenceInMilliseconds / 1000);
-      checkTime(differenceInSeconds);
+      remainingTime(differenceInSeconds);
     }, 600);
 
     return () => clearInterval(interval);
@@ -48,15 +54,22 @@ const LessonItem = ({ lesson }: { lesson: Lesson }) => {
           </Link>
 
           <View style={{ alignItems: "flex-start", gap: 8 }}>
-            <Text>
-              {teacher.Name} {teacher.Surname}
-            </Text>
+            {forTeacher ? (
+              <Text>Jason Statham</Text>
+            ) : (
+              <Text>Jason Statham</Text>
+            )}
             <SkillBadge text={lesson.category} />
           </View>
         </View>
-        <View style={{ flexDirection: "row" }}>
+        <View
+          style={{ flexDirection: "row", alignItems: "center", padding: 4 }}
+        >
           {lesson.status === "ongoing" ? (
-            <Text style={{ color: "green" }}>{lesson.status}</Text>
+            <>
+              <View style={styles.greenDot} />
+              <Text style={{ color: "#8c8" }}>{lesson.status}</Text>
+            </>
           ) : (
             <>
               <Text style={{ color: "#bbb" }}>{lesson.status + " "}</Text>
@@ -67,7 +80,11 @@ const LessonItem = ({ lesson }: { lesson: Lesson }) => {
       </View>
 
       <View style={styles.right}>
-        {lesson.status === "ongoing" ? (
+        {forTeacher ? (
+          <Pressable style={styles.approve}>
+            <Text style={styles.btnText}>Accept</Text>
+          </Pressable>
+        ) : lesson.status === "ongoing" ? (
           <Link href="/rooms/dede" asChild>
             <Pressable style={styles.enter}>
               <Text style={styles.btnText}>Join Lesson</Text>
@@ -78,8 +95,11 @@ const LessonItem = ({ lesson }: { lesson: Lesson }) => {
             <Text style={styles.btnText}>Join Lesson</Text>
           </Pressable>
         )}
+
         <Pressable style={styles.cancel}>
-          <Text style={{ color: "#f99" }}>Cancel</Text>
+          <Text style={{ color: "#f99" }}>
+            {forTeacher ? "Decline" : "cancel"}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -117,6 +137,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     justifyContent: "space-between",
     gap: 4,
+    width: 120,
   },
   enter: {
     backgroundColor: "#C9A977",
@@ -134,12 +155,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  btnText: { color: "white" },
+  btnText: { color: "white", textAlign: "center" },
   cancel: {
     alignItems: "center",
     borderWidth: 2,
     borderColor: "#f99",
     borderRadius: 4,
-    padding: 4,
+    padding: 8,
+    paddingHorizontal: 16,
+  },
+  greenDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#8c8",
+    marginRight: 4,
+    paddingTop: 2,
+  },
+  approve: {
+    paddingHorizontal: 16,
+    backgroundColor: "#8c8",
+    padding: 10,
+    borderRadius: 4,
   },
 });

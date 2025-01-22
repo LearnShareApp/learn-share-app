@@ -7,6 +7,7 @@ const Requests = () => {
       data={[3, 3, 3, 3, 3, 3]}
       renderItem={() => (
         <LessonItem
+          forTeacher
           lesson={{
             id: 2,
             userId: 21,
