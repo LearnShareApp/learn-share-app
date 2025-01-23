@@ -1,5 +1,5 @@
 import {
-  FlatList,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,6 +15,7 @@ import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
 import { useCategories } from "../../utilities/category-hook";
+import SkillBadge from "../../components/skill";
 
 const Home = () => {
   const { token, signOut } = useAuth();
@@ -84,8 +85,27 @@ const Home = () => {
               </View>
             </View>
             <View style={styles.nextLessons}>
+              <View style={{ width: "80%", gap: 8 }}>
+                <Text>Next lesson</Text>
+                <Line />
+                <View style={{ flexDirection: "row", gap: 8 }}>
+                  <Image
+                    source={require("../../../assets/icon.png")}
+                    style={styles.nextTeacherImage}
+                  />
+                  <View style={{ gap: 4 }}>
+                    <Text>Name Surname</Text>
+                    <SkillBadge text={"nonono"} />
+                  </View>
+                </View>
+              </View>
+
               <Link href="/rooms/" asChild>
-                <Text>Go toooo</Text>
+                <Pressable style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 24, padding: 16, color: "#bbb" }}>
+                    {">"}
+                  </Text>
+                </Pressable>
               </Link>
             </View>
           </View>
@@ -153,13 +173,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   nextLessons: {
+    padding: 16,
     width: "100%",
-    height: 100,
     backgroundColor: "#eee",
     borderRadius: 12,
+    gap: 8,
+    alignItems: "center",
+    flexDirection: "row",
   },
   listContainer: {
     gap: 4,
     overflow: "visible",
+  },
+  nextTeacherImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 50,
   },
 });

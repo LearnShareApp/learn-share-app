@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import { TEACHERS } from "../../assets/teachers";
@@ -8,14 +15,16 @@ import SkillBadge from "./skill";
 const LessonItem = ({
   lesson,
   forTeacher,
+  request,
 }: {
   lesson: Lesson;
   forTeacher?: boolean;
+  request?: boolean;
 }) => {
   const teacher = TEACHERS.find((teacher) => teacher.id === lesson.teacherId);
   if (!teacher) return null;
 
-  const date1 = new Date("2025-01-29T19:06:00");
+  const date1 = new Date("2025-01-22T21:26:00");
 
   const [differenceInSeconds, setDifferenceInSeconds] = useState<number>(0);
   const [differenceText, setDifferenceText] = useState<string>("");
@@ -36,7 +45,7 @@ const LessonItem = ({
       const differenceInMilliseconds = date1.getTime() - date2.getTime();
       setDifferenceInSeconds(differenceInMilliseconds / 1000);
       remainingTime(differenceInSeconds);
-    }, 600);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [date1]);
@@ -54,11 +63,7 @@ const LessonItem = ({
           </Link>
 
           <View style={{ alignItems: "flex-start", gap: 8 }}>
-            {forTeacher ? (
-              <Text>Jason Statham</Text>
-            ) : (
-              <Text>Jason Statham</Text>
-            )}
+            {!forTeacher ? <Text>Jason Statham</Text> : <Text>Elon Musk</Text>}
             <SkillBadge text={lesson.category} />
           </View>
         </View>
@@ -80,27 +85,27 @@ const LessonItem = ({
       </View>
 
       <View style={styles.right}>
-        {forTeacher ? (
-          <Pressable style={styles.approve}>
+        {request ? (
+          <TouchableOpacity activeOpacity={0.6} style={styles.approve}>
             <Text style={styles.btnText}>Accept</Text>
-          </Pressable>
+          </TouchableOpacity>
         ) : lesson.status === "ongoing" ? (
           <Link href="/rooms/dede" asChild>
-            <Pressable style={styles.enter}>
+            <TouchableOpacity activeOpacity={0.6} style={styles.enter}>
               <Text style={styles.btnText}>Join Lesson</Text>
-            </Pressable>
+            </TouchableOpacity>
           </Link>
         ) : (
-          <Pressable style={styles.noEnter}>
+          <View style={styles.noEnter}>
             <Text style={styles.btnText}>Join Lesson</Text>
-          </Pressable>
+          </View>
         )}
 
-        <Pressable style={styles.cancel}>
+        <TouchableOpacity activeOpacity={0.6} style={styles.cancel}>
           <Text style={{ color: "#f99" }}>
             {forTeacher ? "Decline" : "cancel"}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

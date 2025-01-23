@@ -18,7 +18,9 @@ const HeaderElement = ({
       <Text style={styles.hello}>{text}</Text>
       <View style={styles.buttons}>
         {requireCalendar && (
-          <FontAwesome size={24} name="calendar" style={{ color: "grey" }} />
+          <Link href="/rooms">
+            <FontAwesome size={24} name="calendar" style={{ color: "grey" }} />
+          </Link>
         )}
         {requireChanges && (
           <FontAwesome

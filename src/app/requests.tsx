@@ -8,6 +8,7 @@ const Requests = () => {
       renderItem={() => (
         <LessonItem
           forTeacher
+          request
           lesson={{
             id: 2,
             userId: 21,
@@ -28,10 +29,8 @@ export default Requests;
 
 const styles = StyleSheet.create({
   skillsList: {
-    flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 8,
-    overflow: "scroll",
   },
 });

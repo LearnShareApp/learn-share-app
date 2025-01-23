@@ -68,7 +68,7 @@ const Teaching = () => {
           </Text>
           <FlatList
             data={LESSONS}
-            renderItem={(item) => <LessonItem lesson={item.item} />}
+            renderItem={(item) => <LessonItem lesson={item.item} forTeacher />}
             contentContainerStyle={{ gap: 8 }}
           />
         </View>
