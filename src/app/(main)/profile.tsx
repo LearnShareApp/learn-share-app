@@ -35,7 +35,9 @@ const Profile = () => {
   }
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync("https://youtube.com");
+    await Clipboard.setStringAsync(
+      "https://www.youtube.com/watch?v=jNQXAC9IVRw"
+    );
   };
 
   return (

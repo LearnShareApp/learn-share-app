@@ -21,9 +21,8 @@ import {
 import axios from "axios";
 
 const authSchema = zod.object({
-  teacher_id: zod.number(),
   category_id: zod.number(),
-  datetime_id: zod.number(),
+  schedule_time_id: zod.number(),
 });
 
 // Функция форматирования даты
@@ -62,9 +61,8 @@ export default function BookLesson() {
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      teacher_id: Number(id),
       category_id: category_id ? Number(category_id) : -1,
-      datetime_id: -1,
+      schedule_time_id: -1,
     },
   });
 
@@ -111,7 +109,7 @@ export default function BookLesson() {
     if (teacher?.skills) {
       const items = teacher.skills.map((skill) => ({
         label: skill.category_name,
-        value: skill.skill_id.toString(),
+        value: skill.category_id.toString(),
       }));
       setSkillItems(items);
     }
@@ -130,13 +128,12 @@ export default function BookLesson() {
   const SendRequest = async (data: zod.infer<typeof authSchema>) => {
     try {
       const postData = {
-        teacher_id: data.teacher_id,
+        teacher_id: Number(id),
         category_id: data.category_id,
-        datetime_id: data.datetime_id,
+        schedule_time_id: data.schedule_time_id,
       };
 
       console.log("Sending request with data:", postData);
-
       await apiService.lessonRequest(postData);
       Toast.show("Request sent successfully", {
         type: "success",
@@ -215,7 +212,7 @@ export default function BookLesson() {
 
       <Controller
         control={control}
-        name="datetime_id"
+        name="schedule_time_id"
         render={({ field: { onChange }, fieldState: { error } }) => (
           <>
             <DropDownPicker

@@ -28,7 +28,7 @@ export interface AddTimeData {
 export interface LessonRequestData {
   teacher_id: number;
   category_id: number;
-  datetime_id: number;
+  schedule_time_id: number;
 }
 
 export interface LoginResponse {
@@ -152,9 +152,8 @@ class ApiService {
   }
 
   async lessonRequest(data: LessonRequestData): Promise<String> {
-    return data.category_id.toString();
-    // const response = await this.api.post("/api/teacher/skill", data);
-    // return response.statusText;
+    const response = await this.api.post("/api/lesson", data);
+    return response.statusText;
   }
 
   async getCategories(): Promise<Category[]> {
