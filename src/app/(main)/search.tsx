@@ -1,104 +1,151 @@
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { TEACHERS } from "../../../assets/teachers";
-import TeacherListItem from "../../components/teacher-item";
 import { FontAwesome } from "@expo/vector-icons";
-// import { useLocalSearchParams } from "expo-router";
-import axios from "axios";
-import SkillBadge from "../../components/skill";
-
-interface Category {
-  id: number;
-  min_age: number;
-  name: string;
-}
-
-interface ApiResponse {
-  categories: Category[];
-}
-const BACKEND_URL = "http://192.168.1.8:8080";
+import TeacherListItem from "../../components/teacher-item";
+import { apiService, Skill, TeacherProfile } from "../../utilities/api";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useCategories } from "../../utilities/category-hook";
+import { Toast } from "react-native-toast-notifications";
 
 const Search = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [teachers, setTeachers] = useState<TeacherProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState("");
+
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [dropdownItems, setDropdownItems] = useState<Skill[]>([]);
+
+  const { categories, loadingCategories } = useCategories();
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchTeachers = async () => {
       try {
-        const response = await axios.get<ApiResponse>(
-          `${BACKEND_URL}/api/categories`
-        );
-        setCategories(response.data.categories);
-        console.log("Categories:", response.data.categories);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          setError(error.message);
-        } else {
-          setError("unknown error");
-        }
-        setCategories([]);
+        setLoading(true);
+        const response = await apiService.getTeachers();
+        setTeachers(response || []);
+      } catch (err) {
+        console.error("Error details:", err);
+        setError("Failed to fetch teachers");
+        Toast.show("Failed to load teachers", {
+          type: "error",
+          placement: "top",
+          duration: 3000,
+        });
+        setTeachers([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCategories();
+    fetchTeachers();
   }, []);
 
-  const [text, onChangeText] = React.useState("");
-  const teachers = TEACHERS.filter((teacher) =>
-    `${teacher.Name.toLowerCase()} ${teacher.Surname.toLowerCase()}`.includes(
-      text.toLowerCase()
-    )
-  ).filter((teacher) => teacher.categories.includes("programming"));
+  useEffect(() => {
+    if (categories) {
+      const items: Skill[] = categories.map((category) => ({
+        label: category.name,
+        value: category.id.toString(),
+      }));
+      setDropdownItems(items);
+    }
+  }, [categories]);
 
-  if (loading) {
-    return <Text>Загрузка...</Text>;
+  const filteredTeachers = React.useMemo(() => {
+    return teachers.filter((teacher) => {
+      const matchesSearch =
+        `${teacher.name.toLowerCase()} ${teacher.surname.toLowerCase()}`.includes(
+          searchText.toLowerCase()
+        );
+
+      const matchesCategory = selectedCategory
+        ? teacher.skills.some(
+            (skill) => skill.category_id.toString() === selectedCategory
+          )
+        : true;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [teachers, searchText, selectedCategory]);
+
+  if (loading || loadingCategories) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.search}>
+          <TextInput
+            style={styles.input}
+            placeholder="Try to find a teacher"
+            onChangeText={setSearchText}
+            value={searchText}
+          />
+          <FontAwesome size={24} name="search" style={{ color: "#C9A977" }} />
+        </View>
+        <View style={styles.dropdownContainer}>
+          <DropDownPicker
+            open={open}
+            value={selectedCategory}
+            items={[]}
+            dropDownContainerStyle={{ borderColor: "transparent" }}
+            setOpen={setOpen}
+            setValue={setSelectedCategory}
+            setItems={setDropdownItems}
+            placeholder="Loading..."
+            style={styles.dropdown}
+          />
+        </View>
+        <ActivityIndicator size="large" color="#C9A977" />
+      </View>
+    );
   }
 
   if (error) {
-    return <Text>Ошибка: {error}</Text>;
+    return <Text>Error: {error}</Text>;
   }
-  console.log(categories);
+
   return (
     <View style={styles.container}>
       <View style={styles.search}>
         <TextInput
           style={styles.input}
-          placeholder="try to find a teacher"
-          onChangeText={onChangeText}
-          value={text}
+          placeholder="Try to find a teacher"
+          onChangeText={setSearchText}
+          value={searchText}
         />
         <FontAwesome size={24} name="search" style={{ color: "#C9A977" }} />
       </View>
 
-      <View
-        style={{
-          gap: 8,
-          alignItems: "flex-start",
-          flexDirection: "row",
-          overflow: "scroll",
-          paddingHorizontal: 16,
-          paddingVertical: 8,
-          backgroundColor: "white",
-          borderRadius: 8,
-        }}
-      >
-        {categories &&
-          Array.isArray(categories) &&
-          categories.map((category) => (
-            <SkillBadge key={category.id} text={category.name} />
-          ))}
+      <View style={styles.dropdownContainer}>
+        <DropDownPicker
+          open={open}
+          value={selectedCategory}
+          items={dropdownItems}
+          setOpen={setOpen}
+          setValue={setSelectedCategory}
+          setItems={setDropdownItems}
+          placeholder="Choose category"
+          style={styles.dropdown}
+        />
       </View>
 
-      <FlatList
-        data={teachers}
-        renderItem={({ item }) => <TeacherListItem teacher={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
-        stickyHeaderHiddenOnScroll
-      />
+      {filteredTeachers.length === 0 ? (
+        <Text style={styles.noResults}>No teachers found</Text>
+      ) : (
+        <FlatList
+          data={filteredTeachers}
+          renderItem={({ item }) => <TeacherListItem teacher={item} />}
+          keyExtractor={(item) => item.teacher_id.toString()}
+          contentContainerStyle={styles.listContainer}
+          stickyHeaderHiddenOnScroll
+        />
+      )}
     </View>
   );
 };
@@ -135,5 +182,19 @@ const styles = StyleSheet.create({
   listContainer: {
     gap: 4,
     overflow: "visible",
+  },
+  dropdownContainer: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 8,
+  },
+  dropdown: {
+    borderColor: "transparent",
+  },
+  noResults: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "#666",
   },
 });

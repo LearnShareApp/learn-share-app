@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -12,8 +13,27 @@ import HeaderElement from "../../components/header-element";
 import { FontAwesome } from "@expo/vector-icons";
 import SkillBadge from "../../components/skill";
 import Line from "../../components/line";
+import { useProfile } from "../../utilities/profile-hook";
 
 const Profile = () => {
+  const { profile, loadingProfile, errorProfile } = useProfile();
+
+  if (loadingProfile) {
+    return (
+      <View>
+        {/* <HeaderElement text="Loading..." requireChanges requireSettings />; */}
+        <Text>Loading...</Text>
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#C9A977" />
+        </View>
+      </View>
+    );
+  }
+
+  if (errorProfile) {
+    return <Text>Error: {errorProfile}</Text>;
+  }
+
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync("https://youtube.com");
   };
@@ -34,7 +54,9 @@ const Profile = () => {
               style={styles.image}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.user_name}>Michael Jackson</Text>
+              <Text style={styles.user_name}>
+                {profile?.name} {profile?.surname}
+              </Text>
               <Text>200d since joining the study world</Text>
             </View>
           </View>
@@ -72,7 +94,7 @@ const Profile = () => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ width: "50%", fontSize: 18 }}>---,-- RSD</Text>
+              <Text style={{ width: "50%", fontSize: 18 }}>in DEV</Text>
               <Pressable
                 style={{
                   backgroundColor: "#FFDFAF",

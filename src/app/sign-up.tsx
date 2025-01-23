@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, Form, useForm } from "react-hook-form";
 import {
   Button,
   StyleSheet,
@@ -11,12 +11,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
-import axios from "axios";
 import { Link, Redirect } from "expo-router";
-import { useToken } from "../providers/tokenProvider";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
-const BACKEND_URL = "http://192.168.1.8:8080";
+import { useAuth } from "../providers/auth-provider";
+import { apiService } from "../utilities/api";
+import axios from "axios";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
@@ -28,14 +28,15 @@ const authSchema = zod.object({
   birthdate: zod.date(),
 });
 
-const SignUp = () => {
-  const { token, setToken } = useToken();
+type AuthFormData = zod.infer<typeof authSchema>;
 
+const SignUp = () => {
+  const { token, signIn } = useAuth();
   if (token) return <Redirect href={"/"} />;
 
   const [showPicker, setShowPicker] = useState(false);
 
-  const { control, handleSubmit, formState } = useForm({
+  const { control, handleSubmit, formState } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     defaultValues: {
       email: "",
@@ -46,18 +47,33 @@ const SignUp = () => {
     },
   });
 
-  const signUp = async (data: zod.infer<typeof authSchema>) => {
+  const signUp = async (data: AuthFormData) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/signup`, data);
-      console.log(response.data);
+      const response = await apiService.signUp(data);
+      await signIn(response.token);
       Toast.show("Signed up successfully", {
         type: "success",
         placement: "top",
         duration: 1500,
       });
-      setToken(response.data);
     } catch (error) {
-      console.error("Error sending data:", error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+        alert("Unexpected error:" + errorMessage.toString());
+      } else {
+        alert("Unexpected error:" + error?.toString());
+        Toast.show("An unexpected error occurred", {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
     }
   };
 
@@ -191,13 +207,13 @@ const SignUp = () => {
                   fontSize: 16,
                 }}
               >
-                your birthdate
+                Your birthdate:
               </Text>
               {showPicker && (
                 <DateTimePicker
                   value={value}
                   mode="date"
-                  display="default"
+                  display="spinner"
                   onChange={(event, selectedDate) => {
                     setShowPicker(false);
                     if (selectedDate) {

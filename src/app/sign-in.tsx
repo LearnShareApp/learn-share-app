@@ -10,27 +10,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
-import * as SecureStore from "expo-secure-store";
-import axios from "axios";
 import { Link, Redirect } from "expo-router";
-
-import apiClient from "../utilities/api";
-import { useToken } from "../providers/tokenProvider";
-const BACKEND_URL = "http://192.168.1.8:8080";
+import { useAuth } from "../providers/auth-provider";
+import { apiService } from "../utilities/api";
+import axios from "axios";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Invalid email address" }),
   password: zod
     .string()
-    .min(4, { message: "Password must be at least 8 characters long" }),
+    .min(4, { message: "Password must be at least 4 characters long" }),
 });
 
+type AuthFormData = zod.infer<typeof authSchema>;
+
 const Auth = () => {
-  const { token, setToken } = useToken();
+  const { token, signIn } = useAuth();
+  if (token) return <Redirect href="/" />;
 
-  if (token) return <Redirect href={"/"} />;
-
-  const { control, handleSubmit, formState } = useForm({
+  const { control, handleSubmit, formState } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     defaultValues: {
       email: "",
@@ -38,37 +36,34 @@ const Auth = () => {
     },
   });
 
-  // const signIn = async (data: zod.infer<typeof authSchema>) => {
-  //   try {
-  //     const response = await apiClient.post("/auth/login", data); // Укажите нужный эндпоинт
-  //     console.log("Login successful:", response.data);
-  //     Toast.show("Signed in successfully", {
-  //       type: "success",
-  //       placement: "top",
-  //       duration: 1500,
-  //     });
-
-  //     // Сохранение токена в Secure Store
-  //     await SecureStore.setItemAsync("authToken", response.data);
-  //   } catch (error) {
-  //     console.error("Error during login:", error);
-  //     alert(error);
-  //   }
-  // };
-
-  const signIn = async (data: zod.infer<typeof authSchema>) => {
+  const signInFunction = async (data: AuthFormData) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/login`, data);
-      console.log(response.data);
+      const response = await apiService.login(data);
+      await signIn(response.token);
       Toast.show("Signed in successfully", {
         type: "success",
         placement: "top",
         duration: 1500,
       });
-      setToken(response.data);
     } catch (error) {
-      console.error("Error sending data:", error);
-      alert(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+          swipeEnabled: true,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show("An unexpected error occurred", {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
     }
   };
 
@@ -127,7 +122,7 @@ const Auth = () => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={handleSubmit(signIn)}
+          onPress={handleSubmit(signInFunction)}
           disabled={formState.isSubmitting}
         >
           <Text style={styles.buttonText}>Sign In</Text>

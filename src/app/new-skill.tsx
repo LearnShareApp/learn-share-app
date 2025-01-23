@@ -10,62 +10,136 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "react-native-toast-notifications";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useEffect, useState } from "react";
+import { apiService, Category, Skill } from "../utilities/api";
+import axios from "axios";
+import { router } from "expo-router";
+import { useTeacher } from "../utilities/teacher-hook";
+
+const youtubeUrlRegex =
+  /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
 
 const authSchema = zod.object({
-  skillName: zod.string(),
-  link: zod.string(),
-  about: zod.string(),
+  category_id: zod.string().min(1, "Select category"),
+  video_card_link: zod
+    .string()
+    .url("Have to be a link")
+    .refine(
+      (url) => youtubeUrlRegex.test(url),
+      "Have to be a link to your YouTube video"
+    ),
+  about: zod.string().min(8, "Describe yourself for students!"),
 });
 
 const SkillAdding = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategory, setLoadingCategory] = useState(true);
+  const [errorCategory, setErrorCategory] = useState<string | null>(null);
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCategory(true);
+        const categories = await apiService.getCategories();
+        setCategories(categories);
+      } catch (error) {
+        setErrorCategory("Failed to fetch categories");
+      } finally {
+        setLoadingCategory(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const [items, setItems] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    setItems(
+      categories.map((category) => ({
+        label: category.name,
+        value: category.id.toString(),
+      }))
+    );
+  }, [categories]);
+
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      skillName: "",
-      link: "",
+      category_id: "",
+      video_card_link: "",
       about: "",
     },
   });
 
   const skillAdd = async (data: zod.infer<typeof authSchema>) => {
-    Toast.show("Signed in successfully", {
-      type: "success",
-      placement: "top",
-      duration: 1500,
-    });
-  };
+    try {
+      const postData = {
+        category_id: Number(data.category_id),
+        video_card_link: data.video_card_link,
+        about: data.about,
+      };
+      const response = await apiService.addSkill(postData);
+      Toast.show("Signed in successfully", {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+      router.back();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show("An unexpected error occurred", {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
+    }
 
-  // const signUp = async (data: zod.infer<typeof authSchema>) => {
-  //   Toast.show("Signed up successfully", {
-  //     type: "success",
-  //     placement: "top",
-  //     duration: 1500,
-  //   });
-  // };
+    const { teacher } = useTeacher();
+    if (teacher) null;
+  };
 
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Add you skill</Text>
+        <Text style={styles.title}>Add your skill</Text>
         <Text style={styles.subtitle}>Please register your new skill:</Text>
 
         <Controller
           control={control}
-          name="skillName"
+          name="category_id"
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },
           }) => (
             <>
-              <TextInput
-                placeholder="skill name"
-                style={styles.input}
+              <DropDownPicker
+                open={open}
                 value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholderTextColor="#aaa"
-                autoCapitalize="none"
-                editable={!formState.isSubmitting}
+                items={items}
+                setOpen={setOpen}
+                setValue={(callback) => {
+                  const newValue =
+                    typeof callback === "function" ? callback(value) : callback;
+                  onChange(newValue);
+                }}
+                setItems={setItems}
+                placeholder="Choose skill"
+                style={styles.dropDown}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>
@@ -74,7 +148,7 @@ const SkillAdding = () => {
 
         <Controller
           control={control}
-          name="link"
+          name="video_card_link"
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },
@@ -122,19 +196,10 @@ const SkillAdding = () => {
           style={styles.button}
           onPress={handleSubmit(skillAdd)}
           disabled={formState.isSubmitting}
+          activeOpacity={0.6}
         >
           <Text style={styles.buttonText}>Add Skill</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          style={[styles.button, styles.signUpButton]}
-          onPress={handleSubmit(signUp)}
-          disabled={formState.isSubmitting}
-        >
-          <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            Sign Up
-          </Text>
-        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
@@ -169,6 +234,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     color: "#000",
+  },
+  dropDown: {
+    width: "90%",
+    marginBottom: 16,
+    borderRadius: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    color: "#000",
+    fontSize: 16,
+    alignSelf: "center",
+    borderColor: "transparent",
   },
   button: {
     backgroundColor: "#C9A977",

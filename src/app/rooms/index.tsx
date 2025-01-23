@@ -1,6 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Link, Stack } from "expo-router";
 import LessonItem from "../../components/lesson-item";
 import { LESSONS } from "../../../assets/lessons";
 

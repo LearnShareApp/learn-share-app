@@ -1,17 +1,36 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text } from "react-native";
+import LessonItem from "../components/lesson-item";
 
 const Requests = () => {
   return (
-    <View>
-      <Text>requests</Text>
-    </View>
+    <FlatList
+      data={[3, 3, 3, 3, 3, 3]}
+      renderItem={() => (
+        <LessonItem
+          forTeacher
+          request
+          lesson={{
+            id: 2,
+            userId: 21,
+            teacherId: 1,
+            category: "programming",
+            price: 39.9,
+            date: "31dec",
+            status: "ongoing",
+          }}
+        />
+      )}
+      contentContainerStyle={styles.skillsList}
+    />
   );
 };
 
 export default Requests;
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
+  skillsList: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
   },
 });

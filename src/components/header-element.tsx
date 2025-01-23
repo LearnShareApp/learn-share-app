@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
@@ -9,16 +9,18 @@ const HeaderElement = ({
   requireChanges,
 }: {
   text: string;
-  requireSettings: boolean;
-  requireCalendar: boolean;
-  requireChanges: boolean;
+  requireSettings?: boolean;
+  requireCalendar?: boolean;
+  requireChanges?: boolean;
 }) => {
   return (
     <View style={styles.header}>
       <Text style={styles.hello}>{text}</Text>
       <View style={styles.buttons}>
         {requireCalendar && (
-          <FontAwesome size={24} name="calendar" style={{ color: "grey" }} />
+          <Link href="/rooms">
+            <FontAwesome size={24} name="calendar" style={{ color: "grey" }} />
+          </Link>
         )}
         {requireChanges && (
           <FontAwesome
@@ -29,7 +31,9 @@ const HeaderElement = ({
         )}
         {requireSettings && (
           <Link href="/settings" asChild>
-            <FontAwesome size={24} name="gear" style={{ color: "grey" }} />
+            <Pressable>
+              <FontAwesome size={24} name="gear" style={{ color: "grey" }} />
+            </Pressable>
           </Link>
         )}
       </View>
