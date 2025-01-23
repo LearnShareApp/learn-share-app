@@ -9,7 +9,7 @@ export default function LessonsLayout() {
       />
       <Stack.Screen
         name="[id]"
-        options={{ title: "Your lessons", headerShown: false }}
+        options={{ title: "lesson", headerShown: false }}
       />
     </Stack>
   );

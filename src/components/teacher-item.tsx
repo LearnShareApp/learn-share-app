@@ -49,7 +49,10 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
                 <FontAwesome size={24} name="star" style={{ color: "gold" }} />
               </>
             ) : (
-              "No reviews"
+              <>
+                {"--"}
+                <FontAwesome size={24} name="star" style={{ color: "gold" }} />
+              </>
             )}{" "}
           </Text>
           <Text>3 lessons</Text>
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   grades: {
-    alignItems: "center",
+    alignItems: "flex-end",
     marginLeft: "auto",
   },
 });
