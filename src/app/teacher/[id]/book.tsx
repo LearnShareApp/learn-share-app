@@ -70,14 +70,12 @@ export default function BookLesson() {
     const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        // Загрузка данных учителя
         const teacherResponse = await apiService.getTeacherById(id);
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
         setTeacher(teacherResponse);
 
-        // Загрузка доступного времени
         const timesResponse = await apiService.getTimeById(id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available

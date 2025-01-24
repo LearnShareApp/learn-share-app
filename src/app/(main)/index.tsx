@@ -45,7 +45,7 @@ const Home = () => {
       />
       <ScrollView>
         <View style={styles.container}>
-          <Link href="/sign-in" asChild>
+          <Link href="/search" asChild>
             <Pressable style={styles.search}>
               <Text style={styles.searchText}>Try to find teacher</Text>
               <FontAwesome

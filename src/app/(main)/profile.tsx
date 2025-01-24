@@ -22,7 +22,6 @@ const Profile = () => {
     return (
       <View>
         {/* <HeaderElement text="Loading..." requireChanges requireSettings />; */}
-        <Text>Loading...</Text>
         <View style={styles.container}>
           <ActivityIndicator size="large" color="#C9A977" />
         </View>

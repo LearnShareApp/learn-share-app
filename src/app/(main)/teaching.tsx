@@ -112,9 +112,17 @@ const Teaching = () => {
               contentContainerStyle={{ gap: 8 }}
             />
           ) : (
-            <Text style={{ textAlign: "center", marginTop: 32, color: "#999" }}>
-              you don't have any lessons for now
-            </Text>
+            <View
+              style={{
+                flex: 1,
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ textAlign: "center", color: "#999" }}>
+                You don't have any lessons for now
+              </Text>
+            </View>
           )}
         </View>
       </>

@@ -1,16 +1,77 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import LessonItem from "../../components/lesson-item";
-import { LESSONS } from "../../../assets/lessons";
+import { apiService, Lesson } from "../../utilities/api";
+import { Toast } from "react-native-toast-notifications";
+import { Link } from "expo-router";
 
 const Rooms = () => {
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        setLoading(true);
+        const response = await apiService.getLessons();
+        setLessons(response || []);
+      } catch (err) {
+        console.error("Error details:", err);
+        setError("Failed to fetch teachers");
+        Toast.show("Failed to load teachers", {
+          type: "error",
+          placement: "top",
+          duration: 3000,
+        });
+        setLessons([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, []);
+
+  if (loading)
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#C9A977"
+        style={{ marginTop: 16 }}
+      />
+    );
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={LESSONS}
-        renderItem={(item) => <LessonItem lesson={item.item} />}
-        contentContainerStyle={{ gap: 8 }}
-      />
+      {lessons.length ? (
+        <FlatList
+          data={lessons}
+          renderItem={(item) => <LessonItem lesson={item.item} />}
+          contentContainerStyle={{ gap: 8 }}
+        />
+      ) : (
+        <View style={styles.center}>
+          <Text style={{ textAlign: "center" }}>
+            You don't have any lessons for now
+          </Text>
+          <Link href="/" asChild>
+            <TouchableOpacity style={styles.btn}>
+              <Text style={{ color: "white", textAlign: "center" }}>
+                Go back
+              </Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      )}
     </View>
   );
 };
@@ -21,5 +82,15 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+  },
+  center: {
+    alignItems: "center",
+    gap: 16,
+  },
+  btn: {
+    width: "60%",
+    backgroundColor: "#C9A977",
+    borderRadius: 4,
+    padding: 16,
   },
 });

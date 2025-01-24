@@ -113,6 +113,10 @@ export interface TeacherLessonResponse {
   lessons: TeacherLesson[];
 }
 
+export interface LessonResponse {
+  lessons: Lesson[];
+}
+
 export interface TeachersResponse {
   teachers: TeacherProfile[];
 }
@@ -201,6 +205,11 @@ class ApiService {
     const response = await this.api.get<TeacherLessonResponse>(
       "/api/teacher/lessons"
     );
+    return response.data.lessons;
+  }
+
+  async getLessons(): Promise<Lesson[]> {
+    const response = await this.api.get<LessonResponse>("/api/lessons");
     return response.data.lessons;
   }
 
