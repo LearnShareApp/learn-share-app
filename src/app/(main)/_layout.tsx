@@ -6,8 +6,15 @@ import { FontAwesome } from "@expo/vector-icons";
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
+  focused: boolean;
 }) {
-  return <FontAwesome size={24} {...props} style={{ color: "#C9A977" }} />;
+  return (
+    <FontAwesome
+      size={24}
+      {...props}
+      style={{ color: props.focused ? "#C9A977" : "grey" }}
+    />
+  );
 }
 
 const TabsLayout = () => {
@@ -31,7 +38,9 @@ const TabsLayout = () => {
           options={{
             title: "Main",
             tabBarIcon(props) {
-              return <TabBarIcon {...props} name="home" />;
+              return (
+                <TabBarIcon {...props} name="home" focused={props.focused} />
+              );
             },
           }}
         />
@@ -40,15 +49,9 @@ const TabsLayout = () => {
           options={{
             title: "Main",
             tabBarIcon(props) {
-              return <TabBarIcon {...props} name="search" />;
-            },
-          }}
-        />
-        <Tabs.Screen
-          name="chats"
-          options={{
-            tabBarIcon(props) {
-              return <TabBarIcon {...props} name="comment" />;
+              return (
+                <TabBarIcon {...props} name="search" focused={props.focused} />
+              );
             },
           }}
         />
@@ -56,7 +59,13 @@ const TabsLayout = () => {
           name="teaching"
           options={{
             tabBarIcon(props) {
-              return <TabBarIcon {...props} name="graduation-cap" />;
+              return (
+                <TabBarIcon
+                  {...props}
+                  name="graduation-cap"
+                  focused={props.focused}
+                />
+              );
             },
           }}
         />
@@ -64,7 +73,9 @@ const TabsLayout = () => {
           name="profile"
           options={{
             tabBarIcon(props) {
-              return <TabBarIcon {...props} name="user" />;
+              return (
+                <TabBarIcon {...props} name="user" focused={props.focused} />
+              );
             },
           }}
         />
