@@ -5,8 +5,8 @@ import { Toast } from "react-native-toast-notifications";
 
 export const useTeacher = () => {
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingTeacher, setLoading] = useState(true);
+  const [errorTeacher, setError] = useState<string | null>(null);
 
   const fetchProfile = async () => {
     try {
@@ -30,5 +30,5 @@ export const useTeacher = () => {
     fetchProfile();
   }, []);
 
-  return { teacher, loading, error, refetch: fetchProfile };
+  return { teacher, loadingTeacher, errorTeacher, refetch: fetchProfile };
 };

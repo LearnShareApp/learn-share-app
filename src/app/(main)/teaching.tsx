@@ -8,18 +8,46 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import { LESSONS } from "../../../assets/lessons";
 import LessonItem from "../../components/lesson-item";
 import HeaderElement from "../../components/header-element";
 import { useTeacher } from "../../utilities/teacher-hook";
+import { apiService, TeacherLesson } from "../../utilities/api";
+import { Toast } from "react-native-toast-notifications";
 
 const Teaching = () => {
-  const { teacher, loading, error } = useTeacher();
+  const { teacher, loadingTeacher, errorTeacher } = useTeacher();
 
-  if (loading) {
+  const [lessons, setLessons] = useState<TeacherLesson[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        setLoading(true);
+        const response = await apiService.getTeacherLessons();
+        setLessons(response || []);
+      } catch (err) {
+        console.error("Error details:", err);
+        setError("Failed to fetch teachers");
+        Toast.show("Failed to load teachers", {
+          type: "error",
+          placement: "top",
+          duration: 3000,
+        });
+        setLessons([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, []);
+
+  if (loadingTeacher) {
     return <HeaderElement text="Loading..." requireChanges requireSettings />;
   }
 
@@ -38,7 +66,14 @@ const Teaching = () => {
                   name="bell"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>New requests (0)</Text>
+                <Text style={{ textAlign: "center" }}>
+                  New requests (
+                  {
+                    lessons.filter((lesson) => lesson.status == "verification")
+                      .length
+                  }
+                  )
+                </Text>
               </Pressable>
             </Link>
 
@@ -66,11 +101,21 @@ const Teaching = () => {
           <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
             Your next lessons:
           </Text>
-          <FlatList
-            data={LESSONS}
-            renderItem={(item) => <LessonItem lesson={item.item} forTeacher />}
-            contentContainerStyle={{ gap: 8 }}
-          />
+
+          {lessons.filter((lesson) => lesson.status != "verification")
+            .length ? (
+            <FlatList
+              data={lessons.filter((lesson) => lesson.status != "verification")}
+              renderItem={(item) => (
+                <LessonItem lesson={item.item} forTeacher />
+              )}
+              contentContainerStyle={{ gap: 8 }}
+            />
+          ) : (
+            <Text style={{ textAlign: "center", marginTop: 32, color: "#999" }}>
+              you don't have any lessons for now
+            </Text>
+          )}
         </View>
       </>
     );

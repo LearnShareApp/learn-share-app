@@ -8,21 +8,41 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
-import { TEACHERS } from "../../assets/teachers";
-import { Lesson } from "../../assets/types/lesson";
 import SkillBadge from "./skill";
+import { Lesson, TeacherLesson } from "../utilities/api";
+
+export interface LessonMain {
+  lesson_id: number;
+  user_id: number;
+  user_name: string;
+  user_surname: string;
+  category_id: number;
+  category_name: string;
+  status: string;
+  datatime: Date;
+}
 
 const LessonItem = ({
   lesson,
   forTeacher,
   request,
 }: {
-  lesson: Lesson;
+  lesson: TeacherLesson | Lesson;
   forTeacher?: boolean;
   request?: boolean;
 }) => {
-  const teacher = TEACHERS.find((teacher) => teacher.id === lesson.teacherId);
-  if (!teacher) return null;
+  const lessonItemData: LessonMain = {
+    lesson_id: lesson.lesson_id,
+    user_id: "teacher_id" in lesson ? lesson.teacher_id : lesson.student_id,
+    user_name:
+      "teacher_id" in lesson ? lesson.teacher_name : lesson.student_name,
+    user_surname:
+      "teacher_id" in lesson ? lesson.teacher_surname : lesson.student_surname,
+    category_id: lesson.category_id,
+    category_name: lesson.category_name,
+    status: lesson.status,
+    datatime: lesson.datatime,
+  };
 
   const date1 = new Date("2025-01-22T21:26:00");
 
@@ -53,7 +73,7 @@ const LessonItem = ({
     <View style={styles.lesson}>
       <View style={styles.left}>
         <View style={styles.top}>
-          <Link href={`/teachers/${teacher.id}`} asChild>
+          <Link href={`/teachers/${lessonItemData.user_id}`} asChild>
             <Pressable>
               <Image
                 source={require("../../assets/icon.png")}
@@ -64,20 +84,27 @@ const LessonItem = ({
 
           <View style={{ alignItems: "flex-start", gap: 8 }}>
             {!forTeacher ? <Text>Jason Statham</Text> : <Text>Elon Musk</Text>}
-            <SkillBadge text={lesson.category} />
+            <SkillBadge text={lessonItemData.category_name} />
           </View>
         </View>
         <View
-          style={{ flexDirection: "row", alignItems: "center", padding: 4 }}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 4,
+            paddingBottom: 0,
+          }}
         >
-          {lesson.status === "ongoing" ? (
+          {lessonItemData.status === "ongoing" ? (
             <>
               <View style={styles.greenDot} />
-              <Text style={{ color: "#8c8" }}>{lesson.status}</Text>
+              <Text style={{ color: "#8c8" }}>{lessonItemData.status}</Text>
             </>
           ) : (
             <>
-              <Text style={{ color: "#bbb" }}>{lesson.status + " "}</Text>
+              <Text style={{ color: "#bbb" }}>
+                {lessonItemData.status + " "}
+              </Text>
               <Text style={{ color: "#bbb" }}>{differenceText}</Text>
             </>
           )}
@@ -89,7 +116,7 @@ const LessonItem = ({
           <TouchableOpacity activeOpacity={0.6} style={styles.approve}>
             <Text style={styles.btnText}>Accept</Text>
           </TouchableOpacity>
-        ) : lesson.status === "ongoing" ? (
+        ) : lessonItemData.status === "ongoing" ? (
           <Link href="/rooms/dede" asChild>
             <TouchableOpacity activeOpacity={0.6} style={styles.enter}>
               <Text style={styles.btnText}>Join Lesson</Text>

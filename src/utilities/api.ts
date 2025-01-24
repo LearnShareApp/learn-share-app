@@ -87,6 +87,32 @@ export interface TeacherProfile {
   skills: TeacherSkill[];
 }
 
+export interface TeacherLesson {
+  lesson_id: number;
+  student_id: number;
+  student_name: string;
+  student_surname: string;
+  category_id: number;
+  category_name: string;
+  status: string;
+  datatime: Date;
+}
+
+export interface Lesson {
+  lesson_id: number;
+  teacher_id: number;
+  teacher_name: string;
+  teacher_surname: string;
+  category_id: number;
+  category_name: string;
+  status: string;
+  datatime: Date;
+}
+
+export interface TeacherLessonResponse {
+  lessons: TeacherLesson[];
+}
+
 export interface TeachersResponse {
   teachers: TeacherProfile[];
 }
@@ -169,6 +195,13 @@ class ApiService {
   async getTeacherProfile(): Promise<TeacherProfile> {
     const response = await this.api.get<TeacherProfile>("/api/teacher");
     return response.data;
+  }
+
+  async getTeacherLessons(): Promise<TeacherLesson[]> {
+    const response = await this.api.get<TeacherLessonResponse>(
+      "/api/teacher/lessons"
+    );
+    return response.data.lessons;
   }
 
   async getTeachers(): Promise<TeacherProfile[]> {
