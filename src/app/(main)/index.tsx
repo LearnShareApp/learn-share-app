@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <>
       <HeaderElement
-        text={`Hello, ${profile?.name}`}
+        text={`Здраво, ${profile?.name}`}
         requireCalendar
         requireSettings
       />
@@ -47,7 +47,7 @@ const Home = () => {
         <View style={styles.container}>
           <Link href="/search" asChild>
             <Pressable style={styles.search}>
-              <Text style={styles.searchText}>Try to find teacher</Text>
+              <Text style={styles.searchText}>Пронаћи наставника</Text>
               <FontAwesome
                 size={24}
                 name="arrow-right"
@@ -56,7 +56,7 @@ const Home = () => {
             </Pressable>
           </Link>
           <View style={styles.info}>
-            <Text>Your lessons</Text>
+            <Text>Ваши часови</Text>
             <Line />
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
@@ -64,7 +64,7 @@ const Home = () => {
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
                 >
-                  successfully finished
+                  успешно завршен
                 </Text>
               </View>
               <View style={styles.infoSection}>
@@ -72,7 +72,7 @@ const Home = () => {
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
                 >
-                  need to be approved
+                  треба одобрити
                 </Text>
               </View>
               <View style={styles.infoSection}>
@@ -80,13 +80,13 @@ const Home = () => {
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
                 >
-                  waiting for you to join
+                  чека да се придружите
                 </Text>
               </View>
             </View>
             <View style={styles.nextLessons}>
               <View style={{ width: "80%", gap: 8 }}>
-                <Text>Next lesson</Text>
+                <Text>Следећи час</Text>
                 <Line />
                 <View style={{ flexDirection: "row", gap: 8 }}>
                   <Image
@@ -109,7 +109,7 @@ const Home = () => {
               </Link>
             </View>
           </View>
-          <Text style={styles.sectionText}>Your previous teachers:</Text>
+          <Text style={styles.sectionText}>Ваши претходни наставници:</Text>
           <View style={styles.listContainer}>
             {TEACHERS.map((teacher) => (
               <TeacherListItem teacher={teacher} key={teacher.id} />

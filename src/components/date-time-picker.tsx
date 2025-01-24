@@ -10,7 +10,7 @@ const DateOfBirthInput = () => {
     if (selectedDate) {
       setDate(selectedDate); // Устанавливаем выбранную дату
     }
-    setShow(false); // Скрываем пикер после выбора
+    setShow(false);
   };
 
   const showDatePicker = () => {
@@ -19,7 +19,7 @@ const DateOfBirthInput = () => {
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>Дата рождения: {date.toLocaleDateString()}</Text>
+      <Text>Датум рођења: {date.toLocaleDateString()}</Text>
       <Button title="Выбрать дату" onPress={showDatePicker} />
       {show && (
         <DateTimePicker

@@ -82,7 +82,7 @@ const Search = () => {
         <View style={styles.search}>
           <TextInput
             style={styles.input}
-            placeholder="Try to find a teacher"
+            placeholder="Пронађи наставника"
             onChangeText={setSearchText}
             value={searchText}
           />
@@ -97,7 +97,7 @@ const Search = () => {
             setOpen={setOpen}
             setValue={setSelectedCategory}
             setItems={setDropdownItems}
-            placeholder="Loading..."
+            placeholder="Учитавање..."
             style={styles.dropdown}
           />
         </View>
@@ -115,7 +115,7 @@ const Search = () => {
       <View style={styles.search}>
         <TextInput
           style={styles.input}
-          placeholder="Try to find a teacher"
+          placeholder="Пронађи наставника"
           onChangeText={setSearchText}
           value={searchText}
         />
@@ -130,13 +130,13 @@ const Search = () => {
           setOpen={setOpen}
           setValue={setSelectedCategory}
           setItems={setDropdownItems}
-          placeholder="Choose category"
+          placeholder="Изабери категориjу"
           style={styles.dropdown}
         />
       </View>
 
       {filteredTeachers.length === 0 ? (
-        <Text style={styles.noResults}>No teachers found</Text>
+        <Text style={styles.noResults}>Није пронађен ниједан наставник</Text>
       ) : (
         <FlatList
           data={filteredTeachers}

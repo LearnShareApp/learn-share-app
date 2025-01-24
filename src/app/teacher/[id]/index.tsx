@@ -109,7 +109,7 @@ const TeacherProfilePage = () => {
                 });
               }}
             >
-              <Text style={styles.bookText}>Book lesson</Text>
+              <Text style={styles.bookText}>Резервишите час</Text>
             </TouchableOpacity>
           ),
         }}
@@ -150,7 +150,7 @@ const TeacherProfilePage = () => {
               </View>
             </View>
             <View style={styles.white}>
-              <Text style={styles.sectionTitle}>About me:</Text>
+              <Text style={styles.sectionTitle}>О мени:</Text>
               <Line />
               <Text style={styles.aboutText}>
                 {teacher.skills[0].about || "No description available"}
@@ -182,9 +182,11 @@ const TeacherProfilePage = () => {
                 router.push(`/teacher/${id}/book?category_id=${1}`);
               }}
             >
-              <Text style={styles.bookTextMain}>Book lesson</Text>
+              <Text style={styles.bookTextMain}>Резервишите час</Text>
             </Pressable>
-            <Text style={styles.reviewsTitle}>Reviews ({reviews.length})</Text>
+            <Text style={styles.reviewsTitle}>
+              Рецензије ({reviews.length})
+            </Text>
           </View>
         }
         renderItem={({ item }) => <ReviewItem review={item} />}

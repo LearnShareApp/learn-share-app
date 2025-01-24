@@ -89,7 +89,7 @@ export default function AddTime() {
         datetime: data.datetime,
       };
       await apiService.addTime(postData);
-      Toast.show("Time added successfully", {
+      Toast.show("Термин је успешно додат", {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -150,11 +150,11 @@ export default function AddTime() {
         control={control}
         name="datetime"
         rules={{
-          required: "Date and time are required",
+          required: "Датум и време су обавезни",
         }}
         render={({ field: { value }, fieldState: { error } }) => (
           <View style={styles.dateTimeContainer}>
-            <Text style={styles.sectionTitle}>Add new time</Text>
+            <Text style={styles.sectionTitle}>Додате нови термин</Text>
             <Line />
             <View style={styles.pickerContainer}>
               <Button
@@ -162,7 +162,7 @@ export default function AddTime() {
                 title={selectedDate.toLocaleDateString()}
                 onPress={() => setShowPickerDate(true)}
               />
-              <Text style={styles.labelText}>Select date:</Text>
+              <Text style={styles.labelText}>Изаберите датум:</Text>
               {showPickerDate && (
                 <DateTimePicker
                   value={selectedDate}
@@ -191,7 +191,7 @@ export default function AddTime() {
                 }
                 onPress={() => setShowPickerTime(true)}
               />
-              <Text style={styles.labelText}>Select time:</Text>
+              <Text style={styles.labelText}>Изаберите термин:</Text>
               {showPickerTime && (
                 <DateTimePicker
                   value={selectedTime}
@@ -216,11 +216,11 @@ export default function AddTime() {
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Add Time</Text>
+        <Text style={styles.buttonText}>Додај термин</Text>
       </TouchableOpacity>
 
       <Text style={[styles.sectionTitle, { paddingHorizontal: 16 }]}>
-        Your times
+        Ваши термини
       </Text>
 
       {loading ? (
@@ -236,7 +236,7 @@ export default function AddTime() {
           numColumns={2}
         />
       ) : (
-        <Text style={{ textAlign: "center" }}>You don't have any time</Text>
+        <Text style={{ textAlign: "center" }}>Немате термина</Text>
       )}
     </View>
   );

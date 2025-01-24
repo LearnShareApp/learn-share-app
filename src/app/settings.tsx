@@ -10,7 +10,9 @@ const Settings = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={signOut} style={styles.logOut}>
-        <Text style={{ textAlign: "center", fontWeight: "600" }}>Log Out</Text>
+        <Text style={{ textAlign: "center", fontWeight: "600" }}>
+          Одјавите се
+        </Text>
       </TouchableOpacity>
     </View>
   );

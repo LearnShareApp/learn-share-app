@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -60,13 +59,11 @@ const Rooms = () => {
         />
       ) : (
         <View style={styles.center}>
-          <Text style={{ textAlign: "center" }}>
-            You don't have any lessons for now
-          </Text>
+          <Text style={{ textAlign: "center" }}>За сада немате часова</Text>
           <Link href="/" asChild>
             <TouchableOpacity style={styles.btn}>
               <Text style={{ color: "white", textAlign: "center" }}>
-                Go back
+                Иди назад
               </Text>
             </TouchableOpacity>
           </Link>
@@ -80,11 +77,14 @@ export default Rooms;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   center: {
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     gap: 16,
   },
   btn: {

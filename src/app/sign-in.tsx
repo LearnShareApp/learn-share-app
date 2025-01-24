@@ -16,10 +16,10 @@ import { apiService } from "../utilities/api";
 import axios from "axios";
 
 const authSchema = zod.object({
-  email: zod.string().email({ message: "Invalid email address" }),
+  email: zod.string().email({ message: "Неважећа адреса" }),
   password: zod
     .string()
-    .min(4, { message: "Password must be at least 4 characters long" }),
+    .min(4, { message: "Лозинка мора да има најмање 4 знака" }),
 });
 
 type AuthFormData = zod.infer<typeof authSchema>;
@@ -40,7 +40,7 @@ const Auth = () => {
     try {
       const response = await apiService.login(data);
       await signIn(response.token);
-      Toast.show("Signed in successfully", {
+      Toast.show("Успешно сте пријављени", {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -70,8 +70,8 @@ const Auth = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.subtitle}>Please Authenticate to continue</Text>
+        <Text style={styles.title}>Добродошли</Text>
+        <Text style={styles.subtitle}>Молимо да унесите свой налог</Text>
 
         <Controller
           control={control}
@@ -105,7 +105,7 @@ const Auth = () => {
           }) => (
             <>
               <TextInput
-                placeholder="password"
+                placeholder="лозинка"
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -125,12 +125,12 @@ const Auth = () => {
           onPress={handleSubmit(signInFunction)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.buttonText}>Пријавите се</Text>
         </TouchableOpacity>
 
         <Link href={"/sign-up"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            or Sign Up
+            или региструје нов налог
           </Text>
         </Link>
       </View>

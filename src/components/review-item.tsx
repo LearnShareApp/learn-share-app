@@ -9,7 +9,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
     <View style={styles.white}>
       <View style={styles.top}>
         <View style={styles.horizontal}>
-          <Text>User Id:</Text>
+          <Text>Id корисника:</Text>
           <Text>{review.userId}</Text>
         </View>
         <View style={styles.horizontal}>

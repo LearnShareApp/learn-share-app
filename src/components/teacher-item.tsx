@@ -32,7 +32,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
                 />
               ))
             ) : (
-              <Text>No skills listed</Text>
+              <Text>Нема наведених вештина</Text>
             )}
           </View>
         </View>
@@ -55,7 +55,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
               </>
             )}{" "}
           </Text>
-          <Text>3 lessons</Text>
+          <Text>3 часа</Text>
         </View>
       </Pressable>
     </Link>

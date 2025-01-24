@@ -114,23 +114,23 @@ const LessonItem = ({
       <View style={styles.right}>
         {request ? (
           <TouchableOpacity activeOpacity={0.6} style={styles.approve}>
-            <Text style={styles.btnText}>Accept</Text>
+            <Text style={styles.btnText}>Прихвати</Text>
           </TouchableOpacity>
         ) : lessonItemData.status === "ongoing" ? (
           <Link href="/rooms/dede" asChild>
             <TouchableOpacity activeOpacity={0.6} style={styles.enter}>
-              <Text style={styles.btnText}>Join Lesson</Text>
+              <Text style={styles.btnText}>Придружите се</Text>
             </TouchableOpacity>
           </Link>
         ) : (
           <View style={styles.noEnter}>
-            <Text style={styles.btnText}>Join Lesson</Text>
+            <Text style={styles.btnText}>Придружите се</Text>
           </View>
         )}
 
         <TouchableOpacity activeOpacity={0.6} style={styles.cancel}>
           <Text style={{ color: "#f99" }}>
-            {forTeacher ? "Decline" : "cancel"}
+            {forTeacher ? "Одбиј" : "Отказати"}
           </Text>
         </TouchableOpacity>
       </View>

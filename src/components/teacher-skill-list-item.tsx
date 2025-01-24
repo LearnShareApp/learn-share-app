@@ -22,7 +22,7 @@ const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
                 fontWeight: "bold",
               }}
             >
-              {skill.rate ? skill.rate.toFixed(1) : "No reviews"}{" "}
+              {skill.rate ? skill.rate.toFixed(1) : "Нема рецензија"}{" "}
               <FontAwesome size={24} name="star" style={{ color: "gold" }} />
             </Text>
           </View>

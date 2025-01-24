@@ -27,9 +27,9 @@ const authSchema = zod.object({
     .url("Have to be a link")
     .refine(
       (url) => youtubeUrlRegex.test(url),
-      "Have to be a link to your YouTube video"
+      "Мора да буде линк до вашег YouTube видеа"
     ),
-  about: zod.string().min(8, "Describe yourself for students!"),
+  about: zod.string().min(8, "Опишите се ученицима!"),
 });
 
 const SkillAdding = () => {
@@ -83,7 +83,7 @@ const SkillAdding = () => {
         about: data.about,
       };
       const response = await apiService.addSkill(postData);
-      Toast.show("Signed in successfully", {
+      Toast.show("Захтев је успешно послат", {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -116,8 +116,8 @@ const SkillAdding = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Add your skill</Text>
-        <Text style={styles.subtitle}>Please register your new skill:</Text>
+        <Text style={styles.title}>Додајте своју вештину</Text>
+        <Text style={styles.subtitle}>Региструјте своју нову вештину:</Text>
 
         <Controller
           control={control}
@@ -138,7 +138,7 @@ const SkillAdding = () => {
                   onChange(newValue);
                 }}
                 setItems={setItems}
-                placeholder="Choose skill"
+                placeholder="Изаберите категориjу"
                 style={styles.dropDown}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
@@ -155,7 +155,7 @@ const SkillAdding = () => {
           }) => (
             <>
               <TextInput
-                placeholder="link to YouTube promo video"
+                placeholder="линк до твог YouTube видеа"
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -178,7 +178,7 @@ const SkillAdding = () => {
           }) => (
             <>
               <TextInput
-                placeholder="describe your skill"
+                placeholder="опишите своју вештину"
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -198,7 +198,7 @@ const SkillAdding = () => {
           disabled={formState.isSubmitting}
           activeOpacity={0.6}
         >
-          <Text style={styles.buttonText}>Add Skill</Text>
+          <Text style={styles.buttonText}>Додај вештину</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

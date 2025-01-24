@@ -170,7 +170,7 @@ export default function BookLesson() {
   if (error || !teacher) {
     return (
       <View style={styles.container}>
-        <Text>Error: {error || "Teacher not found"}</Text>
+        <Text>Error: {error || "Наставник није пронађен"}</Text>
       </View>
     );
   }
@@ -199,7 +199,7 @@ export default function BookLesson() {
                 }
               }}
               setItems={setSkillItems}
-              placeholder="Choose skill"
+              placeholder="Изабери вештину"
               style={styles.dropDown}
               zIndex={2000}
             />
@@ -230,7 +230,7 @@ export default function BookLesson() {
                 }
               }}
               setItems={setTimeItems}
-              placeholder="Choose time"
+              placeholder="Изаберите време"
               style={styles.dropDown}
               zIndex={1000}
             />
@@ -244,7 +244,7 @@ export default function BookLesson() {
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Book Lesson</Text>
+        <Text style={styles.buttonText}>Резервишите час</Text>
       </TouchableOpacity>
     </View>
   );

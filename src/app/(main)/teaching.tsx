@@ -67,7 +67,7 @@ const Teaching = () => {
                   style={{ color: "#C9A977" }}
                 />
                 <Text style={{ textAlign: "center" }}>
-                  New requests (
+                  Нови захтеви (
                   {
                     lessons.filter((lesson) => lesson.status == "verification")
                       .length
@@ -84,7 +84,7 @@ const Teaching = () => {
                   name="calendar"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>My schedule</Text>
+                <Text style={{ textAlign: "center" }}>Мој распоред</Text>
               </Pressable>
             </Link>
           </View>
@@ -95,11 +95,13 @@ const Teaching = () => {
                 name="pie-chart"
                 style={{ color: "#C9A977" }}
               />
-              <Text style={{ textAlign: "center" }}>Manage my skills</Text>
+              <Text style={{ textAlign: "center" }}>
+                Управљај мојим вештинама
+              </Text>
             </Pressable>
           </Link>
           <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
-            Your next lessons:
+            Следећи час:
           </Text>
 
           {lessons.filter((lesson) => lesson.status != "verification")
@@ -120,7 +122,7 @@ const Teaching = () => {
               }}
             >
               <Text style={{ textAlign: "center", color: "#999" }}>
-                You don't have any lessons for now
+                За сада немате часова
               </Text>
             </View>
           )}
@@ -141,8 +143,10 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>Wanna teach? Your are welcome!</Text>
-            <Text>You can start just in 3 easy steps:</Text>
+            <Text style={styles.cardText}>
+              Да ли желите да предајете? Добродошли сте!
+            </Text>
+            <Text>Можете започети само у 3 лака корака:</Text>
           </View>
         </View>
 
@@ -156,8 +160,8 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>1: Make a YouTube video</Text>
-            <Text>Where you describe and show your skill</Text>
+            <Text style={styles.cardText}>1: Направите YouTube видео</Text>
+            <Text>Где описујете и показујете своју вештину</Text>
           </View>
         </View>
 
@@ -172,9 +176,9 @@ const Teaching = () => {
 
           <View style={styles.textPart}>
             <Text style={styles.cardText}>
-              2: Make a requests to register your skill
+              2: Направите захтев да региструјете своју вештину
             </Text>
-            <Text>With link on your youtube video and text description</Text>
+            <Text>Са везом на вашем YouTube видеу и описом</Text>
           </View>
         </View>
 
@@ -188,14 +192,14 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>3: Wait until approvement</Text>
-            <Text>We need some time to check you request</Text>
+            <Text style={styles.cardText}>3: Сачекајте до одобрења</Text>
+            <Text>Треба нам мало времена да проверимо ваш захтев</Text>
           </View>
         </View>
 
         <Link href={"/new-skill"} asChild>
           <TouchableOpacity activeOpacity={0.6} style={styles.btn}>
-            <Text style={styles.text}>Start sharing my skills</Text>
+            <Text style={styles.text}>Заочнете да делите своjе вештине</Text>
           </TouchableOpacity>
         </Link>
       </ScrollView>

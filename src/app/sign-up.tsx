@@ -19,10 +19,10 @@ import { apiService } from "../utilities/api";
 import axios from "axios";
 
 const authSchema = zod.object({
-  email: zod.string().email({ message: "Invalid email address" }),
+  email: zod.string().email({ message: "Неважећа адреса " }),
   password: zod
     .string()
-    .min(4, { message: "Password must be at least 8 characters long" }),
+    .min(4, { message: "Лозинка мора да има најмање 4 знака" }),
   name: zod.string(),
   surname: zod.string(),
   birthdate: zod.date(),
@@ -51,7 +51,7 @@ const SignUp = () => {
     try {
       const response = await apiService.signUp(data);
       await signIn(response.token);
-      Toast.show("Signed up successfully", {
+      Toast.show("Успешно се пријавио", {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -80,8 +80,8 @@ const SignUp = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.subtitle}>Please register to continue</Text>
+        <Text style={styles.title}>Добродошли</Text>
+        <Text style={styles.subtitle}>Региструјте се да бисте наставили</Text>
 
         <Controller
           control={control}
@@ -92,7 +92,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="name"
+                placeholder="име"
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -115,7 +115,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="surname"
+                placeholder="презиме"
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -161,7 +161,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="password"
+                placeholder="лозинка"
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -180,7 +180,7 @@ const SignUp = () => {
           control={control}
           name="birthdate"
           rules={{
-            required: "Date of birth is required",
+            required: "Датум рођења је обавезан",
           }}
           render={({
             field: { value, onChange, onBlur },
@@ -207,7 +207,7 @@ const SignUp = () => {
                   fontSize: 16,
                 }}
               >
-                Your birthdate:
+                Ваш датум рођења:
               </Text>
               {showPicker && (
                 <DateTimePicker
@@ -232,12 +232,12 @@ const SignUp = () => {
           onPress={handleSubmit(signUp)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>Пријавите се</Text>
         </TouchableOpacity>
 
         <Link href={"/sign-in"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            or Sign In
+            или већ имате налог
           </Text>
         </Link>
       </View>
