@@ -11,8 +11,11 @@ import LessonItem from "../../components/lesson-item";
 import { apiService, Lesson } from "../../utilities/api";
 import { Toast } from "react-native-toast-notifications";
 import { Link } from "expo-router";
+import { useLanguage } from "../../providers/language-provider";
 
 const Rooms = () => {
+  const { t } = useLanguage();
+
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,11 +62,11 @@ const Rooms = () => {
         />
       ) : (
         <View style={styles.center}>
-          <Text style={{ textAlign: "center" }}>За сада немате часова</Text>
+          <Text style={{ textAlign: "center" }}>{t("no_lessons")}</Text>
           <Link href="/" asChild>
             <TouchableOpacity style={styles.btn}>
               <Text style={{ color: "white", textAlign: "center" }}>
-                Иди назад
+                {t("go_back_home")}
               </Text>
             </TouchableOpacity>
           </Link>

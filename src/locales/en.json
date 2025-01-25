@@ -119,5 +119,11 @@
   "reject": "Reject",
   "classes": "classes",
   "no_times": "No times",
-  "your_times": "Your times"
+  "your_times": "Your times",
+  "about_us_title": "About Our Project",
+  "about_us_description": "We are building a platform that connects teachers and students from around the world. Our goal is to make education accessible to everyone.",
+  "our_mission": "Our Mission",
+  "mission_description": "We aim to create a global community where everyone can learn and share knowledge.",
+  "contact_us": "Contact Us",
+  "version": "App Version"
 }

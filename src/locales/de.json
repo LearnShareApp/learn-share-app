@@ -119,5 +119,11 @@
   "reject": "Ablehnen",
   "classes": "Stunden",
   "no_times": "Keine Zeiten",
-  "your_times": "Ihre Zeiten"
+  "your_times": "Ihre Zeiten",
+  "about_us_title": "Über unser Projekt",
+  "about_us_description": "Wir bauen eine Plattform, die Lehrer und Schüler aus der ganzen Welt verbindet. Unser Ziel ist es, Bildung für jeden zugänglich zu machen.",
+  "our_mission": "Unsere Mission",
+  "mission_description": "Wir möchten eine globale Gemeinschaft schaffen, in der jeder lernen und Wissen teilen kann.",
+  "contact_us": "Kontaktiere uns",
+  "version": "App-Version"
 }

@@ -58,6 +58,10 @@ export default function RootLayout() {
               name="schedule"
               options={{ headerShown: true, title: "My schedule" }}
             />
+            <Stack.Screen
+              name="about"
+              options={{ headerShown: true, title: "About" }}
+            />
           </Stack>
         </AuthProvider>
       </ToastProvider>
