@@ -1,6 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import {
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -16,6 +17,7 @@ import { apiService } from "../utilities/api";
 import axios from "axios";
 import { useLanguage } from "../providers/language-provider";
 import { LanguageSelector } from "../components/LanguageSelector";
+import { useTheme } from "../providers/theme-provider";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Неважећа адреса" }),
@@ -27,6 +29,7 @@ const authSchema = zod.object({
 type AuthFormData = zod.infer<typeof authSchema>;
 
 const Auth = () => {
+  const { theme, isDark, toggleTheme } = useTheme();
   const { token, signIn } = useAuth();
   if (token) return <Redirect href="/" />;
 
@@ -74,6 +77,12 @@ const Auth = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
+      <Switch
+            value={isDark}
+            onValueChange={toggleTheme}
+            trackColor={{ false: "#767577", true: theme.colors.primary }}
+            thumbColor={isDark ? theme.colors.card : "#f4f3f4"}
+          />
       <Text style={styles.title}>{t('welcome')}</Text>
       <Text style={styles.subtitle}>{t('enter_credentials')}</Text>
 

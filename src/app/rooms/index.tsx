@@ -12,9 +12,11 @@ import { apiService, Lesson } from "../../utilities/api";
 import { Toast } from "react-native-toast-notifications";
 import { Link } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 const Rooms = () => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,13 +49,13 @@ const Rooms = () => {
     return (
       <ActivityIndicator
         size="large"
-        color="#C9A977"
+        color={theme.colors.primary}
         style={{ marginTop: 16 }}
       />
     );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {lessons.length ? (
         <FlatList
           data={lessons}
@@ -62,10 +64,14 @@ const Rooms = () => {
         />
       ) : (
         <View style={styles.center}>
-          <Text style={{ textAlign: "center" }}>{t("no_lessons")}</Text>
+          <Text style={{ textAlign: "center", color: theme.colors.text }}>
+            {t("no_lessons")}
+          </Text>
           <Link href="/" asChild>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={{ color: "white", textAlign: "center" }}>
+            <TouchableOpacity 
+              style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+            >
+              <Text style={{ color: theme.colors.card, textAlign: "center" }}>
                 {t("go_back_home")}
               </Text>
             </TouchableOpacity>
@@ -92,7 +98,6 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: "60%",
-    backgroundColor: "#C9A977",
     borderRadius: 4,
     padding: 16,
   },
