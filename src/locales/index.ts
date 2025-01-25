@@ -3,6 +3,7 @@ import en from "./en.json";
 import sr from "./sr.json";
 import ru from "./ru.json";
 import de from "./de.json";
+import * as SecureStore from "expo-secure-store";
 
 const translations = {
   en,
@@ -24,6 +25,21 @@ export const translate = (key: string, language?: LanguageCode): string => {
 };
 
 export const changeLanguage = async (language: LanguageCode) => {
-  // Здесь можно добавить сохранение выбранного языка в AsyncStorage
-  // и использовать его при следующем запуске приложения
+  try {
+    await SecureStore.setItemAsync("selectedLanguage", language);
+  } catch (error) {
+    console.error("Error saving language:", error);
+  }
+};
+
+export const loadSavedLanguage = async (): Promise<LanguageCode> => {
+  try {
+    const savedLanguage = await SecureStore.getItemAsync("selectedLanguage");
+    if (savedLanguage && (translations[savedLanguage as LanguageCode])) {
+      return savedLanguage as LanguageCode;
+    }
+  } catch (error) {
+    console.error("Error loading language:", error);
+  }
+  return getCurrentLanguage();
 };

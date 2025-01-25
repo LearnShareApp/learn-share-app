@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import { LanguageCode } from "../locales";
-import { translate } from "../locales";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { LanguageCode, translate, changeLanguage, loadSavedLanguage } from "../locales";
 
 type LanguageContextType = {
   language: LanguageCode;
@@ -15,7 +14,16 @@ export const LanguageProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [language, setLanguage] = useState<LanguageCode>("en");
+  const [language, setLanguageState] = useState<LanguageCode>("en");
+
+  useEffect(() => {
+    loadSavedLanguage().then(setLanguageState);
+  }, []);
+
+  const setLanguage = async (newLanguage: LanguageCode) => {
+    await changeLanguage(newLanguage);
+    setLanguageState(newLanguage);
+  };
 
   const t = (key: string) => translate(key, language);
 
