@@ -16,6 +16,7 @@ import { apiService, DateTime } from "../utilities/api";
 import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Line from "../components/line";
+import { useLanguage } from "../providers/language-provider";
 
 const authSchema = zod.object({
   datetime: zod.date(),
@@ -24,6 +25,7 @@ const authSchema = zod.object({
 type FormData = zod.infer<typeof authSchema>;
 
 export default function AddTime() {
+  const { t } = useLanguage();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
 
@@ -89,7 +91,7 @@ export default function AddTime() {
         datetime: data.datetime,
       };
       await apiService.addTime(postData);
-      Toast.show("Термин је успешно додат", {
+      Toast.show(t("request_success"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -98,7 +100,7 @@ export default function AddTime() {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
-          error.response?.data?.error || "An unknown error occurred";
+          error.response?.data?.error || t("unknown_error");
         Toast.show(errorMessage, {
           type: "warning",
           placement: "top",
@@ -107,7 +109,7 @@ export default function AddTime() {
         console.log(errorMessage);
       } else {
         console.error("Unexpected error:", error);
-        Toast.show("An unexpected error occurred", {
+        Toast.show(t("unexpected_error"), {
           type: "warning",
           placement: "top",
           duration: 3000,
@@ -150,11 +152,11 @@ export default function AddTime() {
         control={control}
         name="datetime"
         rules={{
-          required: "Датум и време су обавезни",
+          required: t("date_time_required"),
         }}
         render={({ field: { value }, fieldState: { error } }) => (
           <View style={styles.dateTimeContainer}>
-            <Text style={styles.sectionTitle}>Додате нови термин</Text>
+            <Text style={styles.sectionTitle}>{t("add_new_time")}</Text>
             <Line />
             <View style={styles.pickerContainer}>
               <Button
@@ -162,7 +164,7 @@ export default function AddTime() {
                 title={selectedDate.toLocaleDateString()}
                 onPress={() => setShowPickerDate(true)}
               />
-              <Text style={styles.labelText}>Изаберите датум:</Text>
+              <Text style={styles.labelText}>{t("select_date")}:</Text>
               {showPickerDate && (
                 <DateTimePicker
                   value={selectedDate}
@@ -191,7 +193,7 @@ export default function AddTime() {
                 }
                 onPress={() => setShowPickerTime(true)}
               />
-              <Text style={styles.labelText}>Изаберите термин:</Text>
+              <Text style={styles.labelText}>{t("select_time")}:</Text>
               {showPickerTime && (
                 <DateTimePicker
                   value={selectedTime}
@@ -216,11 +218,11 @@ export default function AddTime() {
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Додај термин</Text>
+        <Text style={styles.buttonText}>{t("add_time")}</Text>
       </TouchableOpacity>
 
       <Text style={[styles.sectionTitle, { paddingHorizontal: 16 }]}>
-        Ваши термини
+        {t("your_times")}
       </Text>
 
       {loading ? (
@@ -236,7 +238,7 @@ export default function AddTime() {
           numColumns={2}
         />
       ) : (
-        <Text style={{ textAlign: "center" }}>Немате термина</Text>
+        <Text style={{ textAlign: "center" }}>{t("no_times")}</Text>
       )}
     </View>
   );

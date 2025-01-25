@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { View, Button, Text, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useLanguage } from "../providers/language-provider";
 
 const DateOfBirthInput = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const { t } = useLanguage();
 
   const onChange = (event: unknown, selectedDate?: Date) => {
     if (selectedDate) {
-      setDate(selectedDate); // Устанавливаем выбранную дату
+      setDate(selectedDate);
     }
     setShow(false);
   };
@@ -19,8 +21,11 @@ const DateOfBirthInput = () => {
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>Датум рођења: {date.toLocaleDateString()}</Text>
-      <Button title="Выбрать дату" onPress={showDatePicker} />
+      <Text>{t("date_of_birth")}: {date.toLocaleDateString()}</Text>
+      <Button 
+        title={t("select_date_of_birth")} 
+        onPress={showDatePicker} 
+      />
       {show && (
         <DateTimePicker
           value={date}

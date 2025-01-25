@@ -96,7 +96,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder={t("name")}
+                placeholder={t("first_name")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -119,7 +119,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder={t("surname")}
+                placeholder={t("last_name")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
