@@ -19,6 +19,7 @@ import {
   TeacherProfile,
 } from "../../../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../../../providers/language-provider";
 
 const authSchema = zod.object({
   category_id: zod.number(),
@@ -41,6 +42,7 @@ export default function BookLesson() {
     category_id?: string;
   }>();
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [availableTimes, setAvailableTimes] = useState<DateTime[]>([]);
@@ -170,7 +172,7 @@ export default function BookLesson() {
   if (error || !teacher) {
     return (
       <View style={styles.container}>
-        <Text>Error: {error || "Наставник није пронађен"}</Text>
+        <Text>{t("teacher_not_found")}</Text>
       </View>
     );
   }

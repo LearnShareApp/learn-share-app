@@ -14,9 +14,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import SkillBadge from "../../components/skill";
 import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
+import { useLanguage } from "../../providers/language-provider";
 
 const Profile = () => {
   const { profile, loadingProfile, errorProfile } = useProfile();
+  const { t } = useLanguage();
 
   if (loadingProfile) {
     return (
@@ -85,7 +87,9 @@ const Profile = () => {
           </View>
 
           <View style={[styles.object, styles.huge]}>
-            <Text style={{ width: "80%", fontSize: 16 }}>Ваш новчаник</Text>
+            <Text style={{ width: "80%", fontSize: 16 }}>
+              {t("your_wallet")}
+            </Text>
             <Line />
             <Text style={{ fontSize: 10 }}>Ballance</Text>
             <View
@@ -117,7 +121,7 @@ const Profile = () => {
             <Pressable>
               <View style={[styles.object, styles.oneLine]}>
                 <Text style={{ width: "80%", fontSize: 16 }}>
-                  Постаните наставником
+                  {t("become_teacher")}
                 </Text>
                 <View style={styles.iconContainer}>
                   <FontAwesome
@@ -133,7 +137,9 @@ const Profile = () => {
           <Link href="/settings" asChild>
             <Pressable>
               <View style={[styles.object, styles.oneLine]}>
-                <Text style={{ width: "80%", fontSize: 16 }}>Подешавања</Text>
+                <Text style={{ width: "80%", fontSize: 16 }}>
+                  {t("settings")}
+                </Text>
                 <View style={styles.iconContainer}>
                   <FontAwesome
                     size={24}
@@ -148,7 +154,7 @@ const Profile = () => {
           <Link href="/about" asChild>
             <Pressable>
               <View style={[styles.object, styles.oneLine]}>
-                <Text style={{ width: "80%", fontSize: 16 }}>О нама</Text>
+                <Text style={{ width: "80%", fontSize: 16 }}>{t("about")}</Text>
                 <View style={styles.iconContainer}>
                   <FontAwesome
                     size={24}
@@ -165,9 +171,7 @@ const Profile = () => {
             style={[styles.object, { backgroundColor: "#FFDFAF" }]}
           >
             {/* <FontAwesome size={24} name="copy" style={{ color: "#C9A977" }} /> */}
-            <Text style={{ textAlign: "center" }}>
-              Позовите своје пријатеље да уче са вама!
-            </Text>
+            <Text style={{ textAlign: "center" }}>{t("invite_friends")}</Text>
           </Pressable>
         </View>
       </ScrollView>

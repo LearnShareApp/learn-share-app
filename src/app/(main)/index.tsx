@@ -16,9 +16,12 @@ import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
 import { useCategories } from "../../utilities/category-hook";
 import SkillBadge from "../../components/skill";
+import { useLanguage } from "../../providers/language-provider";
 
 const Home = () => {
   const { token, signOut } = useAuth();
+  const { t } = useLanguage();
+
   if (!token) return <Redirect href={"/sign-in"} />;
 
   const { profile, loadingProfile, errorProfile } = useProfile();
@@ -39,7 +42,7 @@ const Home = () => {
   return (
     <>
       <HeaderElement
-        text={`Здраво, ${profile?.name}`}
+        text={`${t("welcome")}, ${profile?.name}`}
         requireCalendar
         requireSettings
       />
@@ -47,7 +50,7 @@ const Home = () => {
         <View style={styles.container}>
           <Link href="/search" asChild>
             <Pressable style={styles.search}>
-              <Text style={styles.searchText}>Пронаћи наставника</Text>
+              <Text style={styles.searchText}>{t("search_teacher")}</Text>
               <FontAwesome
                 size={24}
                 name="arrow-right"
@@ -56,7 +59,7 @@ const Home = () => {
             </Pressable>
           </Link>
           <View style={styles.info}>
-            <Text>Ваши часови</Text>
+            <Text>{t("your_lessons")}</Text>
             <Line />
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
@@ -64,7 +67,7 @@ const Home = () => {
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
                 >
-                  успешно завршен
+                  {t("successfully_completed")}
                 </Text>
               </View>
               <View style={styles.infoSection}>
@@ -72,7 +75,7 @@ const Home = () => {
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
                 >
-                  треба одобрити
+                  {t("need_to_approve")}
                 </Text>
               </View>
               <View style={styles.infoSection}>
@@ -80,13 +83,13 @@ const Home = () => {
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
                 >
-                  чека да се придружите
+                  {t("waiting_to_join")}
                 </Text>
               </View>
             </View>
             <View style={styles.nextLessons}>
               <View style={{ width: "80%", gap: 8 }}>
-                <Text>Следећи час</Text>
+                <Text>{t("next_lesson")}</Text>
                 <Line />
                 <View style={{ flexDirection: "row", gap: 8 }}>
                   <Image
@@ -109,7 +112,7 @@ const Home = () => {
               </Link>
             </View>
           </View>
-          <Text style={styles.sectionText}>Ваши претходни наставници:</Text>
+          <Text style={styles.sectionText}>{t("your_previous_teachers")}:</Text>
           <View style={styles.listContainer}>
             {TEACHERS.map((teacher) => (
               <TeacherListItem teacher={teacher} key={teacher.id} />

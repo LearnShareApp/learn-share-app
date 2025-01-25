@@ -16,8 +16,10 @@ import HeaderElement from "../../components/header-element";
 import { useTeacher } from "../../utilities/teacher-hook";
 import { apiService, TeacherLesson } from "../../utilities/api";
 import { Toast } from "react-native-toast-notifications";
+import { useLanguage } from "../../providers/language-provider";
 
 const Teaching = () => {
+  const { t } = useLanguage();
   const { teacher, loadingTeacher, errorTeacher } = useTeacher();
 
   const [lessons, setLessons] = useState<TeacherLesson[]>([]);
@@ -45,7 +47,7 @@ const Teaching = () => {
     };
 
     fetchLessons();
-  }, []);
+  }, [teacher]);
 
   if (loadingTeacher) {
     return <HeaderElement text="Loading..." requireChanges requireSettings />;
@@ -54,7 +56,7 @@ const Teaching = () => {
   if (teacher)
     return (
       <>
-        <HeaderElement text="Teaching" requireChanges requireSettings />
+        <HeaderElement text={t("teaching")} requireChanges requireSettings />
         <View
           style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
         >
@@ -67,7 +69,7 @@ const Teaching = () => {
                   style={{ color: "#C9A977" }}
                 />
                 <Text style={{ textAlign: "center" }}>
-                  Нови захтеви (
+                  {t("new_requests")} (
                   {
                     lessons.filter((lesson) => lesson.status == "verification")
                       .length
@@ -95,13 +97,11 @@ const Teaching = () => {
                 name="pie-chart"
                 style={{ color: "#C9A977" }}
               />
-              <Text style={{ textAlign: "center" }}>
-                Управљај мојим вештинама
-              </Text>
+              <Text style={{ textAlign: "center" }}>{t("manage_skills")}</Text>
             </Pressable>
           </Link>
           <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
-            Следећи час:
+            {t("next_lesson")}:
           </Text>
 
           {lessons.filter((lesson) => lesson.status != "verification")
@@ -122,7 +122,7 @@ const Teaching = () => {
               }}
             >
               <Text style={{ textAlign: "center", color: "#999" }}>
-                За сада немате часова
+                {t("no_lessons")}
               </Text>
             </View>
           )}
@@ -143,10 +143,8 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>
-              Да ли желите да предајете? Добродошли сте!
-            </Text>
-            <Text>Можете започети само у 3 лака корака:</Text>
+            <Text style={styles.cardText}>{t("teach_welcome")}</Text>
+            <Text>{t("teach_intro")}</Text>
           </View>
         </View>
 
@@ -160,8 +158,8 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>1: Направите YouTube видео</Text>
-            <Text>Где описујете и показујете своју вештину</Text>
+            <Text style={styles.cardText}>{t("teach_step1")}</Text>
+            <Text>{t("teach_step1_desc")}</Text>
           </View>
         </View>
 
@@ -175,10 +173,8 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>
-              2: Направите захтев да региструјете своју вештину
-            </Text>
-            <Text>Са везом на вашем YouTube видеу и описом</Text>
+            <Text style={styles.cardText}>{t("teach_step2")}</Text>
+            <Text>{t("teach_step2_desc")}</Text>
           </View>
         </View>
 
@@ -192,14 +188,14 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>3: Сачекајте до одобрења</Text>
-            <Text>Треба нам мало времена да проверимо ваш захтев</Text>
+            <Text style={styles.cardText}>{t("teach_step3")}</Text>
+            <Text>{t("teach_step3_desc")}</Text>
           </View>
         </View>
 
         <Link href={"/new-skill"} asChild>
           <TouchableOpacity activeOpacity={0.6} style={styles.btn}>
-            <Text style={styles.text}>Заочнете да делите своjе вештине</Text>
+            <Text style={styles.text}>{t("start_sharing")}</Text>
           </TouchableOpacity>
         </Link>
       </ScrollView>
