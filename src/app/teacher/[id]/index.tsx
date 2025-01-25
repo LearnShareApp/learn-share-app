@@ -17,6 +17,7 @@ import Line from "../../../components/line";
 import ReviewItem from "../../../components/review-item";
 import { REVIEWS } from "../../../../assets/reviews";
 import { apiService, TeacherProfile } from "../../../utilities/api";
+import { useLanguage } from "../../../providers/language-provider";
 
 interface Review {
   id: number;
@@ -35,6 +36,8 @@ type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 const TeacherProfilePage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+
+  const { t } = useLanguage();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -109,7 +112,7 @@ const TeacherProfilePage = () => {
                 });
               }}
             >
-              <Text style={styles.bookText}>Резервишите час</Text>
+              <Text style={styles.bookText}>{t("book_lesson")}</Text>
             </TouchableOpacity>
           ),
         }}
@@ -142,7 +145,7 @@ const TeacherProfilePage = () => {
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
                     <SkillBadge
-                      text={item.category_id.toString()}
+                      text={item.category_name}
                       key={item.skill_id}
                     />
                   ))}
@@ -150,29 +153,29 @@ const TeacherProfilePage = () => {
               </View>
             </View>
             <View style={styles.white}>
-              <Text style={styles.sectionTitle}>О мени:</Text>
+                <Text style={styles.sectionTitle}>{t("about_me")}:</Text>
               <Line />
               <Text style={styles.aboutText}>
-                {teacher.skills[0].about || "No description available"}
+                {teacher.skills[0].about || t("no_description")}
               </Text>
             </View>
             <View style={[styles.white, styles.rate]}>
               <StatsItem
                 icon="star"
                 value={teacher.skills[0].rate.toFixed(1)}
-                label="rate"
+                label={t("rate")}
                 iconColor="gold"
               />
               <StatsItem
                 icon="graduation-cap"
                 value="1345"
-                label="lessons"
+                label={t("lessons")}
                 iconColor="#ccc"
               />
               <StatsItem
                 icon="user"
                 value="234"
-                label="students"
+                label={t("students")}
                 iconColor="#ccc"
               />
             </View>
@@ -182,10 +185,10 @@ const TeacherProfilePage = () => {
                 router.push(`/teacher/${id}/book?category_id=${1}`);
               }}
             >
-              <Text style={styles.bookTextMain}>Резервишите час</Text>
+              <Text style={styles.bookTextMain}>{t("book_lesson")}</Text>
             </Pressable>
             <Text style={styles.reviewsTitle}>
-              Рецензије ({reviews.length})
+              {t("teacher_reviews")} ({reviews.length})
             </Text>
           </View>
         }

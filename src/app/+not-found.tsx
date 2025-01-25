@@ -1,14 +1,16 @@
 import { View, StyleSheet } from "react-native";
 import { Link, Stack } from "expo-router";
 import React from "react";
+import { useLanguage } from "../providers/language-provider";
 
 export default function NotFoundScreen() {
+  const { t } = useLanguage();
   return (
     <>
       <Stack.Screen options={{ title: "Oops! Not Found" }} />
       <View style={styles.container}>
         <Link href="/" style={styles.button}>
-          Вратите се на почетни екран!
+          {t("go_back_home")}
         </Link>
       </View>
     </>

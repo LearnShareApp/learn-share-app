@@ -3,8 +3,10 @@ import { Link } from "expo-router";
 import SkillBadge from "./skill";
 import { FontAwesome } from "@expo/vector-icons";
 import { TeacherProfile } from "../utilities/api";
+import { useLanguage } from "../providers/language-provider";
 
 const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
+  const { t } = useLanguage();
   if (!teacher) {
     return null;
   }
@@ -32,7 +34,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
                 />
               ))
             ) : (
-              <Text>Нема наведених вештина</Text>
+              <Text>{t("no_skills_listed")}</Text>
             )}
           </View>
         </View>
@@ -55,7 +57,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
               </>
             )}{" "}
           </Text>
-          <Text>3 часа</Text>
+          <Text>3 {t("classes")}</Text>
         </View>
       </Pressable>
     </Link>

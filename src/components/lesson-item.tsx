@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import SkillBadge from "./skill";
 import { Lesson, TeacherLesson } from "../utilities/api";
+import { useLanguage } from "../providers/language-provider";
 
 export interface LessonMain {
   lesson_id: number;
@@ -31,6 +32,8 @@ const LessonItem = ({
   forTeacher?: boolean;
   request?: boolean;
 }) => {
+  const { t } = useLanguage();
+
   const lessonItemData: LessonMain = {
     lesson_id: lesson.lesson_id,
     user_id: "teacher_id" in lesson ? lesson.teacher_id : lesson.student_id,
@@ -114,23 +117,23 @@ const LessonItem = ({
       <View style={styles.right}>
         {request ? (
           <TouchableOpacity activeOpacity={0.6} style={styles.approve}>
-            <Text style={styles.btnText}>Прихвати</Text>
+            <Text style={styles.btnText}>{t("approve")}</Text>
           </TouchableOpacity>
         ) : lessonItemData.status === "ongoing" ? (
           <Link href="/rooms/dede" asChild>
             <TouchableOpacity activeOpacity={0.6} style={styles.enter}>
-              <Text style={styles.btnText}>Придружите се</Text>
+              <Text style={styles.btnText}>{t("join_room")}</Text>
             </TouchableOpacity>
           </Link>
         ) : (
           <View style={styles.noEnter}>
-            <Text style={styles.btnText}>Придружите се</Text>
+            <Text style={styles.btnText}>{t("join_room")}</Text>
           </View>
         )}
 
         <TouchableOpacity activeOpacity={0.6} style={styles.cancel}>
           <Text style={{ color: "#f99" }}>
-            {forTeacher ? "Одбиј" : "Отказати"}
+            {forTeacher ? t("reject") : t("reject")}
           </Text>
         </TouchableOpacity>
       </View>

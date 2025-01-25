@@ -19,6 +19,7 @@ import {
   TeacherProfile,
 } from "../../../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../../../providers/language-provider";
 
 const authSchema = zod.object({
   category_id: zod.number(),
@@ -41,6 +42,7 @@ export default function BookLesson() {
     category_id?: string;
   }>();
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [availableTimes, setAvailableTimes] = useState<DateTime[]>([]);
@@ -163,6 +165,7 @@ export default function BookLesson() {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#C9A977" />
+        <Text>{t("loading")}</Text>
       </View>
     );
   }
@@ -170,7 +173,7 @@ export default function BookLesson() {
   if (error || !teacher) {
     return (
       <View style={styles.container}>
-        <Text>Error: {error || "Наставник није пронађен"}</Text>
+        <Text>{t("teacher_not_found")}</Text>
       </View>
     );
   }
@@ -199,7 +202,7 @@ export default function BookLesson() {
                 }
               }}
               setItems={setSkillItems}
-              placeholder="Изабери вештину"
+              placeholder={t("select_skill")}
               style={styles.dropDown}
               zIndex={2000}
             />
@@ -230,7 +233,7 @@ export default function BookLesson() {
                 }
               }}
               setItems={setTimeItems}
-              placeholder="Изаберите време"
+              placeholder={t("select_time")}
               style={styles.dropDown}
               zIndex={1000}
             />
@@ -244,7 +247,7 @@ export default function BookLesson() {
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Резервишите час</Text>
+        <Text style={styles.buttonText}>{t("book_lesson")}</Text>
       </TouchableOpacity>
     </View>
   );

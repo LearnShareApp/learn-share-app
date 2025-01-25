@@ -13,6 +13,7 @@ import { apiService, Skill, TeacherProfile } from "../../utilities/api";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useCategories } from "../../utilities/category-hook";
 import { Toast } from "react-native-toast-notifications";
+import { useLanguage } from "../../providers/language-provider";
 
 const Search = () => {
   const [teachers, setTeachers] = useState<TeacherProfile[]>([]);
@@ -25,6 +26,7 @@ const Search = () => {
   const [dropdownItems, setDropdownItems] = useState<Skill[]>([]);
 
   const { categories, loadingCategories } = useCategories();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -82,7 +84,7 @@ const Search = () => {
         <View style={styles.search}>
           <TextInput
             style={styles.input}
-            placeholder="Пронађи наставника"
+            placeholder={t("search_teacher")}
             onChangeText={setSearchText}
             value={searchText}
           />
@@ -97,7 +99,7 @@ const Search = () => {
             setOpen={setOpen}
             setValue={setSelectedCategory}
             setItems={setDropdownItems}
-            placeholder="Учитавање..."
+            placeholder={t("loading")}
             style={styles.dropdown}
           />
         </View>
@@ -115,7 +117,7 @@ const Search = () => {
       <View style={styles.search}>
         <TextInput
           style={styles.input}
-          placeholder="Пронађи наставника"
+          placeholder={t("search_teacher")}
           onChangeText={setSearchText}
           value={searchText}
         />
@@ -130,13 +132,13 @@ const Search = () => {
           setOpen={setOpen}
           setValue={setSelectedCategory}
           setItems={setDropdownItems}
-          placeholder="Изабери категориjу"
+          placeholder={t("choose_category")}
           style={styles.dropdown}
         />
       </View>
 
       {filteredTeachers.length === 0 ? (
-        <Text style={styles.noResults}>Није пронађен ниједан наставник</Text>
+        <Text style={styles.noResults}>{t("no_teachers_found")}</Text>
       ) : (
         <FlatList
           data={filteredTeachers}
