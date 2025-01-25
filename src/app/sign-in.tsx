@@ -14,6 +14,8 @@ import { Link, Redirect } from "expo-router";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../providers/language-provider";
+import { LanguageSelector } from "../components/LanguageSelector";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Неважећа адреса" }),
@@ -28,6 +30,8 @@ const Auth = () => {
   const { token, signIn } = useAuth();
   if (token) return <Redirect href="/" />;
 
+  const { t } = useLanguage();
+
   const { control, handleSubmit, formState } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -40,7 +44,7 @@ const Auth = () => {
     try {
       const response = await apiService.login(data);
       await signIn(response.token);
-      Toast.show("Успешно сте пријављени", {
+      Toast.show(t("successfully_signed_in"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -48,7 +52,7 @@ const Auth = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
-          error.response?.data?.error || "An unknown error occurred";
+          error.response?.data?.error || t("an_unknown_error_occurred");
         Toast.show(errorMessage, {
           type: "warning",
           placement: "top",
@@ -58,7 +62,7 @@ const Auth = () => {
         console.log(errorMessage);
       } else {
         console.error("Unexpected error:", error);
-        Toast.show("An unexpected error occurred", {
+        Toast.show(t("an_unexpected_error_occurred"), {
           type: "warning",
           placement: "top",
           duration: 3000,
@@ -70,8 +74,8 @@ const Auth = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Добродошли</Text>
-        <Text style={styles.subtitle}>Молимо да унесите свой налог</Text>
+      <Text style={styles.title}>{t('welcome')}</Text>
+      <Text style={styles.subtitle}>{t('enter_credentials')}</Text>
 
         <Controller
           control={control}
@@ -105,7 +109,7 @@ const Auth = () => {
           }) => (
             <>
               <TextInput
-                placeholder="лозинка"
+                placeholder={t("password")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -125,15 +129,18 @@ const Auth = () => {
           onPress={handleSubmit(signInFunction)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Пријавите се</Text>
+          <Text style={styles.buttonText}>{t("sign_in")}</Text>
         </TouchableOpacity>
 
         <Link href={"/sign-up"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            или региструје нов налог
+            {t("or_register_a_new_account")}
           </Text>
         </Link>
       </View>
+      <View style={{ width: "100%", padding: 16, alignItems: "center" }}>
+        <LanguageSelector />
+      </View> 
     </SafeAreaView>
   );
 };

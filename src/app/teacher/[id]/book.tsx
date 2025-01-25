@@ -165,6 +165,7 @@ export default function BookLesson() {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#C9A977" />
+        <Text>{t("loading")}</Text>
       </View>
     );
   }
@@ -201,7 +202,7 @@ export default function BookLesson() {
                 }
               }}
               setItems={setSkillItems}
-              placeholder="Изабери вештину"
+              placeholder={t("select_skill")}
               style={styles.dropDown}
               zIndex={2000}
             />
@@ -232,7 +233,7 @@ export default function BookLesson() {
                 }
               }}
               setItems={setTimeItems}
-              placeholder="Изаберите време"
+              placeholder={t("select_time")}
               style={styles.dropDown}
               zIndex={1000}
             />
@@ -246,7 +247,7 @@ export default function BookLesson() {
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Резервишите час</Text>
+        <Text style={styles.buttonText}>{t("book_lesson")}</Text>
       </TouchableOpacity>
     </View>
   );

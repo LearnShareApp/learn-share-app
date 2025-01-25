@@ -34,8 +34,8 @@ const Teaching = () => {
         setLessons(response || []);
       } catch (err) {
         console.error("Error details:", err);
-        setError("Failed to fetch teachers");
-        Toast.show("Failed to load teachers", {
+        setError(t("failed_fetch_teachers"));
+        Toast.show(t("failed_load_teachers"), {
           type: "error",
           placement: "top",
           duration: 3000,
@@ -86,7 +86,7 @@ const Teaching = () => {
                   name="calendar"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>Мој распоред</Text>
+                <Text style={{ textAlign: "center" }}>{t("my_schedule")}</Text>
               </Pressable>
             </Link>
           </View>

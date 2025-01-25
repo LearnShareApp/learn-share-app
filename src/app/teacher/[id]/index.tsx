@@ -142,7 +142,7 @@ const TeacherProfilePage = () => {
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
                     <SkillBadge
-                      text={item.category_id.toString()}
+                      text={item.category_name}
                       key={item.skill_id}
                     />
                   ))}

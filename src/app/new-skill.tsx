@@ -85,7 +85,7 @@ const SkillAdding = () => {
         about: data.about,
       };
       const response = await apiService.addSkill(postData);
-      Toast.show("Захтев је успешно послат", {
+      Toast.show(t("request_success"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -95,7 +95,7 @@ const SkillAdding = () => {
       if (axios.isAxiosError(error)) {
         const errorMessage =
           error.response?.data?.error || "An unknown error occurred";
-        Toast.show(errorMessage, {
+        Toast.show(t("unknown_error"), {
           type: "warning",
           placement: "top",
           duration: 3000,
@@ -103,8 +103,8 @@ const SkillAdding = () => {
         console.log(errorMessage);
       } else {
         console.error("Unexpected error:", error);
-        Toast.show("An unexpected error occurred", {
-          type: "warning",
+        Toast.show(t("unexpected_error"), {
+          type: "error",
           placement: "top",
           duration: 3000,
         });

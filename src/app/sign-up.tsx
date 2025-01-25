@@ -17,6 +17,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../providers/language-provider";
+import { LanguageSelector } from "../components/LanguageSelector";
 
 const authSchema = zod.object({
   email: zod.string().email({ message: "Неважећа адреса " }),
@@ -33,6 +35,8 @@ type AuthFormData = zod.infer<typeof authSchema>;
 const SignUp = () => {
   const { token, signIn } = useAuth();
   if (token) return <Redirect href={"/"} />;
+
+  const { t } = useLanguage();
 
   const [showPicker, setShowPicker] = useState(false);
 
@@ -80,8 +84,8 @@ const SignUp = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Добродошли</Text>
-        <Text style={styles.subtitle}>Региструјте се да бисте наставили</Text>
+        <Text style={styles.title}>{t("welcome")}</Text>
+        <Text style={styles.subtitle}>{t("sign_up")}</Text>
 
         <Controller
           control={control}
@@ -92,7 +96,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="име"
+                placeholder={t("name")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -115,7 +119,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="презиме"
+                placeholder={t("surname")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -161,7 +165,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="лозинка"
+                placeholder={t("password")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -180,7 +184,7 @@ const SignUp = () => {
           control={control}
           name="birthdate"
           rules={{
-            required: "Датум рођења је обавезан",
+            required: t("birthdate_required"),
           }}
           render={({
             field: { value, onChange, onBlur },
@@ -198,7 +202,7 @@ const SignUp = () => {
             >
               <Button
                 color="#C9A977"
-                title={value ? value.toDateString() : "select Date of Birth"}
+                title={value ? value.toDateString() : t("select_date_of_birth")}
                 onPress={() => setShowPicker(true)}
               />
               <Text
@@ -207,7 +211,7 @@ const SignUp = () => {
                   fontSize: 16,
                 }}
               >
-                Ваш датум рођења:
+                {t("your_date_of_birth")}:
               </Text>
               {showPicker && (
                 <DateTimePicker
@@ -232,14 +236,17 @@ const SignUp = () => {
           onPress={handleSubmit(signUp)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Пријавите се</Text>
+          <Text style={styles.buttonText}>{t("sign_up")}</Text>
         </TouchableOpacity>
 
         <Link href={"/sign-in"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            или већ имате налог
+            {t("or_you_have_an_account")}
           </Text>
         </Link>
+      </View>
+      <View style={{ width: "100%", padding: 16, alignItems: "center" }}>
+        <LanguageSelector />
       </View>
     </SafeAreaView>
   );
