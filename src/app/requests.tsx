@@ -51,7 +51,7 @@ const Requests = () => {
   if (!lessons) return <Text>error</Text>;
   return (
     lessons.length === 0 ? (
-      <Text style={{ color: theme.colors.text }}>{t("no_requests")}</Text>
+      <Text style={{ color: theme.colors.text, padding: 16, alignSelf: "center" }}>{t("no_requests")}</Text>
     ) : (
       <FlatList
         data={lessons}

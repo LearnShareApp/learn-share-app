@@ -20,6 +20,7 @@ import {
 } from "../../../utilities/api";
 import axios from "axios";
 import { useLanguage } from "../../../providers/language-provider";
+import { useTheme } from "../../../providers/theme-provider";
 
 const authSchema = zod.object({
   category_id: zod.number(),
@@ -43,6 +44,7 @@ export default function BookLesson() {
   }>();
   const router = useRouter();
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [availableTimes, setAvailableTimes] = useState<DateTime[]>([]);
@@ -163,23 +165,23 @@ export default function BookLesson() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#C9A977" />
-        <Text>{t("loading")}</Text>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ color: theme.colors.text }}>{t("loading")}</Text>
       </View>
     );
   }
 
   if (error || !teacher) {
     return (
-      <View style={styles.container}>
-        <Text>{t("teacher_not_found")}</Text>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <Text style={{ color: theme.colors.text }}>{t("teacher_not_found")}</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Controller
         control={control}
         name="category_id"
@@ -190,7 +192,11 @@ export default function BookLesson() {
               value={selectedSkill}
               items={skillItems}
               setOpen={setOpenSkill}
-              dropDownContainerStyle={{ borderColor: "transparent" }}
+              
+              dropDownContainerStyle={{ 
+                borderColor: "transparent",
+                backgroundColor: theme.colors.card 
+              }}
               setValue={(callback) => {
                 const newValue =
                   typeof callback === "function"
@@ -203,10 +209,14 @@ export default function BookLesson() {
               }}
               setItems={setSkillItems}
               placeholder={t("select_skill")}
-              style={styles.dropDown}
+              style={[styles.dropDown, { 
+                backgroundColor: theme.colors.card,
+                borderColor: "transparent" 
+              }]}
+              textStyle={{ color: theme.colors.text }}
               zIndex={2000}
             />
-            {error && <Text style={styles.error}>{error.message}</Text>}
+            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
           </>
         )}
       />
@@ -221,7 +231,10 @@ export default function BookLesson() {
               value={selectedTime}
               items={timeItems}
               setOpen={setOpenTime}
-              dropDownContainerStyle={{ borderColor: "transparent" }}
+              dropDownContainerStyle={{ 
+                borderColor: "transparent",
+                backgroundColor: theme.colors.card 
+              }}
               setValue={(callback) => {
                 const newValue =
                   typeof callback === "function"
@@ -234,20 +247,26 @@ export default function BookLesson() {
               }}
               setItems={setTimeItems}
               placeholder={t("select_time")}
-              style={styles.dropDown}
+              style={[styles.dropDown, { 
+                backgroundColor: theme.colors.card,
+                borderColor: "transparent" 
+              }]}
+              textStyle={{ color: theme.colors.text }}
               zIndex={1000}
             />
-            {error && <Text style={styles.error}>{error.message}</Text>}
+            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
           </>
         )}
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: theme.colors.primary }]}
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>{t("book_lesson")}</Text>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>
+          {t("book_lesson")}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -264,31 +283,25 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     marginBottom: 16,
     borderRadius: 8,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    color: "#000",
     fontSize: 16,
     alignSelf: "center",
-    borderColor: "transparent",
   },
   error: {
-    color: "red",
     fontSize: 12,
     marginBottom: 16,
     textAlign: "left",
     width: "90%",
   },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-  },
   button: {
-    backgroundColor: "#C9A977",
     padding: 16,
     borderRadius: 8,
     marginBottom: 16,
     width: "100%",
     maxWidth: 600,
     alignItems: "center",
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
