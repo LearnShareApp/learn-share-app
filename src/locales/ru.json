@@ -125,5 +125,9 @@
   "contact_us": "Свяжитесь с нами",
   "version": "Версия приложения",
   "call_ended": "Звонок завершен",
-  "failed_to_connect": "Не удалось подключиться к звонку"
+  "failed_to_connect": "Не удалось подключиться к звонку",
+  "lesson_started": "Урок начался",
+  "lesson_finished": "Урок завершен",
+  "lesson_cancelled": "Урок отменен",
+  "lesson_approved": "Урок одобрен"
 }

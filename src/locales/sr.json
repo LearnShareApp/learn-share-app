@@ -120,5 +120,12 @@
   "our_mission": "Наша мисија",
   "mission_description": "Тежимо да створимо глобалну заједницу у којој свако може да учи и дели знање.",
   "contact_us": "Контактирајте нас",
-  "version": "Верзија апликације"
+  "version": "Верзија апликације",
+  "dark_mode": "Dark Mode",
+  "light_mode": "Light Mode",
+  "add_time": "Додајте време",
+  "lesson_started": "Урок је почео",
+  "lesson_finished": "Урок је завршен",
+  "lesson_cancelled": "Урок је отказан",
+  "lesson_approved": "Урок је одобрен"
 }
