@@ -7,6 +7,7 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { AuthProvider } from "../providers/auth-provider";
 import { LanguageProvider } from "../providers/language-provider";
 import { ThemeProvider, useTheme } from "../providers/theme-provider";
+import * as SecureStore from 'expo-secure-store';
 
 const StackNavigator = () => {
   const { theme } = useTheme();
@@ -86,8 +87,14 @@ export default function RootLayout() {
     const setupNavigationBar = async () => {
       if (Platform.OS === 'android') {
         try {
-          await NavigationBar.setBackgroundColorAsync('#ffffff');
-          await NavigationBar.setButtonStyleAsync('dark');
+            const savedTheme = await SecureStore.getItemAsync('user_theme');
+            if (savedTheme === 'dark') {
+              await NavigationBar.setBackgroundColorAsync('#000000');
+              await NavigationBar.setButtonStyleAsync('light');
+            } else {
+              await NavigationBar.setBackgroundColorAsync('#FFFFFF'); 
+              await NavigationBar.setButtonStyleAsync('dark');
+            }
         } catch (error) {
           console.warn('NavigationBar customization is not available:', error);
         }

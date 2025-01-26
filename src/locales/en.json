@@ -126,5 +126,7 @@
   "mission_description": "We aim to create a global community where everyone can learn and share knowledge.",
   "contact_us": "Contact Us",
   "version": "App Version",
-  "dark_mode": "Dark Mode"
+  "dark_mode": "Dark Mode",
+  "light_mode": "Light Mode",
+  "add_time": "Add time"
 }

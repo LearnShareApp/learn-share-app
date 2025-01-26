@@ -14,7 +14,7 @@ function TabBarIcon(props: {
     <FontAwesome
       size={24}
       {...props}
-      style={{ color: props.focused ? theme.colors.primary : theme.colors.text }}
+      style={{ color: props.focused ? theme.colors.primary : '#888' }}
     />
   );
 }
@@ -28,13 +28,16 @@ const TabsLayout = () => {
         screenOptions={{
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.text,
-          tabBarLabelStyle: { fontSize: 16 },
+          tabBarLabelStyle: { display: 'none' },
           tabBarStyle: {
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
+            borderTopLeftRadius: 12,
+            alignItems: "center",
+            borderTopRightRadius: 12,
             paddingTop: 10,
+            height: 60,
+            borderTopWidth: 0,
             backgroundColor: theme.colors.card,
-            borderTopColor: theme.colors.border,
+            borderTopColor: theme.colors.background,
           },
           headerShown: false,
         }}

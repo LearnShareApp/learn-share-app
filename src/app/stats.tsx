@@ -3,8 +3,12 @@ import { useCategories } from "../utilities/category-hook";
 import { useTeacher } from "../utilities/teacher-hook";
 import TeacherSkillListItem from "../components/teacher-skill-list-item";
 import { Link } from "expo-router";
+import { useTheme } from "../providers/theme-provider";
+import { useLanguage } from "../providers/language-provider";
 
 const Stats = () => {
+  const { theme } = useTheme();
+  const { t } = useLanguage();
   const { categories } = useCategories();
   const { teacher } = useTeacher();
 

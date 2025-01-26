@@ -126,5 +126,7 @@
   "mission_description": "Wir möchten eine globale Gemeinschaft schaffen, in der jeder lernen und Wissen teilen kann.",
   "contact_us": "Kontaktiere uns",
   "version": "App-Version",
-  "dark_mode": "Dunkler Modus"
+  "dark_mode": "Dunkler Modus",
+  "light_mode": "Lichtmodus",
+  "add_time": "Zeit hinzufügen"
 }

@@ -17,10 +17,12 @@ import { useProfile } from "../../utilities/profile-hook";
 import { useCategories } from "../../utilities/category-hook";
 import SkillBadge from "../../components/skill";
 import { useLanguage } from "../../providers/language-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 const Home = () => {
   const { token, signOut } = useAuth();
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   if (!token) return <Redirect href={"/sign-in"} />;
 
@@ -46,50 +48,52 @@ const Home = () => {
         requireCalendar
         requireSettings
       />
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: theme.colors.background }}>
         <View style={styles.container}>
           <Link href="/search" asChild>
-            <Pressable style={styles.search}>
-              <Text style={styles.searchText}>{t("search_teacher")}</Text>
+            <Pressable style={{ backgroundColor: theme.colors.card, width: "100%",
+              height: 60,
+              borderRadius: 8,
+              paddingHorizontal: 16,
+              paddingVertical: 4,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}>
+              <Text style={[styles.searchText, { color: theme.colors.text }]}>{t("search_teacher")}</Text>
               <FontAwesome
                 size={24}
                 name="arrow-right"
-                style={{ color: "#C9A977" }}
+                style={{ color: theme.colors.primary }}
               />
             </Pressable>
           </Link>
-          <View style={styles.info}>
-            <Text>{t("your_lessons")}</Text>
+          <View style={[styles.info, { backgroundColor: theme.colors.card }]}>
+            <Text style={{ color: theme.colors.text }}>{t("your_lessons")}</Text>
             <Line />
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
-                <Text style={styles.infoNumber}>24</Text>
-                <Text
-                  style={{ color: "#888", width: 100, textAlign: "center" }}
-                >
+                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>24</Text>
+                <Text style={{ color: '#888', width: 100, textAlign: "center" }}>
                   {t("successfully_completed")}
                 </Text>
               </View>
               <View style={styles.infoSection}>
-                <Text style={styles.infoNumber}>3</Text>
-                <Text
-                  style={{ color: "#888", width: 100, textAlign: "center" }}
-                >
+                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>3</Text>
+                <Text style={{ color: '#888', width: 100, textAlign: "center" }}>
                   {t("need_to_approve")}
                 </Text>
               </View>
               <View style={styles.infoSection}>
-                <Text style={styles.infoNumber}>2</Text>
-                <Text
-                  style={{ color: "#888", width: 100, textAlign: "center" }}
-                >
+                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>2</Text>
+                <Text style={{ color: '#888', width: 100, textAlign: "center" }}>
                   {t("waiting_to_join")}
                 </Text>
               </View>
             </View>
-            <View style={styles.nextLessons}>
+            <View style={[styles.nextLessons, { backgroundColor: theme.colors.border }]}>
               <View style={{ width: "80%", gap: 8 }}>
-                <Text>{t("next_lesson")}</Text>
+                <Text style={{ color: theme.colors.text }}>{t("next_lesson")}</Text>
                 <Line />
                 <View style={{ flexDirection: "row", gap: 8 }}>
                   <Image
@@ -97,7 +101,7 @@ const Home = () => {
                     style={styles.nextTeacherImage}
                   />
                   <View style={{ gap: 4 }}>
-                    <Text>Name Surname</Text>
+                    <Text style={{ color: theme.colors.text }}>Name Surname</Text>
                     <SkillBadge text={"nonono"} />
                   </View>
                 </View>
@@ -105,14 +109,16 @@ const Home = () => {
 
               <Link href="/rooms/" asChild>
                 <Pressable style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 24, padding: 16, color: "#bbb" }}>
+                  <Text style={{ fontSize: 24, padding: 16, color: theme.colors.text }}>
                     {">"}
                   </Text>
                 </Pressable>
               </Link>
             </View>
           </View>
-          <Text style={styles.sectionText}>{t("your_previous_teachers")}:</Text>
+          <Text style={[styles.sectionText, { color: theme.colors.text }]}>
+            {t("your_previous_teachers")}:
+          </Text>
           <View style={styles.listContainer}>
             {TEACHERS.map((teacher) => (
               <TeacherListItem teacher={teacher} key={teacher.id} />
@@ -132,24 +138,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     gap: 8,
   },
-  search: {
-    width: "100%",
-    height: 60,
-    backgroundColor: "white",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
   searchText: {
     fontSize: 14,
     width: 200,
   },
   info: {
     width: "100%",
-    backgroundColor: "white",
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -169,7 +163,6 @@ const styles = StyleSheet.create({
   infoLine: {
     width: 1,
     height: "100%",
-    backgroundColor: "#ddd",
   },
   sectionText: {
     paddingLeft: 8,
@@ -178,7 +171,6 @@ const styles = StyleSheet.create({
   nextLessons: {
     padding: 16,
     width: "100%",
-    backgroundColor: "#eee",
     borderRadius: 12,
     gap: 8,
     alignItems: "center",

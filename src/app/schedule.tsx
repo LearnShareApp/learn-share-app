@@ -17,6 +17,7 @@ import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Line from "../components/line";
 import { useLanguage } from "../providers/language-provider";
+import { useTheme } from "../providers/theme-provider";
 
 const authSchema = zod.object({
   datetime: zod.date(),
@@ -24,8 +25,9 @@ const authSchema = zod.object({
 
 type FormData = zod.infer<typeof authSchema>;
 
-export default function AddTime() {
+const AddTime = () => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
 
@@ -126,20 +128,20 @@ export default function AddTime() {
 
     return (
       <View
-        style={
-          !item.is_available
-            ? [styles.timeItem, styles.takenTime]
-            : styles.timeItem
-        }
+        style={[
+          styles.timeItem,
+          { backgroundColor: theme.colors.card },
+          !item.is_available && styles.takenTime
+        ]}
       >
-        <Text style={styles.timeText}>
+        <Text style={[styles.timeText, { color: theme.colors.text }]}>
           {new Date(item.datetime).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
           })}
         </Text>
-        <Text style={[styles.timeText, { color: "#888" }]}>
+        <Text style={{ color: '#888' }}>
           {new Date(item.datetime).toLocaleDateString()}
         </Text>
       </View>
@@ -147,7 +149,7 @@ export default function AddTime() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Controller
         control={control}
         name="datetime"
@@ -155,16 +157,16 @@ export default function AddTime() {
           required: t("date_time_required"),
         }}
         render={({ field: { value }, fieldState: { error } }) => (
-          <View style={styles.dateTimeContainer}>
-            <Text style={styles.sectionTitle}>{t("add_new_time")}</Text>
+          <View style={[styles.dateTimeContainer, { backgroundColor: theme.colors.card }]}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{t("add_new_time")}</Text>
             <Line />
             <View style={styles.pickerContainer}>
               <Button
-                color="#C9A977"
+                color={theme.colors.primary}
                 title={selectedDate.toLocaleDateString()}
                 onPress={() => setShowPickerDate(true)}
               />
-              <Text style={styles.labelText}>{t("select_date")}:</Text>
+              <Text style={[styles.labelText, { color: theme.colors.text }]}>{t("select_date")}:</Text>
               {showPickerDate && (
                 <DateTimePicker
                   value={selectedDate}
@@ -181,7 +183,7 @@ export default function AddTime() {
             </View>
             <View style={styles.pickerContainer}>
               <Button
-                color="#C9A977"
+                color={theme.colors.primary}
                 title={
                   "    " +
                   selectedTime.toLocaleTimeString([], {
@@ -193,7 +195,7 @@ export default function AddTime() {
                 }
                 onPress={() => setShowPickerTime(true)}
               />
-              <Text style={styles.labelText}>{t("select_time")}:</Text>
+              <Text style={[styles.labelText, { color: theme.colors.text }]}>{t("select_time")}:</Text>
               {showPickerTime && (
                 <DateTimePicker
                   value={selectedTime}
@@ -209,24 +211,24 @@ export default function AddTime() {
                 />
               )}
             </View>
-            {error && <Text style={styles.error}>{error.message}</Text>}
+            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
           </View>
         )}
       />
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: theme.colors.primary }]}
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>{t("add_time")}</Text>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>{t("add_time")}</Text>
       </TouchableOpacity>
 
-      <Text style={[styles.sectionTitle, { paddingHorizontal: 16 }]}>
+      <Text style={[styles.sectionTitle, { paddingHorizontal: 16, color: theme.colors.text }]}>
         {t("your_times")}
       </Text>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#C9A977" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       ) : times.length ? (
         <FlatList
           data={times}
@@ -238,11 +240,11 @@ export default function AddTime() {
           numColumns={2}
         />
       ) : (
-        <Text style={{ textAlign: "center" }}>{t("no_times")}</Text>
+        <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("no_times")}</Text>
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -251,67 +253,55 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   dateTimeContainer: {
-    backgroundColor: "white",
-    gap: 16,
-    padding: 16,
     borderRadius: 8,
-    width: "100%",
+    padding: 16,
+    gap: 8,
   },
   pickerContainer: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    alignSelf: "flex-start",
-    paddingHorizontal: 24,
     justifyContent: "space-between",
-    width: "100%",
+    gap: 8,
   },
-  labelText: {
-    color: "#999",
-    fontSize: 16,
+  timeItem: {
+    flex: 1,
+    margin: 4,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
   },
-  error: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 16,
-    textAlign: "left",
-    width: "90%",
+  takenTime: {
+    opacity: 0.5,
+  },
+  button: {
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  button: {
-    backgroundColor: "#C9A977",
-    padding: 16,
-    borderRadius: 8,
-    width: "100%",
-    alignItems: "center",
+    fontWeight: "600",
   },
   sectionTitle: {
     fontSize: 18,
+    fontWeight: "500",
   },
-  timeItem: {
-    backgroundColor: "white",
-    padding: 16,
-    borderRadius: 8,
-    width: "49%",
-    marginRight: "2%",
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    padding: 4,
+  },
+  error: {
+    fontSize: 14,
+  },
+  labelText: {
+    fontSize: 16,
   },
   timeText: {
     fontSize: 16,
     textAlign: "center",
   },
-  list: {
-    width: "100%",
-  },
-  listContent: {
-    paddingBottom: 16,
-    gap: 8,
-    justifyContent: "space-between",
-  },
-  takenTime: {
-    borderWidth: 2,
-    borderColor: "black",
-  },
 });
+
+export default AddTime;

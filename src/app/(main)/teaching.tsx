@@ -17,8 +17,10 @@ import { useTeacher } from "../../utilities/teacher-hook";
 import { apiService, TeacherLesson } from "../../utilities/api";
 import { Toast } from "react-native-toast-notifications";
 import { useLanguage } from "../../providers/language-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 const Teaching = () => {
+  const { theme } = useTheme();
   const { t } = useLanguage();
   const { teacher, loadingTeacher, errorTeacher } = useTeacher();
 
@@ -58,17 +60,24 @@ const Teaching = () => {
       <>
         <HeaderElement text={t("teaching")} requireChanges requireSettings />
         <View
-          style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
+          style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8, backgroundColor: theme.colors.background }}
         >
           <View style={styles.topNav}>
             <Link href={"/requests"} asChild>
-              <Pressable style={styles.navBtn}>
+            <Pressable style={{
+                width: "48%",
+                minHeight: 32,
+                borderRadius: 8,
+                padding: 16,
+                gap: 8,
+                alignItems: "center",
+                backgroundColor: theme.colors.card }}>
                 <FontAwesome
                   size={24}
                   name="bell"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>
+                <Text style={{ textAlign: "center", color: theme.colors.text }}>
                   {t("new_requests")} (
                   {
                     lessons.filter((lesson) => lesson.status == "verification")
@@ -80,27 +89,43 @@ const Teaching = () => {
             </Link>
 
             <Link href={"/schedule"} asChild>
-              <Pressable style={styles.navBtn}>
+              <Pressable style={{
+                width: "48%",
+                minHeight: 32,
+                borderRadius: 8,
+                padding: 16,
+                gap: 8,
+                alignItems: "center",
+                backgroundColor: theme.colors.card
+              }}>
                 <FontAwesome
                   size={24}
                   name="calendar"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>{t("my_schedule")}</Text>
+                <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("my_schedule")}</Text>
               </Pressable>
             </Link>
           </View>
           <Link href={"/stats"} asChild>
-            <Pressable style={styles.navBtnSkills}>
+            <Pressable style={{
+              width: "100%",
+              borderRadius: 8,
+              padding: 24,
+              gap: 12,
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: theme.colors.card
+            }}>
               <FontAwesome
                 size={24}
                 name="pie-chart"
                 style={{ color: "#C9A977" }}
               />
-              <Text style={{ textAlign: "center" }}>{t("manage_skills")}</Text>
+              <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("manage_skills")}</Text>
             </Pressable>
           </Link>
-          <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
+          <Text style={{ fontSize: 20, paddingHorizontal: 16, color: theme.colors.text }}>
             {t("next_lesson")}:
           </Text>
 
@@ -233,24 +258,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-  },
-  navBtn: {
-    width: "48%",
-    backgroundColor: "white",
-    minHeight: 32,
-    borderRadius: 8,
-    padding: 16,
-    gap: 8,
-    alignItems: "center",
-  },
-  navBtnSkills: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 24,
-    gap: 12,
-    flexDirection: "row",
-    alignItems: "center",
   },
   imagePart: {
     width: "100%",

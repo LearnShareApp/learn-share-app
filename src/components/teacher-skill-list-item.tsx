@@ -4,13 +4,23 @@ import SkillBadge from "./skill";
 import { FontAwesome } from "@expo/vector-icons";
 import { TeacherSkill } from "../utilities/api";
 import { useTeacher } from "../utilities/teacher-hook";
+import { useTheme } from "../providers/theme-provider";
+import { useLanguage } from "../providers/language-provider";
 
 const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
+  const { theme } = useTheme();
+  const { t } = useLanguage();
   const { teacher } = useTeacher();
 
   return (
     <Link href={`/teachers/${teacher?.teacher_id}`} asChild>
-      <Pressable style={styles.item}>
+      <Pressable style={{ backgroundColor: theme.colors.card,gap: 12,
+        width: "100%",
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 8,
+        minHeight: 100,
+      }}>
         <View style={styles.teacherInfo}>
           <View style={styles.skillsList}>
             <SkillBadge text={skill.category_name} />
@@ -20,6 +30,7 @@ const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
               style={{
                 fontSize: 18,
                 fontWeight: "bold",
+                color: theme.colors.text,
               }}
             >
               {skill.rate ? skill.rate.toFixed(1) : "Нема рецензија"}{" "}
@@ -28,7 +39,7 @@ const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
           </View>
         </View>
         <View>
-          <Text>{skill.about}</Text>
+          <Text style={{ color: theme.colors.text }}>{skill.about}</Text>
         </View>
       </Pressable>
     </Link>
@@ -38,15 +49,6 @@ const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
 export default TeacherSkillListItem;
 
 const styles = StyleSheet.create({
-  item: {
-    gap: 12,
-    backgroundColor: "white",
-    width: "100%",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    minHeight: 100,
-  },
   avatar: {
     width: 64,
     height: 64,
