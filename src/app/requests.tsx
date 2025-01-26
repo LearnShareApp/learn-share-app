@@ -3,35 +3,44 @@ import LessonItem from "../components/lesson-item";
 import { useEffect, useState } from "react";
 import { apiService, TeacherLesson } from "../utilities/api";
 import { Toast } from "react-native-toast-notifications";
+import EventEmitter from "../utilities/event-emitter";
 
 const Requests = () => {
   const [lessons, setLessons] = useState<TeacherLesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchLessons = async () => {
-      try {
-        setLoading(true);
-        const response = await apiService.getTeacherLessons();
-        setLessons(
-          response.filter((lesson) => lesson.status === "verification") || []
-        );
-      } catch (err) {
-        console.error("Error details:", err);
-        setError("Failed to fetch teachers");
-        Toast.show("Failed to load teachers", {
-          type: "error",
-          placement: "top",
-          duration: 3000,
+  const fetchLessons = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getTeacherLessons();
+      const sortedLessons = response
+        .filter((lesson) => lesson.status === "verification")
+        .sort((a, b) => {
+          const dateA = new Date(a.datetime);
+          const dateB = new Date(b.datetime);
+          return dateA.getTime() - dateB.getTime();
         });
-        setLessons([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setLessons(sortedLessons || []);
+    } catch (err) {
+      console.error("Error details:", err);
+      setError("Failed to fetch teachers");
+      setLessons([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchLessons();
+  }, []);
+
+  useEffect(() => {
+    const subscription = EventEmitter.addListener('lessonRemoved', (lessonId: number) => {
+      setLessons(prevLessons => prevLessons.filter(lesson => lesson.lesson_id !== lessonId));
+    });
+
+    return () => subscription.remove();
   }, []);
 
   if (loading) return <ActivityIndicator size="large" color="#C9A977" />;

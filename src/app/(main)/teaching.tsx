@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import LessonItem from "../../components/lesson-item";
@@ -17,7 +17,10 @@ import { useTeacher } from "../../utilities/teacher-hook";
 import { apiService, TeacherLesson } from "../../utilities/api";
 import { Toast } from "react-native-toast-notifications";
 import { useLanguage } from "../../providers/language-provider";
+import { useFocusEffect } from '@react-navigation/native';
+import EventEmitter from "../../utilities/event-emitter";
 import { useTheme } from "../../providers/theme-provider";
+
 
 const Teaching = () => {
   const { theme } = useTheme();
@@ -28,28 +31,40 @@ const Teaching = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchLessons = async () => {
-      try {
-        setLoading(true);
-        const response = await apiService.getTeacherLessons();
-        setLessons(response || []);
-      } catch (err) {
-        console.error("Error details:", err);
-        setError(t("failed_fetch_teachers"));
-        Toast.show(t("failed_load_teachers"), {
-          type: "error",
-          placement: "top",
-          duration: 3000,
-        });
-        setLessons([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchLessons = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getTeacherLessons();
+      const sortedLessons = response.sort((a, b) => {
+        const dateA = new Date(a.datetime);
+        const dateB = new Date(b.datetime);
+        return dateA.getTime() - dateB.getTime();
+      });
+      setLessons(sortedLessons || []);
+    } catch (err) {
+      console.error("Error details:", err);
+      setError(t("failed_fetch_teachers"));
+      setLessons([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchLessons();
-  }, [teacher]);
+  // Обновление при фокусе на экране
+  useFocusEffect(
+    useCallback(() => {
+      fetchLessons();
+    }, [])
+  );
+
+  // Подписка на событие обновления уроков
+  useEffect(() => {
+    const subscription = EventEmitter.addListener('lessonsUpdated', () => {
+      fetchLessons();
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   if (loadingTeacher) {
     return <HeaderElement text="Loading..." requireChanges requireSettings />;
@@ -129,10 +144,10 @@ const Teaching = () => {
             {t("next_lesson")}:
           </Text>
 
-          {lessons.filter((lesson) => lesson.status != "verification")
+          {lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled")
             .length ? (
             <FlatList
-              data={lessons.filter((lesson) => lesson.status != "verification")}
+              data={lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled")}
               renderItem={(item) => (
                 <LessonItem lesson={item.item} forTeacher />
               )}

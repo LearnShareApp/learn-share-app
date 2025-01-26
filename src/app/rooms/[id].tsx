@@ -6,8 +6,9 @@ import {
   ListRenderItem,
   TouchableOpacity,
   Text,
+  ActivityIndicator,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AudioSession,
   LiveKitRoom,
@@ -19,16 +20,39 @@ import {
 } from "@livekit/react-native";
 import { Track } from "livekit-client";
 import { Toast } from "react-native-toast-notifications";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { useLanguage } from "../../providers/language-provider";
 
 registerGlobals();
 
-const wsURL = "wss://learn-and-share-tdvnu79s.livekit.cloud";
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzc2NDQxNjEsImlzcyI6IkFQSWdESkdFTVpkeTJNYSIsIm5iZiI6MTczNzYzNjk2MSwic3ViIjoicXVpY2tzdGFydCB1c2VyIDFrd2FucyIsInZpZGVvIjp7ImNhblB1Ymxpc2giOnRydWUsImNhblB1Ymxpc2hEYXRhIjp0cnVlLCJjYW5TdWJzY3JpYmUiOnRydWUsInJvb20iOiJxdWlja3N0YXJ0IHJvb20iLCJyb29tSm9pbiI6dHJ1ZX19.SpZB1ezcPogBsjK-oCfxcJr_y7jzgmKJ77CenQh4toU";
+const wsURL = "wss://learn-and-share-app-raalcu2w.livekit.cloud"
 
 export default function Lesson() {
+  const { id } = useLocalSearchParams();
+  const { t } = useLanguage();
+  const [isLoading, setIsLoading] = useState(true);
+  const [roomToken, setRoomToken] = useState<string | null>(null);
   const [isCallActive, setIsCallActive] = useState(true);
+
+  useEffect(() => {
+    const getRoomToken = async () => {
+      try {
+        const response = id as string;
+        setRoomToken(response);
+      } catch (error) {
+        Toast.show(t("failed_to_connect"), {
+          type: "error",
+          placement: "top",
+          duration: 3000,
+        });
+        router.replace("/");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getRoomToken();
+  }, [id]);
 
   useEffect(() => {
     let start = async () => {
@@ -43,7 +67,7 @@ export default function Lesson() {
 
   const handleEndCall = () => {
     setIsCallActive(false);
-    Toast.show("Call ended", {
+    Toast.show(t("call_ended"), {
       type: "success",
       placement: "top",
       duration: 3000,
@@ -54,10 +78,26 @@ export default function Lesson() {
     }, 3000);
   };
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#C9A977" />
+      </View>
+    );
+  }
+
   if (!isCallActive) {
     return (
       <View style={styles.endCallContainer}>
-        <Text style={styles.endCallText}>Call Ended</Text>
+        <Text style={styles.endCallText}>{t("call_ended")}</Text>
+      </View>
+    );
+  }
+
+  if (!roomToken) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{t("failed_to_connect")}</Text>
       </View>
     );
   }
@@ -65,7 +105,7 @@ export default function Lesson() {
   return (
     <LiveKitRoom
       serverUrl={wsURL}
-      token={token}
+      token={roomToken}
       connect={true}
       options={{
         adaptiveStream: { pixelDensity: "screen" },
@@ -143,6 +183,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#1E1E1E",
   },
   endCallText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1E1E1E",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1E1E1E",
+  },
+  errorText: {
     color: "white",
     fontSize: 24,
     fontWeight: "bold",

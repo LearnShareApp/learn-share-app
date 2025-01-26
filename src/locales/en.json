@@ -128,5 +128,9 @@
   "version": "App Version",
   "dark_mode": "Dark Mode",
   "light_mode": "Light Mode",
-  "add_time": "Add time"
+  "add_time": "Add time",
+  "lesson_started": "Lesson started",
+  "lesson_finished": "Lesson finished",
+  "lesson_cancelled": "Lesson cancelled",
+  "lesson_approved": "Lesson approved"
 }

@@ -95,7 +95,8 @@ export interface TeacherLesson {
   category_id: number;
   category_name: string;
   status: string;
-  datatime: Date;
+  datetime: Date;
+  token: string;
 }
 
 export interface Lesson {
@@ -106,7 +107,8 @@ export interface Lesson {
   category_id: number;
   category_name: string;
   status: string;
-  datatime: Date;
+  datetime: Date;
+  token: string;
 }
 
 export interface TeacherLessonResponse {
@@ -186,6 +188,26 @@ class ApiService {
     return response.statusText;
   }
 
+  async lessonApprove(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/approve`);
+    return response.statusText;
+  }
+
+  async lessonCancel(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/cancel`);
+    return response.statusText;
+  }
+
+  async lessonFinish(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/finish`);
+    return response.statusText;
+  }
+
+  async lessonStart(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/start`);
+    return response.statusText;
+  }
+
   async getCategories(): Promise<Category[]> {
     const response = await this.api.get<CategoriesResponse>("/api/categories");
     return response.data.categories;
@@ -225,6 +247,11 @@ class ApiService {
 
   async request<T>(config: AxiosRequestConfig): Promise<T> {
     const response = await this.api.request<T>(config);
+    return response.data;
+  }
+
+  async getRoomToken(lessonId: string): Promise<{ token: string }> {
+    const response = await this.api.get(`/api/lesson/${lessonId}/token`);
     return response.data;
   }
 }

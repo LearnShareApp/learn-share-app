@@ -16,11 +16,6 @@ export const useTeacher = () => {
       setError(null);
     } catch (err) {
       setError("Failed to fetch teacher profile");
-      Toast.show("You are not a teacher", {
-        type: "error",
-        placement: "top",
-        duration: 1000,
-      });
     } finally {
       setLoading(false);
     }
