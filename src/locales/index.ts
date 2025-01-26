@@ -3,6 +3,8 @@ import en from "./en.json";
 import sr from "./sr.json";
 import ru from "./ru.json";
 import de from "./de.json";
+import fr from "./fr.json";
+
 import * as SecureStore from "expo-secure-store";
 
 const translations = {
@@ -10,6 +12,7 @@ const translations = {
   sr,
   ru,
   de,
+  fr,
 };
 
 export type LanguageCode = keyof typeof translations;

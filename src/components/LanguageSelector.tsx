@@ -7,6 +7,7 @@ const languages: { code: LanguageCode; label: string }[] = [
     { code: "sr", label: "SRP" },
     { code: "ru", label: "RU" },
     { code: "de", label: "DE" },
+    { code: "fr", label: "FR" },
 ];
 
 export const LanguageSelector = () => {
