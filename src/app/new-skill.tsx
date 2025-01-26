@@ -180,7 +180,7 @@ const SkillAdding = () => {
           }) => (
             <>
               <TextInput
-                placeholder="опишите своју вештину"
+                placeholder={t("describe_your_skill")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -188,6 +188,7 @@ const SkillAdding = () => {
                 placeholderTextColor="#aaa"
                 autoCapitalize="none"
                 editable={!formState.isSubmitting}
+                multiline={true}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>

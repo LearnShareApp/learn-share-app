@@ -129,5 +129,6 @@
   "light_mode": "Светли режим",
   "add_time": "Додајте термин",
   "successfully_signed_up": "Успешно се регистровао",
-  "no_lessons_today": "Немате урока за данас"
+  "no_lessons_today": "Немате урока за данас",
+  "describe_your_skill": "Опишите своју вештину"
 }

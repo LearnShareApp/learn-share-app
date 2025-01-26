@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import SkillBadge from "./skill";
 import { apiService, Lesson, TeacherLesson } from "../utilities/api";
 import { useLanguage } from "../providers/language-provider";
@@ -26,7 +26,6 @@ export interface LessonMain {
   category_name: string;
   status: string;
   datetime: Date;
-  token: string;
 }
 
 const LessonItem = ({
@@ -53,7 +52,6 @@ const LessonItem = ({
       category_name: lesson.category_name,
       status: lesson.status,
       datetime: lesson.datetime,
-      token: lesson.token,
     }
   }, [lesson]);
 
@@ -164,15 +162,47 @@ const LessonItem = ({
     return () => clearInterval(interval);
   }, [lessonItemData.datetime]);
 
+  const lessonJoin = async () => {
+    try {
+      const tokenResponse = await apiService.getLessonToken(lessonItemData.lesson_id);
+      Toast.show('connecting...'), {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      };
+      router.push(`/rooms/${tokenResponse}`);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || t("an_unknown_error_occurred");
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+          swipeEnabled: true,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show(t("an_unexpected_error_occurred"), {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
+    }
+  }
+
   const lessonStart = async () => {
     try {
-      const response = await apiService.lessonStart(lessonItemData.lesson_id);
+      const startResponse = await apiService.lessonStart(lessonItemData.lesson_id);
       Toast.show(t("lesson_started"), {
         type: "success",
         placement: "top",
         duration: 1500,
       });
 
+      lessonJoin();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -246,7 +276,7 @@ const LessonItem = ({
           <TouchableOpacity activeOpacity={0.6} onPress={lessonApprove} style={[styles.approve, { backgroundColor: theme.colors.success }]}>
             <Text style={styles.btnText}>{t("approve")}</Text>
           </TouchableOpacity>
-        ) : forTeacher && lessonAvailable && lessonItemData.token == '' ? (
+        ) : forTeacher && lessonAvailable ? (
 
           <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary, padding: 8,
             borderRadius: 4,
@@ -260,8 +290,8 @@ const LessonItem = ({
 
         ) : lessonItemData.status === "ongoing" ? (
 
-          <Link href={`/rooms/${lessonItemData.token}`} asChild>
-            <TouchableOpacity activeOpacity={0.6} style={ { backgroundColor: theme.colors.primary, padding: 8,
+
+            <TouchableOpacity activeOpacity={0.6} onPress={lessonJoin} style={ { backgroundColor: theme.colors.primary, padding: 8,
     borderRadius: 4,
     height: 60,
     justifyContent: "center",
@@ -271,7 +301,6 @@ const LessonItem = ({
               </Text>
 
             </TouchableOpacity>
-          </Link>
 
         ) : (
 
