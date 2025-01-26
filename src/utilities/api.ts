@@ -95,7 +95,8 @@ export interface TeacherLesson {
   category_id: number;
   category_name: string;
   status: string;
-  datatime: Date;
+  datetime: Date;
+  token: string;
 }
 
 export interface Lesson {
@@ -106,7 +107,8 @@ export interface Lesson {
   category_id: number;
   category_name: string;
   status: string;
-  datatime: Date;
+  datetime: Date;
+  token: string;
 }
 
 export interface TeacherLessonResponse {
@@ -183,6 +185,26 @@ class ApiService {
 
   async lessonRequest(data: LessonRequestData): Promise<String> {
     const response = await this.api.post("/api/lesson", data);
+    return response.statusText;
+  }
+
+  async lessonApprove(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/approve`);
+    return response.statusText;
+  }
+
+  async lessonCancel(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/cancel`);
+    return response.statusText;
+  }
+
+  async lessonFinish(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/finish`);
+    return response.statusText;
+  }
+
+  async lessonStart(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/start`);
     return response.statusText;
   }
 

@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "expo-router";
 import SkillBadge from "./skill";
-import { Lesson, TeacherLesson } from "../utilities/api";
+import { apiService, Lesson, TeacherLesson } from "../utilities/api";
 import { useLanguage } from "../providers/language-provider";
+import { Toast } from "react-native-toast-notifications";
+import axios from "axios";
 
 export interface LessonMain {
   lesson_id: number;
@@ -20,7 +22,8 @@ export interface LessonMain {
   category_id: number;
   category_name: string;
   status: string;
-  datatime: Date;
+  datetime: Date;
+  token: string;
 }
 
 const LessonItem = ({
@@ -34,20 +37,23 @@ const LessonItem = ({
 }) => {
   const { t } = useLanguage();
 
-  const lessonItemData: LessonMain = {
-    lesson_id: lesson.lesson_id,
-    user_id: "teacher_id" in lesson ? lesson.teacher_id : lesson.student_id,
-    user_name:
-      "teacher_id" in lesson ? lesson.teacher_name : lesson.student_name,
-    user_surname:
-      "teacher_id" in lesson ? lesson.teacher_surname : lesson.student_surname,
-    category_id: lesson.category_id,
-    category_name: lesson.category_name,
-    status: lesson.status,
-    datatime: lesson.datatime,
-  };
+  const lessonItemData: LessonMain = useMemo(() => {
+    return  {
+      lesson_id: lesson.lesson_id,
+      user_id: "teacher_id" in lesson ? lesson.teacher_id : lesson.student_id,
+      user_name:
+        "teacher_id" in lesson ? lesson.teacher_name : lesson.student_name,
+      user_surname:
+        "teacher_id" in lesson ? lesson.teacher_surname : lesson.student_surname,
+      category_id: lesson.category_id,
+      category_name: lesson.category_name,
+      status: lesson.status,
+      datetime: lesson.datetime,
+      token: lesson.token,
+    }
+  }, [lesson]);
 
-  const date1 = new Date("2025-01-22T21:26:00");
+  const date1 = new Date(lessonItemData.datetime);
 
   const [differenceInSeconds, setDifferenceInSeconds] = useState<number>(0);
   const [differenceText, setDifferenceText] = useState<string>("");
@@ -72,6 +78,117 @@ const LessonItem = ({
 
     return () => clearInterval(interval);
   }, [date1]);
+
+  const lessonApprove = async () => {
+    try {
+      const response = await apiService.lessonApprove(lessonItemData.lesson_id);
+      Toast.show(t("lesson_approved"), {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || t("an_unknown_error_occurred");
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+          swipeEnabled: true,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show(t("an_unexpected_error_occurred"), {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
+    }
+  };
+
+  const lessonCancel = async () => {
+    try {
+      const response = await apiService.lessonCancel(lessonItemData.lesson_id);
+      Toast.show(t("lesson_canceled"), {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || t("an_unknown_error_occurred");
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+          swipeEnabled: true,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show(t("an_unexpected_error_occurred"), {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
+    }
+  };
+
+  const [lessonAvailable, setLessonAvailable] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkLessonTime = () => {
+      const lessonTime = new Date(lessonItemData.datetime);
+      const currentTime = new Date();
+      
+      const fiveMinutesBefore = new Date(lessonTime.getTime() - 15 * 60 * 1000);
+      
+      if (currentTime.getTime() >= fiveMinutesBefore.getTime() || currentTime.getTime() > lessonTime.getTime()) {
+        setLessonAvailable(true);
+      }
+    };
+    checkLessonTime();
+    const interval = setInterval(checkLessonTime, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [lessonItemData.datetime]);
+
+  const lessonStart = async () => {
+    try {
+      const response = await apiService.lessonStart(lessonItemData.lesson_id);
+      Toast.show(t("lesson_started"), {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || t("an_unknown_error_occurred");
+        Toast.show(errorMessage, {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+          swipeEnabled: true,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show(t("an_unexpected_error_occurred"), {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+      }
+    }
+  };
+
   return (
     <View style={styles.lesson}>
       <View style={styles.left}>
@@ -86,7 +203,11 @@ const LessonItem = ({
           </Link>
 
           <View style={{ alignItems: "flex-start", gap: 8 }}>
-            {!forTeacher ? <Text>Jason Statham</Text> : <Text>Elon Musk</Text>}
+            {!forTeacher ? <Text>
+              {lessonItemData.user_name} {lessonItemData.user_surname}
+              </Text> : <Text>
+                {lessonItemData.user_name} {lessonItemData.user_surname}
+            </Text>}
             <SkillBadge text={lessonItemData.category_name} />
           </View>
         </View>
@@ -116,24 +237,44 @@ const LessonItem = ({
 
       <View style={styles.right}>
         {request ? (
-          <TouchableOpacity activeOpacity={0.6} style={styles.approve}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={styles.approve}
+            onPress={lessonApprove}
+          >
             <Text style={styles.btnText}>{t("approve")}</Text>
           </TouchableOpacity>
+        ) : forTeacher && lessonAvailable && lessonItemData.token == '' ? (
+
+          <TouchableOpacity activeOpacity={0.6} style={styles.enter} onPress={lessonStart}>
+            <Text style={styles.btnText}>
+              {t("start_lesson")}
+            </Text>
+          </TouchableOpacity>
+
         ) : lessonItemData.status === "ongoing" ? (
-          <Link href="/rooms/dede" asChild>
+
+          <Link href={`/rooms/${lessonItemData.token}`} asChild>
             <TouchableOpacity activeOpacity={0.6} style={styles.enter}>
-              <Text style={styles.btnText}>{t("join_room")}</Text>
+              <Text style={styles.btnText}>
+                {t("join_room")}
+              </Text>
             </TouchableOpacity>
           </Link>
+
         ) : (
+
           <View style={styles.noEnter}>
-            <Text style={styles.btnText}>{t("join_room")}</Text>
+            <Text style={styles.btnText}>
+              {forTeacher ? t("start_lesson") : t("join_room")}
+            </Text>
           </View>
+
         )}
 
-        <TouchableOpacity activeOpacity={0.6} style={styles.cancel}>
+        <TouchableOpacity activeOpacity={0.6} style={styles.cancel} onPress={lessonCancel}>
           <Text style={{ color: "#f99" }}>
-            {forTeacher ? t("reject") : t("reject")}
+            {forTeacher ? t("reject") : t("cancel")}
           </Text>
         </TouchableOpacity>
       </View>
