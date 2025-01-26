@@ -55,7 +55,7 @@ const SignUp = () => {
     try {
       const response = await apiService.signUp(data);
       await signIn(response.token);
-      Toast.show("Успешно се пријавио", {
+      Toast.show(t("successfully_signed_up"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -202,7 +202,7 @@ const SignUp = () => {
             >
               <Button
                 color="#C9A977"
-                title={value ? value.toDateString() : t("select_date_of_birth")}
+                title={value ? value.toLocaleDateString() : t("select_date_of_birth")}
                 onPress={() => setShowPicker(true)}
               />
               <Text
@@ -301,6 +301,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
+    width: "80%",
   },
   error: {
     color: "red",

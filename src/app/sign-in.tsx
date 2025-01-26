@@ -77,12 +77,12 @@ const Auth = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-      <Switch
+      {/* <Switch
             value={isDark}
             onValueChange={toggleTheme}
             trackColor={{ false: "#767577", true: theme.colors.primary }}
             thumbColor={isDark ? theme.colors.card : "#f4f3f4"}
-          />
+          /> */}
       <Text style={styles.title}>{t('welcome')}</Text>
       <Text style={styles.subtitle}>{t('enter_credentials')}</Text>
 
@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#aaa",
     marginBottom: 32,
+    textAlign: "center",
   },
   input: {
     width: "90%",
@@ -199,11 +200,15 @@ const styles = StyleSheet.create({
   },
   signUpButtonText: {
     color: "#C9A977",
+    textAlign: "center",
+    width: "70%",
   },
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
+    width: "80%",
   },
   error: {
     color: "red",

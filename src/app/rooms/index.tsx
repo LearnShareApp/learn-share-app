@@ -69,9 +69,11 @@ const Rooms = () => {
           </Text>
           <Link href="/" asChild>
             <TouchableOpacity 
-              style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+              style={{width: "auto",
+                borderRadius: 4,
+                padding: 16, backgroundColor: theme.colors.primary }}
             >
-              <Text style={{ color: theme.colors.card, textAlign: "center" }}>
+              <Text style={{ color: theme.colors.text, textAlign: "center", fontSize: 16 }}>
                 {t("go_back_home")}
               </Text>
             </TouchableOpacity>
@@ -95,10 +97,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 16,
-  },
-  btn: {
-    width: "60%",
-    borderRadius: 4,
-    padding: 16,
   },
 });

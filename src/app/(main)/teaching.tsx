@@ -178,8 +178,8 @@ const Teaching = () => {
   return (
     <>
       <HeaderElement text="Teaching" requireChanges requireSettings />
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={[styles.card]}>
+      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach1.png")}
@@ -189,12 +189,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>{t("teach_welcome")}</Text>
-            <Text>{t("teach_intro")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_welcome")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_intro")}</Text>
           </View>
         </View>
 
-        <View style={[styles.card]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach2.png")}
@@ -204,12 +204,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>{t("teach_step1")}</Text>
-            <Text>{t("teach_step1_desc")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step1")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_step1_desc")}</Text>
           </View>
         </View>
 
-        <View style={[styles.card]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach3.png")}
@@ -219,12 +219,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>{t("teach_step2")}</Text>
-            <Text>{t("teach_step2_desc")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step2")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_step2_desc")}</Text>
           </View>
         </View>
 
-        <View style={[styles.card]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach4.png")}
@@ -234,14 +234,16 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>{t("teach_step3")}</Text>
-            <Text>{t("teach_step3_desc")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step3")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_step3_desc")}</Text>
           </View>
         </View>
 
         <Link href={"/new-skill"} asChild>
-          <TouchableOpacity activeOpacity={0.6} style={styles.btn}>
-            <Text style={styles.text}>{t("start_sharing")}</Text>
+          <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary,padding: 16,
+    marginVertical: 32,
+    borderRadius: 8, }}>
+            <Text style={[styles.text, { color: theme.colors.text }]}>{t("start_sharing")}</Text>
           </TouchableOpacity>
         </Link>
       </ScrollView>
@@ -256,12 +258,6 @@ const styles = StyleSheet.create({
     gap: 16,
     alignItems: "center",
     paddingBottom: 24,
-  },
-  btn: {
-    padding: 16,
-    marginVertical: 32,
-    backgroundColor: "#C9A977",
-    borderRadius: 8,
   },
   text: {
     textAlign: "center",

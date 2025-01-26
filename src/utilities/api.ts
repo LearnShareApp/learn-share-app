@@ -2,7 +2,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
-const BACKEND_URL = "http://192.168.1.8:81";
+const BACKEND_URL = "http://adoe.ru:81";
 
 export interface LoginData {
   email: string;

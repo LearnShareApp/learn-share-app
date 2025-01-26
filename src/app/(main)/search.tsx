@@ -116,7 +116,7 @@ const Search = () => {
   }
 
   if (error) {
-    return <Text style={{ color: theme.colors.error }}>Error: {error}</Text>;
+    return <Text style={{ color: theme.colors.error, flex: 1, backgroundColor: theme.colors.background }}>Error: {error}</Text>;
   }
 
   return (

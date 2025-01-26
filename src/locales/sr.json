@@ -127,5 +127,6 @@
   "lesson_approved": "Урок је одобрен",
   "dark_mode": "Темни режим",
   "light_mode": "Светли режим",
-  "add_time": "Додајте термин"
+  "add_time": "Додајте термин",
+  "successfully_signed_up": "Успешно се регистровао"
 }
