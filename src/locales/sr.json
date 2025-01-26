@@ -56,7 +56,7 @@
   "wait_for_approval": "Сачекајте одобрење",
   "start_teaching": "Започните са предавањем",
   "your_lessons": "Ваши часови",
-  "waiting_to_join": "Чекају се на прикључивање",
+  "waiting_to_join": "Чекају вас",
   "your_teaching_stats": "Ваша статистика предавања",
   "your_skills": "Ваше вештине",
   "add_skill_description": "Опишите своју вештину",
@@ -121,11 +121,11 @@
   "mission_description": "Тежимо да створимо глобалну заједницу у којој свако може да учи и дели знање.",
   "contact_us": "Контактирајте нас",
   "version": "Верзија апликације",
-  "dark_mode": "Dark Mode",
-  "light_mode": "Light Mode",
-  "add_time": "Додајте време",
   "lesson_started": "Урок је почео",
   "lesson_finished": "Урок је завршен",
   "lesson_cancelled": "Урок је отказан",
   "lesson_approved": "Урок је одобрен"
+  "dark_mode": "Темни режим",
+  "light_mode": "Светли режим",
+  "add_time": "Додајте термин"
 }

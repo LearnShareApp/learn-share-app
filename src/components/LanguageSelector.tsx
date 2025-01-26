@@ -44,14 +44,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: "center",
         justifyContent: "center",
-        gap: 8,
     },
     languageButton: {
         paddingVertical: 8,
         paddingHorizontal: 16,
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 8,
+        borderRadius: 4,
     },
     buttonWithBorder: {
         borderRightWidth: 1,

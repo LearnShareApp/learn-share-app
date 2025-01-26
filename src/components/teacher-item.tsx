@@ -4,9 +4,12 @@ import SkillBadge from "./skill";
 import { FontAwesome } from "@expo/vector-icons";
 import { TeacherProfile } from "../utilities/api";
 import { useLanguage } from "../providers/language-provider";
+import { useTheme } from "../providers/theme-provider";
 
 const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
+
   if (!teacher) {
     return null;
   }
@@ -15,15 +18,22 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
 
   return (
     <Link href={`/teacher/${teacher.teacher_id}`} asChild>
-      <Pressable style={styles.item}>
+      <Pressable style={{ flexDirection: "row",
+        gap: 12,
+        width: "100%",
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 8,
+        minHeight: 100,backgroundColor: theme.colors.card
+      }}>
         <Image
           source={require("../../assets/icon.png")}
           style={styles.avatar}
         />
         <View style={styles.teacherInfo}>
           <View style={styles.names}>
-            <Text>{teacher.name}</Text>
-            <Text>{teacher.surname}</Text>
+            <Text style={{ color: theme.colors.text }}>{teacher.name}</Text>
+            <Text style={{ color: theme.colors.text }}>{teacher.surname}</Text>
           </View>
           <View style={styles.skillsList}>
             {teacher.skills?.length > 0 ? (
@@ -34,7 +44,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
                 />
               ))
             ) : (
-              <Text>{t("no_skills_listed")}</Text>
+              <Text style={{ color: theme.colors.text }}>{t("no_skills_listed")}</Text>
             )}
           </View>
         </View>
@@ -43,21 +53,22 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
             style={{
               fontSize: 18,
               fontWeight: "bold",
+              color: theme.colors.text
             }}
           >
             {firstSkillRate ? (
               <>
                 {firstSkillRate.toFixed(1)}
-                <FontAwesome size={24} name="star" style={{ color: "gold" }} />
+                <FontAwesome size={24} name="star" style={{ color: theme.colors.primary }} />
               </>
             ) : (
               <>
                 {"--"}
-                <FontAwesome size={24} name="star" style={{ color: "gold" }} />
+                <FontAwesome size={24} name="star" style={{ color: theme.colors.primary }} />
               </>
             )}{" "}
           </Text>
-          <Text>3 {t("classes")}</Text>
+          <Text style={{ color: theme.colors.text }}>3 {t("classes")}</Text>
         </View>
       </Pressable>
     </Link>
@@ -67,16 +78,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
 export default TeacherListItem;
 
 const styles = StyleSheet.create({
-  item: {
-    flexDirection: "row",
-    gap: 12,
-    backgroundColor: "white",
-    width: "100%",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    minHeight: 100,
-  },
+
   avatar: {
     width: 64,
     height: 64,
@@ -87,7 +89,6 @@ const styles = StyleSheet.create({
   },
   names: {
     flexDirection: "row",
-    color: "white",
     gap: 4,
   },
   skillsList: {

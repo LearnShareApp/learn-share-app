@@ -14,6 +14,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useCategories } from "../../utilities/category-hook";
 import { Toast } from "react-native-toast-notifications";
 import { useLanguage } from "../../providers/language-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 const Search = () => {
   const [teachers, setTeachers] = useState<TeacherProfile[]>([]);
@@ -27,6 +28,7 @@ const Search = () => {
 
   const { categories, loadingCategories } = useCategories();
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -36,8 +38,8 @@ const Search = () => {
         setTeachers(response || []);
       } catch (err) {
         console.error("Error details:", err);
-        setError("Failed to fetch teachers");
-        Toast.show("Failed to load teachers", {
+        setError(t("failed_fetch_teachers"));
+        Toast.show(t("failed_load_teachers"), {
           type: "error",
           placement: "top",
           duration: 3000,
@@ -80,51 +82,57 @@ const Search = () => {
 
   if (loading || loadingCategories) {
     return (
-      <View style={styles.container}>
-        <View style={styles.search}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <View style={[styles.search, { backgroundColor: theme.colors.card }]}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: theme.colors.text }]}
             placeholder={t("search_teacher")}
+            placeholderTextColor={theme.colors.text}
             onChangeText={setSearchText}
             value={searchText}
           />
-          <FontAwesome size={24} name="search" style={{ color: "#C9A977" }} />
+          <FontAwesome size={24} name="search" style={{ color: theme.colors.primary }} />
         </View>
-        <View style={styles.dropdownContainer}>
+        <View style={[styles.dropdownContainer, { backgroundColor: theme.colors.card }]}>
           <DropDownPicker
             open={open}
             value={selectedCategory}
             items={[]}
-            dropDownContainerStyle={{ borderColor: "transparent" }}
+            dropDownContainerStyle={{ 
+              borderColor: "transparent",
+              backgroundColor: theme.colors.card 
+            }}
             setOpen={setOpen}
             setValue={setSelectedCategory}
             setItems={setDropdownItems}
             placeholder={t("loading")}
-            style={styles.dropdown}
+            style={[styles.dropdown, { backgroundColor: theme.colors.card }]}
+            textStyle={{ color: theme.colors.text }}
           />
         </View>
-        <ActivityIndicator size="large" color="#C9A977" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   if (error) {
-    return <Text>Error: {error}</Text>;
+    return <Text style={{ color: theme.colors.error }}>Error: {error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.search}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.search, { backgroundColor: theme.colors.card }]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: theme.colors.text }]}
           placeholder={t("search_teacher")}
+          placeholderTextColor={theme.colors.text}
           onChangeText={setSearchText}
           value={searchText}
         />
-        <FontAwesome size={24} name="search" style={{ color: "#C9A977" }} />
+        <FontAwesome size={24} name="search" style={{ color: theme.colors.primary }} />
       </View>
 
-      <View style={styles.dropdownContainer}>
+      <View style={[styles.dropdownContainer, { backgroundColor: theme.colors.card }]}>
         <DropDownPicker
           open={open}
           value={selectedCategory}
@@ -133,12 +141,19 @@ const Search = () => {
           setValue={setSelectedCategory}
           setItems={setDropdownItems}
           placeholder={t("choose_category")}
-          style={styles.dropdown}
+          style={[styles.dropdown, { backgroundColor: theme.colors.card }]}
+          dropDownContainerStyle={{ 
+            borderColor: "transparent",
+            backgroundColor: theme.colors.card 
+          }}
+          textStyle={{ color: theme.colors.text }}
         />
       </View>
 
       {filteredTeachers.length === 0 ? (
-        <Text style={styles.noResults}>{t("no_teachers_found")}</Text>
+        <Text style={[styles.noResults, { color: theme.colors.text }]}>
+          {t("no_teachers_found")}
+        </Text>
       ) : (
         <FlatList
           data={filteredTeachers}
@@ -151,8 +166,6 @@ const Search = () => {
     </View>
   );
 };
-
-export default Search;
 
 const styles = StyleSheet.create({
   container: {
@@ -173,7 +186,6 @@ const styles = StyleSheet.create({
   search: {
     width: "100%",
     height: 60,
-    backgroundColor: "white",
     borderRadius: 16,
     paddingRight: 16,
     paddingVertical: 4,
@@ -184,9 +196,9 @@ const styles = StyleSheet.create({
   listContainer: {
     gap: 4,
     overflow: "visible",
+    height: "100%",
   },
   dropdownContainer: {
-    backgroundColor: "white",
     borderRadius: 8,
     padding: 8,
   },
@@ -197,6 +209,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
     fontSize: 16,
-    color: "#666",
   },
 });
+
+export default Search;

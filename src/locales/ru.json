@@ -87,7 +87,7 @@
   "unexpected_error": "Произошла непредвиденная ошибка",
   "failed_fetch_teachers": "Не удалось получить список преподавателей",
   "request_success": "Запрос успешно отправлен",
-  "i_am": "Я",
+  "i_am": "Это Я",
   "since_joined_the_world_of_learning": "с момента присоединения к миру обучения",
   "birthdate_required": "Дата рождения обязательна",
   "select_date_of_birth": "Выберите дату рождения",
@@ -130,4 +130,7 @@
   "lesson_finished": "Урок завершен",
   "lesson_cancelled": "Урок отменен",
   "lesson_approved": "Урок одобрен"
+  "dark_mode": "Темный режим",
+  "light_mode": "Светлый режим",
+  "add_time": "Добавить время"
 }

@@ -14,6 +14,8 @@ import { useLanguage } from "../providers/language-provider";
 import { Toast } from "react-native-toast-notifications";
 import axios from "axios";
 import EventEmitter from "../utilities/event-emitter";
+import { useTheme } from "../providers/theme-provider";
+
 
 export interface LessonMain {
   lesson_id: number;
@@ -37,6 +39,7 @@ const LessonItem = ({
   request?: boolean;
 }) => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const lessonItemData: LessonMain = useMemo(() => {
     return  {
@@ -193,7 +196,7 @@ const LessonItem = ({
   };
 
   return (
-    <View style={styles.lesson}>
+    <View style={[styles.lesson, { backgroundColor: theme.colors.card }]}>
       <View style={styles.left}>
         <View style={styles.top}>
           <Link href={`/teachers/${lessonItemData.user_id}`} asChild>
@@ -204,13 +207,12 @@ const LessonItem = ({
               />
             </Pressable>
           </Link>
-
           <View style={{ alignItems: "flex-start", gap: 8 }}>
-            {!forTeacher ? <Text>
-              {lessonItemData.user_name} {lessonItemData.user_surname}
-              </Text> : <Text>
-                {lessonItemData.user_name} {lessonItemData.user_surname}
-            </Text>}
+            {!forTeacher ? (
+              <Text style={{ color: theme.colors.text }}>{lessonItemData.user_name} {lessonItemData.user_surname}</Text>
+            ) : (
+              <Text style={{ color: theme.colors.text }}>{lessonItemData.user_name} {lessonItemData.user_surname}</Text>
+            )}
             <SkillBadge text={lessonItemData.category_name} />
           </View>
         </View>
@@ -225,12 +227,15 @@ const LessonItem = ({
           {lessonItemData.status === "ongoing" ? (
             <>
               <View style={styles.greenDot} />
-              <Text style={{ color: "#8c8" }}>{lessonItemData.status}</Text>
+              <Text style={{ color: theme.colors.success }}>
+                {lessonItemData.status}
+              </Text>
             </>
           ) : (
             <>
 
               <Text style={{ color: "#bbb", flex: 1 }}>{lessonItemData.status + " "} {differenceText}</Text>
+
             </>
           )}
         </View>
@@ -238,11 +243,7 @@ const LessonItem = ({
 
       <View style={styles.right}>
         {request ? (
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={styles.approve}
-            onPress={lessonApprove}
-          >
+          <TouchableOpacity activeOpacity={0.6} onPress={lessonApprove} style={[styles.approve, { backgroundColor: theme.colors.success }]}>
             <Text style={styles.btnText}>{t("approve")}</Text>
           </TouchableOpacity>
         ) : forTeacher && lessonAvailable && lessonItemData.token == '' ? (
@@ -256,25 +257,24 @@ const LessonItem = ({
         ) : lessonItemData.status === "ongoing" ? (
 
           <Link href={`/rooms/${lessonItemData.token}`} asChild>
-            <TouchableOpacity activeOpacity={0.6} style={styles.enter}>
+            <TouchableOpacity activeOpacity={0.6} style={[styles.enter, { backgroundColor: theme.colors.primary }]}>
               <Text style={styles.btnText}>
                 {t("join_room")}
               </Text>
+
             </TouchableOpacity>
           </Link>
 
         ) : (
 
-          <View style={styles.noEnter}>
-            <Text style={styles.btnText}>
-              {forTeacher ? t("start_lesson") : t("join_room")}
-            </Text>
+          <View style={[styles.noEnter, { backgroundColor: theme.colors.border }]}>
+            <Text style={styles.btnText}>{forTeacher ? t("start_lesson") : t("join_room")}</Text>
           </View>
 
         )}
 
-        <TouchableOpacity activeOpacity={0.6} style={styles.cancel} onPress={lessonCancel}>
-          <Text style={{ color: "#f99" }}>
+        <TouchableOpacity activeOpacity={0.6} style={[styles.cancel, { borderColor: theme.colors.error }]}} onPress={lessonCancel}>
+          <Text style={{ color: theme.colors.error }}>
             {forTeacher ? t("reject") : t("cancel")}
           </Text>
         </TouchableOpacity>
@@ -288,7 +288,6 @@ export default LessonItem;
 const styles = StyleSheet.create({
   lesson: {
     width: "100%",
-    backgroundColor: "white",
     borderRadius: 8,
     padding: 12,
     gap: 8,
@@ -306,10 +305,6 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 50,
   },
-  bottom: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   right: {
     marginLeft: "auto",
     justifyContent: "space-between",
@@ -317,7 +312,6 @@ const styles = StyleSheet.create({
     width: 120,
   },
   enter: {
-    backgroundColor: "#C9A977",
     padding: 8,
     borderRadius: 4,
     height: 60,
@@ -325,7 +319,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noEnter: {
-    backgroundColor: "#ccc",
     padding: 8,
     borderRadius: 4,
     height: 60,
@@ -336,7 +329,6 @@ const styles = StyleSheet.create({
   cancel: {
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#f99",
     borderRadius: 4,
     padding: 8,
     paddingHorizontal: 16,
@@ -345,13 +337,11 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#8c8",
     marginRight: 4,
     paddingTop: 2,
   },
   approve: {
     paddingHorizontal: 16,
-    backgroundColor: "#8c8",
     padding: 10,
     borderRadius: 4,
   },
