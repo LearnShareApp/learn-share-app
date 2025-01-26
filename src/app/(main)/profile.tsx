@@ -24,8 +24,8 @@ const Profile = () => {
 
   if (loadingProfile) {
     return (
-      <View style={{ backgroundColor: theme.colors.background }}>
-        <View style={styles.container}>
+      <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       </View>
@@ -33,7 +33,7 @@ const Profile = () => {
   }
 
   if (errorProfile) {
-    return <Text style={{ color: theme.colors.error }}>Error: {errorProfile}</Text>;
+    return <Text style={{ color: theme.colors.error, flex: 1, backgroundColor: theme.colors.background }}>Error: {errorProfile}</Text>;
   }
 
   const copyToClipboard = async () => {

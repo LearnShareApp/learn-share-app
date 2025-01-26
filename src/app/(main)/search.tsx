@@ -82,7 +82,7 @@ const Search = () => {
 
   if (loading || loadingCategories) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background, flex: 1 }]}>
         <View style={[styles.search, { backgroundColor: theme.colors.card }]}>
           <TextInput
             style={[styles.input, { color: theme.colors.text }]}

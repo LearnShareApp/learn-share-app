@@ -248,7 +248,11 @@ const LessonItem = ({
           </TouchableOpacity>
         ) : forTeacher && lessonAvailable && lessonItemData.token == '' ? (
 
-          <TouchableOpacity activeOpacity={0.6} style={styles.enter} onPress={lessonStart}>
+          <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary, padding: 8,
+            borderRadius: 4,
+            height: 60,
+            justifyContent: "center",
+            alignItems: "center",}} onPress={lessonStart}>
             <Text style={styles.btnText}>
               {t("start_lesson")}
             </Text>
@@ -257,7 +261,11 @@ const LessonItem = ({
         ) : lessonItemData.status === "ongoing" ? (
 
           <Link href={`/rooms/${lessonItemData.token}`} asChild>
-            <TouchableOpacity activeOpacity={0.6} style={[styles.enter, { backgroundColor: theme.colors.primary }]}>
+            <TouchableOpacity activeOpacity={0.6} style={ { backgroundColor: theme.colors.primary, padding: 8,
+    borderRadius: 4,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center", }}>
               <Text style={styles.btnText}>
                 {t("join_room")}
               </Text>
@@ -273,7 +281,7 @@ const LessonItem = ({
 
         )}
 
-        <TouchableOpacity activeOpacity={0.6} style={[styles.cancel, { borderColor: theme.colors.error }]}} onPress={lessonCancel}>
+        <TouchableOpacity activeOpacity={0.6} style={[styles.cancel, { borderColor: theme.colors.error }]} onPress={lessonCancel}>
           <Text style={{ color: theme.colors.error }}>
             {forTeacher ? t("reject") : t("cancel")}
           </Text>
@@ -310,13 +318,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 4,
     width: 120,
-  },
-  enter: {
-    padding: 8,
-    borderRadius: 4,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
   },
   noEnter: {
     padding: 8,

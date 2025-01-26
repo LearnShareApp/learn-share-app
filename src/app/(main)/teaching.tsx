@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Pressable,
@@ -67,7 +68,12 @@ const Teaching = () => {
   }, []);
 
   if (loadingTeacher) {
-    return <HeaderElement text="Loading..." requireChanges requireSettings />;
+    return <>
+      <HeaderElement text="Loading..." requireChanges requireSettings />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: theme.colors.background }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    </>;
   }
 
   if (teacher)

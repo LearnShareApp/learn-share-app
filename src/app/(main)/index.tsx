@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -30,7 +31,12 @@ const Home = () => {
   const { loadingCategories, errorCategories } = useCategories();
 
   if (loadingProfile || loadingCategories) {
-    return <HeaderElement text="Loading..." requireCalendar requireSettings />;
+    return <>
+      <HeaderElement text="Loading..." requireCalendar requireSettings />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: theme.colors.background }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    </>;
   }
 
   if (errorProfile || errorCategories) {
