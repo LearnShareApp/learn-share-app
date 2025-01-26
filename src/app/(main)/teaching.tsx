@@ -153,7 +153,7 @@ const Teaching = () => {
           {lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled")
             .length ? (
             <FlatList
-              data={lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled")}
+              data={lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled" && lesson.status !== "finished")}
               renderItem={(item) => (
                 <LessonItem lesson={item.item} forTeacher />
               )}

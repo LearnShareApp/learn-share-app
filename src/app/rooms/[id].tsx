@@ -22,13 +22,14 @@ import { Track } from "livekit-client";
 import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
+import { apiService } from "../../utilities/api";
 
 registerGlobals();
 
 const wsURL = "wss://learn-and-share-app-raalcu2w.livekit.cloud"
 
 export default function Lesson() {
-  const { id } = useLocalSearchParams();
+  const { id, lesson_id } = useLocalSearchParams();
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [roomToken, setRoomToken] = useState<string | null>(null);
@@ -65,6 +66,8 @@ export default function Lesson() {
     };
   }, []);
 
+  
+  
   const handleEndCall = () => {
     setIsCallActive(false);
     Toast.show(t("call_ended"), {
@@ -74,7 +77,7 @@ export default function Lesson() {
     });
 
     setTimeout(() => {
-      router.replace("/");
+      router.replace(`/rooms/finish?lesson_id=${lesson_id}`);
     }, 3000);
   };
 

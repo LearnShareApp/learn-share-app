@@ -170,7 +170,7 @@ const LessonItem = ({
         placement: "top",
         duration: 1500,
       };
-      router.push(`/rooms/${tokenResponse}`);
+      router.push(`/rooms/${tokenResponse}?lesson_id=${lessonItemData.lesson_id}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -276,7 +276,7 @@ const LessonItem = ({
           <TouchableOpacity activeOpacity={0.6} onPress={lessonApprove} style={[styles.approve, { backgroundColor: theme.colors.success }]}>
             <Text style={styles.btnText}>{t("approve")}</Text>
           </TouchableOpacity>
-        ) : forTeacher && lessonAvailable ? (
+        ) : forTeacher && lessonAvailable && lessonItemData.status !== "ongoing" ?(
 
           <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary, padding: 8,
             borderRadius: 4,

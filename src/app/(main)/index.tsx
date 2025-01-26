@@ -133,8 +133,8 @@ const Home = () => {
                     style={styles.nextTeacherImage}
                   />
                   <View style={{ gap: 4 }}>
-                    <Text style={{ color: theme.colors.text }}>Name Surname</Text>
-                    <SkillBadge text={"nonono"} />
+                    <Text style={{ color: theme.colors.text }}>{nextLesson[0].teacher_name} {nextLesson[0].teacher_surname}</Text>
+                    <SkillBadge text={nextLesson[0].category_name} />
                   </View>
                 </View>) : (<Text style={{ color: theme.colors.text }}>{t("no_lessons_today")}</Text>) }
                 
@@ -153,9 +153,9 @@ const Home = () => {
             {t("your_previous_teachers")}:
           </Text>
           <View style={styles.listContainer}>
-            {TEACHERS.map((teacher) => (
-              <TeacherListItem teacher={teacher} key={teacher.id} />
-            ))}
+            <View style={{ width: "100%", height: 100, backgroundColor: theme.colors.card, borderRadius: 8, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: theme.colors.text }}>{t("you_will_see_your_previous_teachers_here")}</Text>
+            </View>
           </View>
         </View>
       </ScrollView>
