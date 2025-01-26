@@ -13,6 +13,7 @@ import { apiService, Lesson, TeacherLesson } from "../utilities/api";
 import { useLanguage } from "../providers/language-provider";
 import { Toast } from "react-native-toast-notifications";
 import axios from "axios";
+import EventEmitter from "../utilities/event-emitter";
 
 export interface LessonMain {
   lesson_id: number;
@@ -81,12 +82,13 @@ const LessonItem = ({
 
   const lessonApprove = async () => {
     try {
-      const response = await apiService.lessonApprove(lessonItemData.lesson_id);
+      await apiService.lessonApprove(lessonItemData.lesson_id);
       Toast.show(t("lesson_approved"), {
         type: "success",
         placement: "top",
         duration: 1500,
       });
+      EventEmitter.emit('lessonRemoved', lessonItemData.lesson_id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -111,12 +113,13 @@ const LessonItem = ({
 
   const lessonCancel = async () => {
     try {
-      const response = await apiService.lessonCancel(lessonItemData.lesson_id);
+      await apiService.lessonCancel(lessonItemData.lesson_id);
       Toast.show(t("lesson_canceled"), {
         type: "success",
         placement: "top",
         duration: 1500,
       });
+      EventEmitter.emit('lessonRemoved', lessonItemData.lesson_id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -146,7 +149,7 @@ const LessonItem = ({
       const lessonTime = new Date(lessonItemData.datetime);
       const currentTime = new Date();
       
-      const fiveMinutesBefore = new Date(lessonTime.getTime() - 15 * 60 * 1000);
+      const fiveMinutesBefore = new Date(lessonTime.getTime() - 5 * 60 * 1000);
       
       if (currentTime.getTime() >= fiveMinutesBefore.getTime() || currentTime.getTime() > lessonTime.getTime()) {
         setLessonAvailable(true);
@@ -226,10 +229,8 @@ const LessonItem = ({
             </>
           ) : (
             <>
-              <Text style={{ color: "#bbb" }}>
-                {lessonItemData.status + " "}
-              </Text>
-              <Text style={{ color: "#bbb" }}>{differenceText}</Text>
+
+              <Text style={{ color: "#bbb", flex: 1 }}>{lessonItemData.status + " "} {differenceText}</Text>
             </>
           )}
         </View>
