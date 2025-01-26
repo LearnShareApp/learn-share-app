@@ -77,13 +77,13 @@ const Profile = () => {
                 <Text style={{ textAlign: "center", color: theme.colors.text }}>
                   {t("learning_hours")}
                 </Text>
-                <Text style={{ fontSize: 24, color: theme.colors.text }}>200</Text>
+                <Text style={{ fontSize: 24, color: theme.colors.text }}>0</Text>
               </View>
               <View style={styles.infoSection}>
                 <Text style={{ textAlign: "center", color: theme.colors.text }}>
                   {t("lessons_completed")}
                 </Text>
-                <Text style={{ fontSize: 24, color: theme.colors.text }}>130</Text>
+                <Text style={{ fontSize: 24, color: theme.colors.text }}>0</Text>
               </View>
             </View>
             <Text style={{ color: theme.colors.text }}>{t("skills_you_learned")}:</Text>

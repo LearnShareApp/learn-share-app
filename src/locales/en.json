@@ -121,9 +121,9 @@
   "no_times": "No times",
   "your_times": "Your times",
   "about_us_title": "About Our Project",
-  "about_us_description": "We are building a platform that connects teachers and students from around the world. Our goal is to make education accessible to everyone.",
+  "about_us_description": "Learn&Share is an innovative platform created to unite people through knowledge sharing. We believe that each person has unique skills and experience that can be useful to others. Our platform makes the process of knowledge sharing simple, convenient and accessible to everyone.",
   "our_mission": "Our Mission",
-  "mission_description": "We aim to create a global community where everyone can learn and share knowledge.",
+  "mission_description": "To create a global community where everyone can be both a student and a teacher. We strive to make education accessible by breaking down barriers between people and knowledge, allowing everyone to learn and share their skills with others.",
   "contact_us": "Contact Us",
   "version": "App Version",
   "dark_mode": "Dark Mode",
@@ -136,5 +136,6 @@
   "successfully_signed_up": "Successfully signed up",
   "no_lessons_today": "No lessons today",
   "describe_your_skill": "Describe your skill",
-  "you_will_see_your_previous_teachers_here": "You will see your previous teachers here"
+  "you_will_see_your_previous_teachers_here": "You will see your previous teachers here",
+  "view_all": "View all"
 }

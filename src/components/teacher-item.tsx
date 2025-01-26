@@ -68,7 +68,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
               </>
             )}{" "}
           </Text>
-          <Text style={{ color: theme.colors.text }}>3 {t("classes")}</Text>
+          <Text style={{ color: theme.colors.text }}>0 {t("classes")}</Text>
         </View>
       </Pressable>
     </Link>

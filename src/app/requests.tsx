@@ -2,10 +2,14 @@ import { ActivityIndicator, FlatList, StyleSheet, Text } from "react-native";
 import LessonItem from "../components/lesson-item";
 import { useEffect, useState } from "react";
 import { apiService, TeacherLesson } from "../utilities/api";
-import { Toast } from "react-native-toast-notifications";
 import EventEmitter from "../utilities/event-emitter";
+import { useTheme } from "../providers/theme-provider";
+import { useLanguage } from "../providers/language-provider";
 
 const Requests = () => {
+  const {theme} = useTheme();
+  const { t } = useLanguage();
+  
   const [lessons, setLessons] = useState<TeacherLesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,13 +50,17 @@ const Requests = () => {
   if (loading) return <ActivityIndicator size="large" color="#C9A977" />;
   if (!lessons) return <Text>error</Text>;
   return (
-    <FlatList
-      data={lessons}
-      renderItem={(lesson) => (
-        <LessonItem forTeacher request lesson={lesson.item} />
-      )}
-      contentContainerStyle={styles.skillsList}
-    />
+    lessons.length === 0 ? (
+      <Text style={{ color: theme.colors.text }}>{t("no_requests")}</Text>
+    ) : (
+      <FlatList
+        data={lessons}
+        renderItem={(lesson) => (
+          <LessonItem forTeacher request lesson={lesson.item} />
+        )}
+        contentContainerStyle={styles.skillsList}
+      />
+    )
   );
 };
 
@@ -65,3 +73,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 });
+function useTranslation(): { t: any; } {
+  throw new Error("Function not implemented.");
+}
+

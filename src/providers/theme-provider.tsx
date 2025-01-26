@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, Platform } from 'react-native';
 import { Theme, lightTheme, darkTheme } from '../theme/theme';
 import * as SecureStore from 'expo-secure-store';
+import * as NavigationBar from "expo-navigation-bar";
 
 type ThemeContextType = {
     theme: Theme;
@@ -23,8 +24,16 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
                 const savedTheme = await SecureStore.getItemAsync(THEME_KEY);
                 if (savedTheme) {
                     setIsDark(savedTheme === 'dark');
+                    if (Platform.OS === 'android') {
+                        await NavigationBar.setBackgroundColorAsync(savedTheme === 'dark' ? '#000000' : '#FFFFFF');
+                        await NavigationBar.setButtonStyleAsync(savedTheme === 'dark' ? 'light' : 'dark');
+                    }
                 } else {
                     setIsDark(systemColorScheme === 'dark');
+                    if (Platform.OS === 'android') {
+                        await NavigationBar.setBackgroundColorAsync(systemColorScheme === 'dark' ? '#000000' : '#FFFFFF');
+                        await NavigationBar.setButtonStyleAsync(systemColorScheme === 'dark' ? 'light' : 'dark');
+                    }
                 }
             } catch (error) {
                 console.error('Failed to load theme:', error);
@@ -39,6 +48,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         setIsDark(newTheme);
         try {
             await SecureStore.setItemAsync(THEME_KEY, newTheme ? 'dark' : 'light');
+            
+            if (Platform.OS === 'android') {
+                await NavigationBar.setBackgroundColorAsync(newTheme ? '#000000' : '#FFFFFF');
+                await NavigationBar.setButtonStyleAsync(newTheme ? 'light' : 'dark');
+            }
         } catch (error) {
             console.error('Failed to save theme:', error);
         }
