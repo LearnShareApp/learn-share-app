@@ -133,5 +133,6 @@
   "lesson_finished": "Lesson finished",
   "lesson_cancelled": "Lesson cancelled",
   "lesson_approved": "Lesson approved",
-  "successfully_signed_up": "Successfully signed up"
+  "successfully_signed_up": "Successfully signed up",
+  "no_lessons_today": "No lessons today"
 }

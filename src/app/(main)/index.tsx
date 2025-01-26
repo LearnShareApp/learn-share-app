@@ -19,6 +19,10 @@ import { useCategories } from "../../utilities/category-hook";
 import SkillBadge from "../../components/skill";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
+import { apiService } from "../../utilities/api";
+import { useEffect } from "react";
+import { useState } from "react";
+import { Lesson } from "../../utilities/api";
 
 const Home = () => {
   const { token, signOut } = useAuth();
@@ -29,6 +33,28 @@ const Home = () => {
 
   const { profile, loadingProfile, errorProfile } = useProfile();
   const { loadingCategories, errorCategories } = useCategories();
+
+  const [nextLesson, setNextLesson] = useState<Lesson[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        setLoading(true);
+        const response = await apiService.getLessons();
+        setNextLesson((response || []).sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime()));
+      } catch (err) {
+        console.error("Error details:", err);
+        setError("Failed to fetch teachers");
+        setNextLesson([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, []);
 
   if (loadingProfile || loadingCategories) {
     return <>
@@ -101,7 +127,7 @@ const Home = () => {
               <View style={{ width: "80%", gap: 8 }}>
                 <Text style={{ color: theme.colors.text }}>{t("next_lesson")}</Text>
                 <Line />
-                <View style={{ flexDirection: "row", gap: 8 }}>
+                {nextLesson.length > 0 ? (<View style={{ flexDirection: "row", gap: 8 }}>
                   <Image
                     source={require("../../../assets/icon.png")}
                     style={styles.nextTeacherImage}
@@ -110,7 +136,8 @@ const Home = () => {
                     <Text style={{ color: theme.colors.text }}>Name Surname</Text>
                     <SkillBadge text={"nonono"} />
                   </View>
-                </View>
+                </View>) : (<Text style={{ color: theme.colors.text }}>{t("no_lessons_today")}</Text>) }
+                
               </View>
 
               <Link href="/rooms/" asChild>

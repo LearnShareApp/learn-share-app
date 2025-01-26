@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import SkillBadge from "../../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
 import YoutubePlayer from "react-native-youtube-iframe";

@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     gap: 8,
     paddingBottom: 74,
+    flex: 1,
   },
   input: {
     height: 40,
