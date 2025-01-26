@@ -5,7 +5,7 @@ export default function LessonsLayout() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "Your lessons", headerShown: false }}
+        options={{ title: "Your lessons", headerShown: true }}
       />
       <Stack.Screen
         name="[id]"

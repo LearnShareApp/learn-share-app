@@ -25,7 +25,7 @@ const Rooms = () => {
       try {
         setLoading(true);
         const response = await apiService.getLessons();
-        setLessons(response || []);
+        setLessons(response.filter((lesson) => lesson.status !== "cancelled") || []);
       } catch (err) {
         console.error("Error details:", err);
         setError("Failed to fetch teachers");

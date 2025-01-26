@@ -249,6 +249,11 @@ class ApiService {
     const response = await this.api.request<T>(config);
     return response.data;
   }
+
+  async getRoomToken(lessonId: string): Promise<{ token: string }> {
+    const response = await this.api.get(`/api/lesson/${lessonId}/token`);
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();

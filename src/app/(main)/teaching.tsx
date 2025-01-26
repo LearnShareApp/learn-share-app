@@ -51,19 +51,8 @@ const Teaching = () => {
   useFocusEffect(
     useCallback(() => {
       fetchLessons();
-    }, [teacher])
+    }, [])
   );
-
-  // Периодическое обновление каждые 30 секунд
-  useEffect(() => {
-    fetchLessons();
-    
-    const interval = setInterval(() => {
-      fetchLessons();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [teacher]);
 
   // Подписка на событие обновления уроков
   useEffect(() => {
@@ -72,7 +61,7 @@ const Teaching = () => {
     });
 
     return () => subscription.remove();
-  }, [teacher]);
+  }, []);
 
   if (loadingTeacher) {
     return <HeaderElement text="Loading..." requireChanges requireSettings />;
