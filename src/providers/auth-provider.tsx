@@ -1,7 +1,14 @@
 // providers/auth-provider.tsx
 import { createContext, useContext, useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
-import { User } from "../../assets/types/user";
+
+interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  date_of_birth: string;
+}
 
 interface AuthContextType {
   token: string | null;

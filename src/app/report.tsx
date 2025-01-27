@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
-    
+import { StyleSheet, Text, View } from "react-native";
+
 const Report = () => {
-    return (
+  return (
     <View>
-        <Text>Report</Text>
+      <Text>Report</Text>
     </View>
-    )
-}
+  );
+};
 
-export default Report
+export default Report;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

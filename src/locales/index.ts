@@ -38,7 +38,7 @@ export const changeLanguage = async (language: LanguageCode) => {
 export const loadSavedLanguage = async (): Promise<LanguageCode> => {
   try {
     const savedLanguage = await SecureStore.getItemAsync("selectedLanguage");
-    if (savedLanguage && (translations[savedLanguage as LanguageCode])) {
+    if (savedLanguage && translations[savedLanguage as LanguageCode]) {
       return savedLanguage as LanguageCode;
     }
   } catch (error) {

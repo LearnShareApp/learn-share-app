@@ -13,10 +13,12 @@ const Settings = () => {
   if (!token) return <Redirect href="/sign-in" />;
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
-          {t('language')}
+          {t("language")}
         </Text>
         <LanguageSelector />
       </View>
@@ -24,7 +26,7 @@ const Settings = () => {
       <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
         <View style={styles.themeContainer}>
           <Text style={[styles.label, { color: theme.colors.text }]}>
-            {t('dark_mode')}
+            {t("dark_mode")}
           </Text>
           <Switch
             value={isDark}
@@ -34,13 +36,13 @@ const Settings = () => {
           />
         </View>
       </View>
-      
-      <TouchableOpacity 
-        onPress={signOut} 
+
+      <TouchableOpacity
+        onPress={signOut}
         style={[styles.logOut, { backgroundColor: theme.colors.error }]}
       >
         <Text style={[styles.logOutText, { color: theme.colors.buttonText }]}>
-          {t('log_out')}
+          {t("log_out")}
         </Text>
       </TouchableOpacity>
     </View>

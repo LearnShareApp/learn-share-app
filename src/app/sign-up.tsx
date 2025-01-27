@@ -205,7 +205,9 @@ const SignUp = () => {
             >
               <Button
                 color="#C9A977"
-                title={value ? value.toLocaleDateString() : t("select_date_of_birth")}
+                title={
+                  value ? value.toLocaleDateString() : t("select_date_of_birth")
+                }
                 onPress={() => setShowPicker(true)}
               />
               <Text

@@ -18,10 +18,9 @@ import { useTeacher } from "../../utilities/teacher-hook";
 import { apiService, TeacherLesson } from "../../utilities/api";
 import { Toast } from "react-native-toast-notifications";
 import { useLanguage } from "../../providers/language-provider";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import EventEmitter from "../../utilities/event-emitter";
 import { useTheme } from "../../providers/theme-provider";
-
 
 const Teaching = () => {
   const { theme } = useTheme();
@@ -60,7 +59,7 @@ const Teaching = () => {
 
   // Подписка на событие обновления уроков
   useEffect(() => {
-    const subscription = EventEmitter.addListener('lessonsUpdated', () => {
+    const subscription = EventEmitter.addListener("lessonsUpdated", () => {
       fetchLessons();
     });
 
@@ -68,12 +67,21 @@ const Teaching = () => {
   }, []);
 
   if (loadingTeacher) {
-    return <>
-      <HeaderElement text="Loading..." requireChanges requireSettings />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: theme.colors.background }}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
-    </>;
+    return (
+      <>
+        <HeaderElement text="Loading..." requireChanges requireSettings />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: theme.colors.background,
+          }}
+        >
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      </>
+    );
   }
 
   if (teacher)
@@ -81,18 +89,27 @@ const Teaching = () => {
       <>
         <HeaderElement text={t("teaching")} requireChanges requireSettings />
         <View
-          style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8, backgroundColor: theme.colors.background }}
+          style={{
+            flex: 1,
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+            gap: 8,
+            backgroundColor: theme.colors.background,
+          }}
         >
           <View style={styles.topNav}>
             <Link href={"/requests"} asChild>
-            <Pressable style={{
-                width: "48%",
-                minHeight: 32,
-                borderRadius: 8,
-                padding: 16,
-                gap: 8,
-                alignItems: "center",
-                backgroundColor: theme.colors.card }}>
+              <Pressable
+                style={{
+                  width: "48%",
+                  minHeight: 32,
+                  borderRadius: 8,
+                  padding: 16,
+                  gap: 8,
+                  alignItems: "center",
+                  backgroundColor: theme.colors.card,
+                }}
+              >
                 <FontAwesome
                   size={24}
                   name="bell"
@@ -110,50 +127,71 @@ const Teaching = () => {
             </Link>
 
             <Link href={"/schedule"} asChild>
-              <Pressable style={{
-                width: "48%",
-                minHeight: 32,
-                borderRadius: 8,
-                padding: 16,
-                gap: 8,
-                alignItems: "center",
-                backgroundColor: theme.colors.card
-              }}>
+              <Pressable
+                style={{
+                  width: "48%",
+                  minHeight: 32,
+                  borderRadius: 8,
+                  padding: 16,
+                  gap: 8,
+                  alignItems: "center",
+                  backgroundColor: theme.colors.card,
+                }}
+              >
                 <FontAwesome
                   size={24}
                   name="calendar"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("my_schedule")}</Text>
+                <Text style={{ textAlign: "center", color: theme.colors.text }}>
+                  {t("my_schedule")}
+                </Text>
               </Pressable>
             </Link>
           </View>
           <Link href={"/stats"} asChild>
-            <Pressable style={{
-              width: "100%",
-              borderRadius: 8,
-              padding: 24,
-              gap: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: theme.colors.card
-            }}>
+            <Pressable
+              style={{
+                width: "100%",
+                borderRadius: 8,
+                padding: 24,
+                gap: 12,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: theme.colors.card,
+              }}
+            >
               <FontAwesome
                 size={24}
                 name="pie-chart"
                 style={{ color: "#C9A977" }}
               />
-              <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("manage_skills")}</Text>
+              <Text style={{ textAlign: "center", color: theme.colors.text }}>
+                {t("manage_skills")}
+              </Text>
             </Pressable>
           </Link>
-          <Text style={{ fontSize: 20, paddingHorizontal: 16, color: theme.colors.text }}>
+          <Text
+            style={{
+              fontSize: 20,
+              paddingHorizontal: 16,
+              color: theme.colors.text,
+            }}
+          >
             {t("next_lesson")}:
           </Text>
 
-          {lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled")
-            .length ? (
+          {lessons.filter(
+            (lesson) =>
+              lesson.status !== "verification" && lesson.status !== "cancelled"
+          ).length ? (
             <FlatList
-              data={lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled" && lesson.status !== "finished")}
+              data={lessons.filter(
+                (lesson) =>
+                  lesson.status !== "verification" &&
+                  lesson.status !== "cancelled" &&
+                  lesson.status !== "finished"
+              )}
               renderItem={(item) => (
                 <LessonItem lesson={item.item} forTeacher />
               )}
@@ -178,7 +216,12 @@ const Teaching = () => {
   return (
     <>
       <HeaderElement text="Teaching" requireChanges requireSettings />
-      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
@@ -189,7 +232,9 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_welcome")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>
+              {t("teach_welcome")}
+            </Text>
             <Text style={{ color: theme.colors.text }}>{t("teach_intro")}</Text>
           </View>
         </View>
@@ -204,8 +249,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step1")}</Text>
-            <Text style={{ color: theme.colors.text }}>{t("teach_step1_desc")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>
+              {t("teach_step1")}
+            </Text>
+            <Text style={{ color: theme.colors.text }}>
+              {t("teach_step1_desc")}
+            </Text>
           </View>
         </View>
 
@@ -219,8 +268,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step2")}</Text>
-            <Text style={{ color: theme.colors.text }}>{t("teach_step2_desc")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>
+              {t("teach_step2")}
+            </Text>
+            <Text style={{ color: theme.colors.text }}>
+              {t("teach_step2_desc")}
+            </Text>
           </View>
         </View>
 
@@ -234,16 +287,28 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step3")}</Text>
-            <Text style={{ color: theme.colors.text }}>{t("teach_step3_desc")}</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>
+              {t("teach_step3")}
+            </Text>
+            <Text style={{ color: theme.colors.text }}>
+              {t("teach_step3_desc")}
+            </Text>
           </View>
         </View>
 
         <Link href={"/new-skill"} asChild>
-          <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary,padding: 16,
-    marginVertical: 32,
-    borderRadius: 8, }}>
-            <Text style={[styles.text, { color: theme.colors.text }]}>{t("start_sharing")}</Text>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={{
+              backgroundColor: theme.colors.primary,
+              padding: 16,
+              marginVertical: 32,
+              borderRadius: 8,
+            }}
+          >
+            <Text style={[styles.text, { color: theme.colors.text }]}>
+              {t("start_sharing")}
+            </Text>
           </TouchableOpacity>
         </Link>
       </ScrollView>

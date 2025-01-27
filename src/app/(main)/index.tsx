@@ -194,7 +194,7 @@ const Home = () => {
                 {nextLesson.length > 0 ? (
                   <View style={{ flexDirection: "row", gap: 8 }}>
                     <Image
-                      source={require("../../../assets/icon.png")}
+                      source={require("../../../assets/icon.jpg")}
                       style={styles.nextTeacherImage}
                     />
                     <View style={{ gap: 4 }}>

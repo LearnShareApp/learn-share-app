@@ -147,7 +147,7 @@ const TeacherProfilePage = () => {
               ]}
             >
               <Image
-                source={require("../../../assets/icon.png")}
+                source={require("../../../assets/icon.jpg")}
                 style={styles.image}
                 accessibilityLabel={`${teacher.name}'s profile picture`}
               />

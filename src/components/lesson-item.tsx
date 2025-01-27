@@ -16,7 +16,6 @@ import axios from "axios";
 import EventEmitter from "../utilities/event-emitter";
 import { useTheme } from "../providers/theme-provider";
 
-
 export interface LessonMain {
   lesson_id: number;
   user_id: number;
@@ -41,18 +40,20 @@ const LessonItem = ({
   const { theme } = useTheme();
 
   const lessonItemData: LessonMain = useMemo(() => {
-    return  {
+    return {
       lesson_id: lesson.lesson_id,
       user_id: "teacher_id" in lesson ? lesson.teacher_id : lesson.student_id,
       user_name:
         "teacher_id" in lesson ? lesson.teacher_name : lesson.student_name,
       user_surname:
-        "teacher_id" in lesson ? lesson.teacher_surname : lesson.student_surname,
+        "teacher_id" in lesson
+          ? lesson.teacher_surname
+          : lesson.student_surname,
       category_id: lesson.category_id,
       category_name: lesson.category_name,
       status: lesson.status,
       datetime: lesson.datetime,
-    }
+    };
   }, [lesson]);
 
   const date1 = new Date(lessonItemData.datetime);
@@ -89,7 +90,7 @@ const LessonItem = ({
         placement: "top",
         duration: 1500,
       });
-      EventEmitter.emit('lessonRemoved', lessonItemData.lesson_id);
+      EventEmitter.emit("lessonRemoved", lessonItemData.lesson_id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -120,7 +121,7 @@ const LessonItem = ({
         placement: "top",
         duration: 1500,
       });
-      EventEmitter.emit('lessonRemoved', lessonItemData.lesson_id);
+      EventEmitter.emit("lessonRemoved", lessonItemData.lesson_id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -149,10 +150,13 @@ const LessonItem = ({
     const checkLessonTime = () => {
       const lessonTime = new Date(lessonItemData.datetime);
       const currentTime = new Date();
-      
+
       const fiveMinutesBefore = new Date(lessonTime.getTime() - 62 * 60 * 1000);
-      
-      if (currentTime.getTime() >= fiveMinutesBefore.getTime() || currentTime.getTime() > lessonTime.getTime()) {
+
+      if (
+        currentTime.getTime() >= fiveMinutesBefore.getTime() ||
+        currentTime.getTime() > lessonTime.getTime()
+      ) {
         setLessonAvailable(true);
       }
     };
@@ -164,13 +168,18 @@ const LessonItem = ({
 
   const lessonJoin = async () => {
     try {
-      const tokenResponse = await apiService.getLessonToken(lessonItemData.lesson_id);
-      Toast.show('connecting...'), {
-        type: "success",
-        placement: "top",
-        duration: 1500,
-      };
-      router.push(`/rooms/${tokenResponse}?lesson_id=${lessonItemData.lesson_id}`);
+      const tokenResponse = await apiService.getLessonToken(
+        lessonItemData.lesson_id
+      );
+      Toast.show("connecting..."),
+        {
+          type: "success",
+          placement: "top",
+          duration: 1500,
+        };
+      router.push(
+        `/rooms/${tokenResponse}?lesson_id=${lessonItemData.lesson_id}`
+      );
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -191,11 +200,13 @@ const LessonItem = ({
         });
       }
     }
-  }
+  };
 
   const lessonStart = async () => {
     try {
-      const startResponse = await apiService.lessonStart(lessonItemData.lesson_id);
+      const startResponse = await apiService.lessonStart(
+        lessonItemData.lesson_id
+      );
       Toast.show(t("lesson_started"), {
         type: "success",
         placement: "top",
@@ -232,16 +243,20 @@ const LessonItem = ({
           <Link href={`/teachers/${lessonItemData.user_id}`} asChild>
             <Pressable>
               <Image
-                source={require("../../assets/icon.png")}
+                source={require("../../assets/icon.jpg")}
                 style={styles.image}
               />
             </Pressable>
           </Link>
           <View style={{ alignItems: "flex-start", gap: 8 }}>
             {!forTeacher ? (
-              <Text style={{ color: theme.colors.text }}>{lessonItemData.user_name} {lessonItemData.user_surname}</Text>
+              <Text style={{ color: theme.colors.text }}>
+                {lessonItemData.user_name} {lessonItemData.user_surname}
+              </Text>
             ) : (
-              <Text style={{ color: theme.colors.text }}>{lessonItemData.user_name} {lessonItemData.user_surname}</Text>
+              <Text style={{ color: theme.colors.text }}>
+                {lessonItemData.user_name} {lessonItemData.user_surname}
+              </Text>
             )}
             <SkillBadge text={lessonItemData.category_name} />
           </View>
@@ -263,9 +278,9 @@ const LessonItem = ({
             </>
           ) : (
             <>
-
-              <Text style={{ color: "#bbb", flex: 1 }}>{lessonItemData.status + " "} {differenceText}</Text>
-
+              <Text style={{ color: "#bbb", flex: 1 }}>
+                {lessonItemData.status + " "} {differenceText}
+              </Text>
             </>
           )}
         </View>
@@ -273,44 +288,60 @@ const LessonItem = ({
 
       <View style={styles.right}>
         {request ? (
-          <TouchableOpacity activeOpacity={0.6} onPress={lessonApprove} style={[styles.approve, { backgroundColor: theme.colors.success }]}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={lessonApprove}
+            style={[styles.approve, { backgroundColor: theme.colors.success }]}
+          >
             <Text style={styles.btnText}>{t("approve")}</Text>
           </TouchableOpacity>
-        ) : forTeacher && lessonAvailable && lessonItemData.status !== "ongoing" ?(
-
-          <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary, padding: 8,
-            borderRadius: 4,
-            height: 60,
-            justifyContent: "center",
-            alignItems: "center",}} onPress={lessonStart}>
-            <Text style={styles.btnText}>
-              {t("start_lesson")}
-            </Text>
+        ) : forTeacher &&
+          lessonAvailable &&
+          lessonItemData.status !== "ongoing" ? (
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={{
+              backgroundColor: theme.colors.primary,
+              padding: 8,
+              borderRadius: 4,
+              height: 60,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={lessonStart}
+          >
+            <Text style={styles.btnText}>{t("start_lesson")}</Text>
           </TouchableOpacity>
-
         ) : lessonItemData.status === "ongoing" ? (
-
-
-            <TouchableOpacity activeOpacity={0.6} onPress={lessonJoin} style={ { backgroundColor: theme.colors.primary, padding: 8,
-    borderRadius: 4,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center", }}>
-              <Text style={styles.btnText}>
-                {t("join_room")}
-              </Text>
-
-            </TouchableOpacity>
-
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={lessonJoin}
+            style={{
+              backgroundColor: theme.colors.primary,
+              padding: 8,
+              borderRadius: 4,
+              height: 60,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.btnText}>{t("join_room")}</Text>
+          </TouchableOpacity>
         ) : (
-
-          <View style={[styles.noEnter, { backgroundColor: theme.colors.border }]}>
-            <Text style={styles.btnText}>{forTeacher ? t("start_lesson") : t("join_room")}</Text>
+          <View
+            style={[styles.noEnter, { backgroundColor: theme.colors.border }]}
+          >
+            <Text style={styles.btnText}>
+              {forTeacher ? t("start_lesson") : t("join_room")}
+            </Text>
           </View>
-
         )}
 
-        <TouchableOpacity activeOpacity={0.6} style={[styles.cancel, { borderColor: theme.colors.error }]} onPress={lessonCancel}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={[styles.cancel, { borderColor: theme.colors.error }]}
+          onPress={lessonCancel}
+        >
           <Text style={{ color: theme.colors.error }}>
             {forTeacher ? t("reject") : t("cancel")}
           </Text>

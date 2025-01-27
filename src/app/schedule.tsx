@@ -101,8 +101,7 @@ const AddTime = () => {
       fetchTimes();
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error || t("unknown_error");
+        const errorMessage = error.response?.data?.error || t("unknown_error");
         Toast.show(errorMessage, {
           type: "warning",
           placement: "top",
@@ -131,7 +130,7 @@ const AddTime = () => {
         style={[
           styles.timeItem,
           { backgroundColor: theme.colors.card },
-          !item.is_available && styles.takenTime
+          !item.is_available && styles.takenTime,
         ]}
       >
         <Text style={[styles.timeText, { color: theme.colors.text }]}>
@@ -141,7 +140,7 @@ const AddTime = () => {
             hour12: false,
           })}
         </Text>
-        <Text style={{ color: '#888' }}>
+        <Text style={{ color: "#888" }}>
           {new Date(item.datetime).toLocaleDateString()}
         </Text>
       </View>
@@ -149,7 +148,9 @@ const AddTime = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <Controller
         control={control}
         name="datetime"
@@ -157,8 +158,15 @@ const AddTime = () => {
           required: t("date_time_required"),
         }}
         render={({ field: { value }, fieldState: { error } }) => (
-          <View style={[styles.dateTimeContainer, { backgroundColor: theme.colors.card }]}>
-            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{t("add_new_time")}</Text>
+          <View
+            style={[
+              styles.dateTimeContainer,
+              { backgroundColor: theme.colors.card },
+            ]}
+          >
+            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+              {t("add_new_time")}
+            </Text>
             <Line />
             <View style={styles.pickerContainer}>
               <Button
@@ -166,7 +174,9 @@ const AddTime = () => {
                 title={selectedDate.toLocaleDateString()}
                 onPress={() => setShowPickerDate(true)}
               />
-              <Text style={[styles.labelText, { color: theme.colors.text }]}>{t("select_date")}:</Text>
+              <Text style={[styles.labelText, { color: theme.colors.text }]}>
+                {t("select_date")}:
+              </Text>
               {showPickerDate && (
                 <DateTimePicker
                   value={selectedDate}
@@ -195,7 +205,9 @@ const AddTime = () => {
                 }
                 onPress={() => setShowPickerTime(true)}
               />
-              <Text style={[styles.labelText, { color: theme.colors.text }]}>{t("select_time")}:</Text>
+              <Text style={[styles.labelText, { color: theme.colors.text }]}>
+                {t("select_time")}:
+              </Text>
               {showPickerTime && (
                 <DateTimePicker
                   value={selectedTime}
@@ -211,7 +223,11 @@ const AddTime = () => {
                 />
               )}
             </View>
-            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
+            {error && (
+              <Text style={[styles.error, { color: theme.colors.error }]}>
+                {error.message}
+              </Text>
+            )}
           </View>
         )}
       />
@@ -220,10 +236,17 @@ const AddTime = () => {
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>{t("add_time")}</Text>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>
+          {t("add_time")}
+        </Text>
       </TouchableOpacity>
 
-      <Text style={[styles.sectionTitle, { paddingHorizontal: 16, color: theme.colors.text }]}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          { paddingHorizontal: 16, color: theme.colors.text },
+        ]}
+      >
         {t("your_times")}
       </Text>
 
@@ -240,7 +263,9 @@ const AddTime = () => {
           numColumns={2}
         />
       ) : (
-        <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("no_times")}</Text>
+        <Text style={{ textAlign: "center", color: theme.colors.text }}>
+          {t("no_times")}
+        </Text>
       )}
     </View>
   );

@@ -21,7 +21,6 @@ import { useLanguage } from "../providers/language-provider";
 const youtubeUrlRegex =
   /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
 
-
 const SkillAdding = () => {
   const { t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);

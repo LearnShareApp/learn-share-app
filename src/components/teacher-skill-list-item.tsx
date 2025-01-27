@@ -14,13 +14,17 @@ const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
 
   return (
     <Link href={`/teachers/${teacher?.teacher_id}`} asChild>
-      <Pressable style={{ backgroundColor: theme.colors.card,gap: 12,
-        width: "100%",
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderRadius: 8,
-        minHeight: 100,
-      }}>
+      <Pressable
+        style={{
+          backgroundColor: theme.colors.card,
+          gap: 12,
+          width: "100%",
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderRadius: 8,
+          minHeight: 100,
+        }}
+      >
         <View style={styles.teacherInfo}>
           <View style={styles.skillsList}>
             <SkillBadge text={skill.category_name} />

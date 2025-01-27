@@ -27,7 +27,9 @@ const Rooms = () => {
       try {
         setLoading(true);
         const response = await apiService.getLessons();
-        setLessons(response.filter((lesson) => lesson.status !== "cancelled") || []);
+        setLessons(
+          response.filter((lesson) => lesson.status !== "cancelled") || []
+        );
       } catch (err) {
         console.error("Error details:", err);
         setError("Failed to fetch teachers");
@@ -55,7 +57,9 @@ const Rooms = () => {
     );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       {lessons.length ? (
         <FlatList
           data={lessons}
@@ -68,12 +72,21 @@ const Rooms = () => {
             {t("no_lessons")}
           </Text>
           <Link href="/" asChild>
-            <TouchableOpacity 
-              style={{width: "auto",
+            <TouchableOpacity
+              style={{
+                width: "auto",
                 borderRadius: 4,
-                padding: 16, backgroundColor: theme.colors.primary }}
+                padding: 16,
+                backgroundColor: theme.colors.primary,
+              }}
             >
-              <Text style={{ color: theme.colors.text, textAlign: "center", fontSize: 16 }}>
+              <Text
+                style={{
+                  color: theme.colors.text,
+                  textAlign: "center",
+                  fontSize: 16,
+                }}
+              >
                 {t("go_back_home")}
               </Text>
             </TouchableOpacity>

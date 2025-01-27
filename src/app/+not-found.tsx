@@ -11,18 +11,29 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: t("not_found"), headerShown: false }} />
       <View style={styles.container}>
-        <Text style={{ color: theme.colors.text, textAlign: "center", fontSize: 16 }}>{t("not_found")}</Text>
-      <Link href="/" asChild>
-            <TouchableOpacity 
-              style={{width: "auto",
-                borderRadius: 4,
-                padding: 16, backgroundColor: theme.colors.primary }}
-            >
-              <Text style={{ color: 'white', textAlign: "center", fontSize: 16 }}>
-                {t("go_back_home")}
-              </Text>
-            </TouchableOpacity>
-          </Link>
+        <Text
+          style={{
+            color: theme.colors.text,
+            textAlign: "center",
+            fontSize: 16,
+          }}
+        >
+          {t("not_found")}
+        </Text>
+        <Link href="/" asChild>
+          <TouchableOpacity
+            style={{
+              width: "auto",
+              borderRadius: 4,
+              padding: 16,
+              backgroundColor: theme.colors.primary,
+            }}
+          >
+            <Text style={{ color: "white", textAlign: "center", fontSize: 16 }}>
+              {t("go_back_home")}
+            </Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </>
   );

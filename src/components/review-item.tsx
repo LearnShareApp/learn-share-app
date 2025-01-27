@@ -20,8 +20,14 @@ const ReviewItem = ({ review }: { review: Review }) => {
           <Text style={{ color: theme.colors.text }}>{review.userName}</Text>
         </View>
         <View style={styles.horizontal}>
-          <Text style={{ color: theme.colors.text }}>{review.grade.toFixed(1)}</Text>
-          <FontAwesome size={18} name="star" style={{ color: theme.colors.primary }} />
+          <Text style={{ color: theme.colors.text }}>
+            {review.grade.toFixed(1)}
+          </Text>
+          <FontAwesome
+            size={18}
+            name="star"
+            style={{ color: theme.colors.primary }}
+          />
         </View>
       </View>
       <Line />

@@ -21,11 +21,10 @@ const DateOfBirthInput = () => {
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>{t("date_of_birth")}: {date.toLocaleDateString()}</Text>
-      <Button 
-        title={t("select_date_of_birth")} 
-        onPress={showDatePicker} 
-      />
+      <Text>
+        {t("date_of_birth")}: {date.toLocaleDateString()}
+      </Text>
+      <Button title={t("select_date_of_birth")} onPress={showDatePicker} />
       {show && (
         <DateTimePicker
           value={date}

@@ -77,8 +77,8 @@ const Auth = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-      <Text style={styles.title}>{t('welcome')}</Text>
-      <Text style={styles.subtitle}>{t('enter_credentials')}</Text>
+        <Text style={styles.title}>{t("welcome")}</Text>
+        <Text style={styles.subtitle}>{t("enter_credentials")}</Text>
 
         <Controller
           control={control}
@@ -145,7 +145,7 @@ const Auth = () => {
       </View>
       <View style={{ width: "100%", padding: 16, alignItems: "center" }}>
         <LanguageSelector />
-      </View> 
+      </View>
     </SafeAreaView>
   );
 };
