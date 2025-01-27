@@ -151,11 +151,12 @@ const LessonItem = ({
       const lessonTime = new Date(lessonItemData.datetime);
       const currentTime = new Date();
 
-      const fiveMinutesBefore = new Date(lessonTime.getTime() - 62 * 60 * 1000);
+      const fiveMinutesBefore = new Date(lessonTime.getTime() - 5 * 60 * 1000);
+      const anHourAfter = new Date(lessonTime.getTime() + 60 * 60 * 1000);
 
       if (
-        currentTime.getTime() >= fiveMinutesBefore.getTime() ||
-        currentTime.getTime() > lessonTime.getTime()
+        currentTime.getTime() >= fiveMinutesBefore.getTime() &&
+        currentTime.getTime() < anHourAfter.getTime()
       ) {
         setLessonAvailable(true);
       }
