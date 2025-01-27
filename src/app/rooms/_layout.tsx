@@ -10,6 +10,13 @@ export default function LessonsLayout() {
       contentStyle: {
         backgroundColor: theme.colors.background,
       },
+      headerStyle: {
+        backgroundColor: theme.colors.card,
+      },
+      headerTintColor: theme.colors.text,
+      headerTitleStyle: {
+        color: theme.colors.text,
+      },
     }}
     >
       <Stack.Screen
