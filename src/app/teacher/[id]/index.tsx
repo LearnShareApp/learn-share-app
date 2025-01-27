@@ -63,7 +63,12 @@ const TeacherProfilePage = () => {
 
   if (loading) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: theme.colors.background }]}>
+      <View
+        style={[
+          styles.centerContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
@@ -71,71 +76,122 @@ const TeacherProfilePage = () => {
 
   if (error || !teacher) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: theme.colors.background }]}>
-        <Text style={{ color: theme.colors.text }}>Error: {error || "Teacher not found"}</Text>
+      <View
+        style={[
+          styles.centerContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
+        <Text style={{ color: theme.colors.text }}>
+          Error: {error || "Teacher not found"}
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <Stack.Screen
         options={{
           title: `${teacher.name} ${teacher.surname}`,
           headerRight: () => (
             <TouchableOpacity
               activeOpacity={0.6}
-              style={[styles.bookBtn, { backgroundColor: theme.colors.primary }]}
+              style={[
+                styles.bookBtn,
+                { backgroundColor: theme.colors.primary },
+              ]}
               onPress={() => {
-                console.log("Navigating to:", `/teacher/${id}/book`);
-                router.push(`/teacher/${id}/book?category_id=${1}&teacher_id=${id}`);
+                console.log(
+                  "Navigating to:",
+                  `/teacher/${teacher.teacher_id}/book`
+                );
+                router.push(
+                  `/teacher/${
+                    teacher.teacher_id
+                  }/book?category_id=${1}&teacher_id=${
+                    teacher.teacher_id
+                  }&user_id=${teacher.user_id}`
+                );
               }}
             >
-              <Text style={[styles.bookText, { color: theme.colors.buttonText }]}>{t("book_lesson")}</Text>
+              <Text
+                style={[styles.bookText, { color: theme.colors.buttonText }]}
+              >
+                {t("book_lesson")}
+              </Text>
             </TouchableOpacity>
           ),
         }}
       />
       <FlatList
-        data={[{userName: 'tester',
-          grade: 5,
-          text: 'It is just a test, does not affect anything'}]}
+        data={[
+          {
+            userName: "tester",
+            grade: 5,
+            text: "It is just a test, does not affect anything",
+          },
+        ]}
         ListHeaderComponent={
           <View style={styles.headerContainer}>
-            <View style={{height: 180,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: theme.colors.card, borderRadius: 8}}>
-              <Text style={{ color: theme.colors.text }}>{t("here_will_be_your_video_soon")}</Text>
+            <View
+              style={{
+                height: 180,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: theme.colors.card,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ color: theme.colors.text }}>
+                {t("here_will_be_your_video_soon")}
+              </Text>
             </View>
-            <View style={[styles.white, styles.mainCard, { backgroundColor: theme.colors.card }]}>
+            <View
+              style={[
+                styles.white,
+                styles.mainCard,
+                { backgroundColor: theme.colors.card },
+              ]}
+            >
               <Image
                 source={require("../../../../assets/icon.png")}
                 style={styles.image}
                 accessibilityLabel={`${teacher.name}'s profile picture`}
               />
               <View style={styles.teacherInfo}>
-                <Text style={[styles.teacherName, { color: theme.colors.text }]}>
+                <Text
+                  style={[styles.teacherName, { color: theme.colors.text }]}
+                >
                   {teacher.name} {teacher.surname}
                 </Text>
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
-                    <SkillBadge
-                      text={item.category_name}
-                      key={item.skill_id}
-                    />
+                    <SkillBadge text={item.category_name} key={item.skill_id} />
                   ))}
                 </View>
               </View>
             </View>
-            <View style={[styles.white, { backgroundColor: theme.colors.card }]}>
-              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{t("about_me")}:</Text>
+            <View
+              style={[styles.white, { backgroundColor: theme.colors.card }]}
+            >
+              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+                {t("about_me")}:
+              </Text>
               <Line />
               <Text style={[styles.aboutText, { color: theme.colors.text }]}>
                 {teacher.skills[0].about || t("no_description")}
               </Text>
             </View>
-            <View style={[styles.white, styles.rate, { backgroundColor: theme.colors.card }]}>
+            <View
+              style={[
+                styles.white,
+                styles.rate,
+                { backgroundColor: theme.colors.card },
+              ]}
+            >
               <StatsItem
                 icon="star"
                 value={teacher.skills[0].rate.toFixed(1)}
@@ -156,12 +212,28 @@ const TeacherProfilePage = () => {
               />
             </View>
             <Pressable
-              style={[styles.bookBtnMain, { backgroundColor: theme.colors.primary }]}
+              style={[
+                styles.bookBtnMain,
+                { backgroundColor: theme.colors.primary },
+              ]}
               onPress={() => {
-                router.push(`/teacher/${id}/book?category_id=${1}&teacher_id=${id}`);
+                router.push(
+                  `/teacher/${
+                    teacher.teacher_id
+                  }/book?category_id=${1}&teacher_id=${
+                    teacher.teacher_id
+                  }&user_id=${teacher.user_id}`
+                );
               }}
             >
-              <Text style={[styles.bookTextMain, { color: theme.colors.buttonText }]}>{t("book_lesson")}</Text>
+              <Text
+                style={[
+                  styles.bookTextMain,
+                  { color: theme.colors.buttonText },
+                ]}
+              >
+                {t("book_lesson")}
+              </Text>
             </Pressable>
             <Text style={[styles.reviewsTitle, { color: theme.colors.text }]}>
               {t("teacher_reviews")} (1)
@@ -191,9 +263,18 @@ const StatsItem = ({
   return (
     <View style={styles.rates}>
       <Text style={{ color: theme.colors.text }}>
-        <FontAwesome size={18} name={icon} style={{ color: icon === "star" ? theme.colors.primary : theme.colors.text }} /> {value}
+        <FontAwesome
+          size={18}
+          name={icon}
+          style={{
+            color: icon === "star" ? theme.colors.primary : theme.colors.text,
+          }}
+        />{" "}
+        {value}
       </Text>
-      <Text style={[styles.labelText, { color: theme.colors.text }]}>{label}</Text>
+      <Text style={[styles.labelText, { color: theme.colors.text }]}>
+        {label}
+      </Text>
     </View>
   );
 };

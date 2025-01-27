@@ -2,8 +2,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
-// const BACKEND_URL = "http://adoe.ru:81";
-const BACKEND_URL = "http://192.168.1.8:81";
+const BACKEND_URL = "http://adoe.ru:81"; // удаленный
+// const BACKEND_URL = "http://192.168.1.8:81";  // локальный
 
 export interface LoginData {
   email: string;
@@ -235,14 +235,16 @@ class ApiService {
   }
 
   async getLessonToken(id: number): Promise<string> {
-    const response = await this.api.get<{ token: string }>(`/api/lessons/${id}/join`);
+    const response = await this.api.get<{ token: string }>(
+      `/api/lessons/${id}/join`
+    );
     return response.data.token;
   }
 
-
   async getTeachers(is_mine?: boolean): Promise<TeacherProfile[]> {
-    console.log(`/api/teachers?is_mine=${is_mine ? true : false}`)
-    const response = await this.api.get<TeachersResponse>(`/api/teachers?is_mine=${is_mine}`);
+    const response = await this.api.get<TeachersResponse>(
+      `/api/teachers?is_mine=${is_mine}`
+    );
     return response.data.teachers || [];
   }
 

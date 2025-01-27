@@ -34,7 +34,9 @@ const Home = () => {
   const { loadingCategories, errorCategories } = useCategories();
 
   const [nextLesson, setNextLesson] = useState<Lesson[]>([]);
-  const [previousTeachers, setPreviousTeachers] = useState<TeacherProfile[]>([]);
+  const [previousTeachers, setPreviousTeachers] = useState<TeacherProfile[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,10 +45,19 @@ const Home = () => {
       try {
         setLoading(true);
         const response = await apiService.getLessons();
-        setNextLesson((response || []).filter((lesson) => lesson.status === "ongoing" || lesson.status === "waiting").sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime()));
+        setNextLesson(
+          (response || [])
+            .filter(
+              (lesson) =>
+                lesson.status === "ongoing" || lesson.status === "waiting"
+            )
+            .sort(
+              (a, b) =>
+                new Date(a.datetime).getTime() - new Date(b.datetime).getTime()
+            )
+        );
 
         const responseTeachers = await apiService.getTeachers(true);
-        console.log(responseTeachers);
         setPreviousTeachers(responseTeachers || []);
       } catch (err) {
         console.error("Error details:", err);
@@ -61,12 +72,21 @@ const Home = () => {
   }, []);
 
   if (loadingProfile || loadingCategories) {
-    return <>
-      <HeaderElement text="Loading..." requireCalendar requireSettings />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: theme.colors.background }}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
-    </>;
+    return (
+      <>
+        <HeaderElement text="Loading..." requireCalendar requireSettings />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: theme.colors.background,
+          }}
+        >
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      </>
+    );
   }
 
   if (errorProfile || errorCategories) {
@@ -87,16 +107,22 @@ const Home = () => {
       <ScrollView style={{ backgroundColor: theme.colors.background }}>
         <View style={styles.container}>
           <Link href="/search" asChild>
-            <Pressable style={{ backgroundColor: theme.colors.card, width: "100%",
-              height: 60,
-              borderRadius: 8,
-              paddingHorizontal: 16,
-              paddingVertical: 4,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}>
-              <Text style={[styles.searchText, { color: theme.colors.text }]}>{t("search_teacher")}</Text>
+            <Pressable
+              style={{
+                backgroundColor: theme.colors.card,
+                width: "100%",
+                height: 60,
+                borderRadius: 8,
+                paddingHorizontal: 16,
+                paddingVertical: 4,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={[styles.searchText, { color: theme.colors.text }]}>
+                {t("search_teacher")}
+              </Text>
               <FontAwesome
                 size={24}
                 name="arrow-right"
@@ -105,53 +131,96 @@ const Home = () => {
             </Pressable>
           </Link>
           <View style={[styles.info, { backgroundColor: theme.colors.card }]}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text style={{ color: theme.colors.text }}>{t("your_lessons")}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: theme.colors.text }}>
+                {t("your_lessons")}
+              </Text>
               <Link href="/lessons" asChild>
-                <Text style={{ color: '#888' }}>{t("view_all")} {">"}</Text>
+                <Text style={{ color: "#888" }}>
+                  {t("view_all")} {">"}
+                </Text>
               </Link>
             </View>
             <Line />
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
-                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>0</Text>
-                <Text style={{ color: '#888', width: 100, textAlign: "center" }}>
+                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
+                  0
+                </Text>
+                <Text
+                  style={{ color: "#888", width: 100, textAlign: "center" }}
+                >
                   {t("successfully_completed")}
                 </Text>
               </View>
               <View style={styles.infoSection}>
-                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>0</Text>
-                <Text style={{ color: '#888', width: 100, textAlign: "center" }}>
+                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
+                  0
+                </Text>
+                <Text
+                  style={{ color: "#888", width: 100, textAlign: "center" }}
+                >
                   {t("need_to_approve")}
                 </Text>
               </View>
               <View style={styles.infoSection}>
-                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>0</Text>
-                <Text style={{ color: '#888', width: 100, textAlign: "center" }}>
+                <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
+                  0
+                </Text>
+                <Text
+                  style={{ color: "#888", width: 100, textAlign: "center" }}
+                >
                   {t("waiting_to_join")}
                 </Text>
               </View>
             </View>
-            <View style={[styles.nextLessons, { backgroundColor: theme.colors.border }]}>
+            <View
+              style={[
+                styles.nextLessons,
+                { backgroundColor: theme.colors.border },
+              ]}
+            >
               <View style={{ width: "80%", gap: 8 }}>
-                <Text style={{ color: theme.colors.text }}>{t("next_lesson")}</Text>
-                <Line color={'#ccc'} />
-                {nextLesson.length > 0 ? (<View style={{ flexDirection: "row", gap: 8 }}>
-                  <Image
-                    source={require("../../../assets/icon.png")}
-                    style={styles.nextTeacherImage}
-                  />
-                  <View style={{ gap: 4 }}>
-                    <Text style={{ color: theme.colors.text }}>{nextLesson[0].teacher_name} {nextLesson[0].teacher_surname}</Text>
-                    <SkillBadge text={nextLesson[0].category_name} />
+                <Text style={{ color: theme.colors.text }}>
+                  {t("next_lesson")}
+                </Text>
+                <Line color={"#ccc"} />
+                {nextLesson.length > 0 ? (
+                  <View style={{ flexDirection: "row", gap: 8 }}>
+                    <Image
+                      source={require("../../../assets/icon.png")}
+                      style={styles.nextTeacherImage}
+                    />
+                    <View style={{ gap: 4 }}>
+                      <Text style={{ color: theme.colors.text }}>
+                        {nextLesson[0].teacher_name}{" "}
+                        {nextLesson[0].teacher_surname}
+                      </Text>
+                      <SkillBadge text={nextLesson[0].category_name} />
+                    </View>
                   </View>
-                </View>) : (<Text style={{ color: theme.colors.text, height: 48 }}>{t("no_lessons_today")}</Text>) }
-                
+                ) : (
+                  <Text style={{ color: theme.colors.text, height: 48 }}>
+                    {t("no_lessons_today")}
+                  </Text>
+                )}
               </View>
 
               <Link href="/rooms/" asChild>
                 <Pressable style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 24, padding: 16, color: theme.colors.text }}>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      padding: 16,
+                      color: theme.colors.text,
+                    }}
+                  >
                     {">"}
                   </Text>
                 </Pressable>
@@ -161,12 +230,26 @@ const Home = () => {
           <Text style={[styles.sectionText, { color: theme.colors.text }]}>
             {t("your_previous_teachers")}:
           </Text>
-          <View style={[styles.listContainer, { flex: 1}]}>
-            {previousTeachers.length > 0 ? previousTeachers.map((previousTeacher) => (
-              <TeacherListItem teacher={previousTeacher} />
-            )) : (
-              <View style={{ width: "100%", height: 120, backgroundColor: theme.colors.card, borderRadius: 8, justifyContent: "center", alignItems: "center", padding: 16 }}>
-                <Text style={{ color: theme.colors.text }}>{t("you_will_see_your_previous_teachers_here")}</Text>
+          <View style={[styles.listContainer, { flex: 1 }]}>
+            {previousTeachers.length > 0 ? (
+              previousTeachers.map((previousTeacher) => (
+                <TeacherListItem teacher={previousTeacher} />
+              ))
+            ) : (
+              <View
+                style={{
+                  width: "100%",
+                  height: 120,
+                  backgroundColor: theme.colors.card,
+                  borderRadius: 8,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: 16,
+                }}
+              >
+                <Text style={{ color: theme.colors.text }}>
+                  {t("you_will_see_your_previous_teachers_here")}
+                </Text>
               </View>
             )}
           </View>

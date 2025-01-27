@@ -38,10 +38,11 @@ const formatDateTime = (date: Date): string => {
 };
 
 export default function BookLesson() {
-  const { id, category_id, teacher_id } = useLocalSearchParams<{
+  const { id, category_id, teacher_id, user_id } = useLocalSearchParams<{
     id: string;
     category_id?: string;
     teacher_id?: string;
+    user_id: string;
   }>();
   const router = useRouter();
   const { t } = useLanguage();
@@ -75,20 +76,18 @@ export default function BookLesson() {
     const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        const teacherResponse = await apiService.getTeacherById(id);
+        const teacherResponse = await apiService.getTeacherById(user_id);
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
+        console.log(teacherResponse);
         setTeacher(teacherResponse);
 
-        const timesResponse = await apiService.getTimeById(id);
+        const timesResponse = await apiService.getTimeById(user_id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available
         );
-
-        // availableTimes.sort(
-        //   (a, b) => a?.datetime.getTime() - b?.datetime.getTime()
-        // );
+        console.log(availableTimes);
         setAvailableTimes(availableTimes);
       } catch (err) {
         console.error("Error details:", err);
@@ -166,7 +165,9 @@ export default function BookLesson() {
 
   if (loading) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+      >
         <ActivityIndicator size="large" color={theme.colors.primary} />
         <Text style={{ color: theme.colors.text }}>{t("loading")}</Text>
       </View>
@@ -175,14 +176,20 @@ export default function BookLesson() {
 
   if (error || !teacher) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <Text style={{ color: theme.colors.text }}>{t("teacher_not_found")}</Text>
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+      >
+        <Text style={{ color: theme.colors.text }}>
+          {t("teacher_not_found")}
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <Controller
         control={control}
         name="category_id"
@@ -193,10 +200,9 @@ export default function BookLesson() {
               value={selectedSkill}
               items={skillItems}
               setOpen={setOpenSkill}
-              
-              dropDownContainerStyle={{ 
+              dropDownContainerStyle={{
                 borderColor: "transparent",
-                backgroundColor: theme.colors.card 
+                backgroundColor: theme.colors.card,
               }}
               setValue={(callback) => {
                 const newValue =
@@ -210,14 +216,21 @@ export default function BookLesson() {
               }}
               setItems={setSkillItems}
               placeholder={t("select_skill")}
-              style={[styles.dropDown, { 
-                backgroundColor: theme.colors.card,
-                borderColor: "transparent" 
-              }]}
+              style={[
+                styles.dropDown,
+                {
+                  backgroundColor: theme.colors.card,
+                  borderColor: "transparent",
+                },
+              ]}
               textStyle={{ color: theme.colors.text }}
               zIndex={2000}
             />
-            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
+            {error && (
+              <Text style={[styles.error, { color: theme.colors.error }]}>
+                {error.message}
+              </Text>
+            )}
           </>
         )}
       />
@@ -232,9 +245,9 @@ export default function BookLesson() {
               value={selectedTime}
               items={timeItems}
               setOpen={setOpenTime}
-              dropDownContainerStyle={{ 
+              dropDownContainerStyle={{
                 borderColor: "transparent",
-                backgroundColor: theme.colors.card 
+                backgroundColor: theme.colors.card,
               }}
               setValue={(callback) => {
                 const newValue =
@@ -248,14 +261,21 @@ export default function BookLesson() {
               }}
               setItems={setTimeItems}
               placeholder={t("select_time")}
-              style={[styles.dropDown, { 
-                backgroundColor: theme.colors.card,
-                borderColor: "transparent" 
-              }]}
+              style={[
+                styles.dropDown,
+                {
+                  backgroundColor: theme.colors.card,
+                  borderColor: "transparent",
+                },
+              ]}
               textStyle={{ color: theme.colors.text }}
               zIndex={1000}
             />
-            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
+            {error && (
+              <Text style={[styles.error, { color: theme.colors.error }]}>
+                {error.message}
+              </Text>
+            )}
           </>
         )}
       />

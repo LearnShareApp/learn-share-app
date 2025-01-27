@@ -17,15 +17,19 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
   const firstSkillRate = teacher.skills?.[0]?.rate ?? 0;
 
   return (
-    <Link href={`/teacher/${teacher.teacher_id}`} asChild>
-      <Pressable style={{ flexDirection: "row",
-        gap: 12,
-        width: "100%",
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderRadius: 8,
-        minHeight: 100,backgroundColor: theme.colors.card
-      }}>
+    <Link href={`/teacher/${teacher.user_id}`} asChild>
+      <Pressable
+        style={{
+          flexDirection: "row",
+          gap: 12,
+          width: "100%",
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderRadius: 8,
+          minHeight: 100,
+          backgroundColor: theme.colors.card,
+        }}
+      >
         <Image
           source={require("../../assets/icon.png")}
           style={styles.avatar}
@@ -44,7 +48,9 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
                 />
               ))
             ) : (
-              <Text style={{ color: theme.colors.text }}>{t("no_skills_listed")}</Text>
+              <Text style={{ color: theme.colors.text }}>
+                {t("no_skills_listed")}
+              </Text>
             )}
           </View>
         </View>
@@ -53,18 +59,26 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
             style={{
               fontSize: 18,
               fontWeight: "bold",
-              color: theme.colors.text
+              color: theme.colors.text,
             }}
           >
             {firstSkillRate ? (
               <>
                 {firstSkillRate.toFixed(1)}
-                <FontAwesome size={24} name="star" style={{ color: theme.colors.primary }} />
+                <FontAwesome
+                  size={24}
+                  name="star"
+                  style={{ color: theme.colors.primary }}
+                />
               </>
             ) : (
               <>
                 {"--"}
-                <FontAwesome size={24} name="star" style={{ color: theme.colors.primary }} />
+                <FontAwesome
+                  size={24}
+                  name="star"
+                  style={{ color: theme.colors.primary }}
+                />
               </>
             )}{" "}
           </Text>
@@ -78,7 +92,6 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
 export default TeacherListItem;
 
 const styles = StyleSheet.create({
-
   avatar: {
     width: 64,
     height: 64,
