@@ -160,7 +160,7 @@ const Search = () => {
           renderItem={({ item }) => <TeacherListItem teacher={item} />}
           keyExtractor={(item) => item.teacher_id.toString()}
           contentContainerStyle={styles.listContainer}
-          stickyHeaderHiddenOnScroll
+          style={{ flex: 1 }}
         />
       )}
     </View>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     gap: 8,
-    paddingBottom: 74,
+    paddingBottom: 8,
     flex: 1,
   },
   input: {
@@ -196,8 +196,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 4,
-    overflow: "visible",
-    height: "100%",
   },
   dropdownContainer: {
     borderRadius: 8,
