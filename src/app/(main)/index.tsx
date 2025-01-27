@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link, Redirect } from "expo-router";
+import { Link, Redirect, useFocusEffect } from "expo-router";
 import { useAuth } from "../../providers/auth-provider";
 import TeacherListItem from "../../components/teacher-item";
 import HeaderElement from "../../components/header-element";
@@ -19,7 +19,7 @@ import SkillBadge from "../../components/skill";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { apiService, TeacherProfile } from "../../utilities/api";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { Lesson } from "../../utilities/api";
 
@@ -40,36 +40,38 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchLessons = async () => {
-      try {
-        setLoading(true);
-        const response = await apiService.getLessons();
-        setNextLesson(
-          (response || [])
-            .filter(
-              (lesson) =>
-                lesson.status === "ongoing" || lesson.status === "waiting"
-            )
-            .sort(
-              (a, b) =>
-                new Date(a.datetime).getTime() - new Date(b.datetime).getTime()
-            )
-        );
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getLessons();
+      setNextLesson(
+        (response || [])
+          .filter(
+            (lesson) =>
+              lesson.status === "ongoing" || lesson.status === "waiting"
+          )
+          .sort(
+            (a, b) =>
+              new Date(a.datetime).getTime() - new Date(b.datetime).getTime()
+          )
+      );
 
-        const responseTeachers = await apiService.getTeachers(true);
-        setPreviousTeachers(responseTeachers || []);
-      } catch (err) {
-        console.error("Error details:", err);
-        setError("Failed to fetch teachers");
-        setNextLesson([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLessons();
+      const responseTeachers = await apiService.getTeachers(true);
+      setPreviousTeachers(responseTeachers || []);
+    } catch (err) {
+      console.error("Error details:", err);
+      setError("Failed to fetch teachers");
+      setNextLesson([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   if (loadingProfile || loadingCategories) {
     return (

@@ -27,7 +27,6 @@ const authSchema = zod.object({
   schedule_time_id: zod.number(),
 });
 
-// Функция форматирования даты
 const formatDateTime = (date: Date): string => {
   return date.toLocaleString("srb-SRB", {
     month: "2-digit",
@@ -79,14 +78,12 @@ export default function BookLesson() {
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
-        console.log(teacherResponse);
         setTeacher(teacherResponse);
 
         const timesResponse = await apiService.getTimeById(user_id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available
         );
-        console.log(availableTimes);
         setAvailableTimes(availableTimes);
       } catch (err) {
         console.error("Error details:", err);

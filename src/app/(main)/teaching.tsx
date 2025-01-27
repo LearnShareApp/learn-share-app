@@ -25,14 +25,15 @@ import { useTheme } from "../../providers/theme-provider";
 const Teaching = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { teacher, loadingTeacher, errorTeacher } = useTeacher();
+  const { teacher, loadingTeacher, errorTeacher, refetch } = useTeacher();
 
   const [lessons, setLessons] = useState<TeacherLesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchLessons = async () => {
+  const fetchLessons = useCallback(async () => {
     try {
+      refetch();
       setLoading(true);
       const response = await apiService.getTeacherLessons();
       const sortedLessons = response.sort((a, b) => {
@@ -48,7 +49,7 @@ const Teaching = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Обновление при фокусе на экране
   useFocusEffect(
@@ -57,7 +58,6 @@ const Teaching = () => {
     }, [])
   );
 
-  // Подписка на событие обновления уроков
   useEffect(() => {
     const subscription = EventEmitter.addListener("lessonsUpdated", () => {
       fetchLessons();
