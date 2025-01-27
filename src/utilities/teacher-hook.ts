@@ -1,7 +1,5 @@
-// hooks/useProfile.ts
 import { useState, useEffect } from "react";
 import { apiService, TeacherProfile } from "./api";
-import { Toast } from "react-native-toast-notifications";
 
 export const useTeacher = () => {
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);

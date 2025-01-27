@@ -17,17 +17,16 @@ import {
   DateTime,
   Skill,
   TeacherProfile,
-} from "../../../utilities/api";
+} from "../../utilities/api";
 import axios from "axios";
-import { useLanguage } from "../../../providers/language-provider";
-import { useTheme } from "../../../providers/theme-provider";
+import { useLanguage } from "../../providers/language-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 const authSchema = zod.object({
   category_id: zod.number(),
   schedule_time_id: zod.number(),
 });
 
-// Функция форматирования даты
 const formatDateTime = (date: Date): string => {
   return date.toLocaleString("srb-SRB", {
     month: "2-digit",
@@ -38,10 +37,9 @@ const formatDateTime = (date: Date): string => {
 };
 
 export default function BookLesson() {
-  const { id, category_id, teacher_id, user_id } = useLocalSearchParams<{
-    id: string;
+  const { category_id, teacher_id, user_id } = useLocalSearchParams<{
     category_id?: string;
-    teacher_id?: string;
+    teacher_id: string;
     user_id: string;
   }>();
   const router = useRouter();
@@ -80,14 +78,12 @@ export default function BookLesson() {
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
-        console.log(teacherResponse);
         setTeacher(teacherResponse);
 
         const timesResponse = await apiService.getTimeById(user_id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available
         );
-        console.log(availableTimes);
         setAvailableTimes(availableTimes);
       } catch (err) {
         console.error("Error details:", err);
@@ -102,10 +98,10 @@ export default function BookLesson() {
       }
     };
 
-    if (id) {
+    if (user_id) {
       fetchTeacherData();
     }
-  }, [id, router]);
+  }, [user_id, router]);
 
   useEffect(() => {
     if (teacher?.skills) {
@@ -130,7 +126,7 @@ export default function BookLesson() {
   const SendRequest = async (data: zod.infer<typeof authSchema>) => {
     try {
       const postData = {
-        teacher_id: Number(id),
+        teacher_id: Number(teacher_id),
         category_id: data.category_id,
         schedule_time_id: data.schedule_time_id,
       };

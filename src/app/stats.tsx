@@ -22,7 +22,7 @@ const Stats = () => {
       ListFooterComponent={
         <Link href={"/new-skill"} asChild>
           <Pressable style={styles.btn}>
-            <Text style={styles.text}>Додајте нову вештину</Text>
+            <Text style={styles.text}>{t("add_skill")}</Text>
           </Pressable>
         </Link>
       }

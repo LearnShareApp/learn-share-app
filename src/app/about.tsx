@@ -10,36 +10,50 @@ const About = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={[styles.content, { backgroundColor: theme.colors.background }]}>
+      <View
+        style={[styles.content, { backgroundColor: theme.colors.background }]}
+      >
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.title, { color: theme.colors.text }]}>{t("about_us_title")}</Text>
+          <Text style={[styles.title, { color: theme.colors.text }]}>
+            {t("about_us_title")}
+          </Text>
           <Line />
-          <Text style={[styles.text, { color: theme.colors.text }]}>{t("about_us_description")}</Text>
+          <Text style={[styles.text, { color: theme.colors.text }]}>
+            {t("about_us_description")}
+          </Text>
         </View>
 
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.title, { color: theme.colors.text }]}>{t("our_mission")}</Text>
+          <Text style={[styles.title, { color: theme.colors.text }]}>
+            {t("our_mission")}
+          </Text>
           <Line />
-          <Text style={[styles.text, { color: theme.colors.text }]}>{t("mission_description")}</Text>
+          <Text style={[styles.text, { color: theme.colors.text }]}>
+            {t("mission_description")}
+          </Text>
         </View>
 
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.title, { color: theme.colors.text }]}>{t("contact_us")}</Text>
+          <Text style={[styles.title, { color: theme.colors.text }]}>
+            {t("contact_us")}
+          </Text>
           <Line />
           <View style={styles.contactItem}>
             <FontAwesome name="envelope" size={20} color="#C9A977" />
-            <Text 
+            <Text
               style={[styles.link, { color: theme.colors.text }]}
-              onPress={() => Linking.openURL('mailto:learnandshareapp@gmail.com')}
+              onPress={() =>
+                Linking.openURL("mailto:learnandshareapp@gmail.com")
+              }
             >
               learnandshareapp@gmail.com
             </Text>
           </View>
           <View style={styles.contactItem}>
             <FontAwesome name="telegram" size={20} color="#C9A977" />
-            <Text 
+            <Text
               style={[styles.link, { color: theme.colors.text }]}
-              onPress={() => Linking.openURL('https://t.me/andr_ewtf')}
+              onPress={() => Linking.openURL("https://t.me/andr_ewtf")}
             >
               @andr_ewtf
             </Text>
@@ -47,7 +61,9 @@ const About = () => {
         </View>
 
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.title, { color: theme.colors.text }]}>{t("version")}</Text>
+          <Text style={[styles.title, { color: theme.colors.text }]}>
+            {t("version")}
+          </Text>
           <Line />
           <Text style={[styles.text, { color: theme.colors.text }]}>1.0.0</Text>
         </View>
@@ -93,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default About; 
+export default About;

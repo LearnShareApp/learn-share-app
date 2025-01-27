@@ -104,6 +104,7 @@ const SignUp = () => {
                 placeholderTextColor="#aaa"
                 autoCapitalize="none"
                 editable={!formState.isSubmitting}
+                autoComplete="name"
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>
@@ -127,6 +128,7 @@ const SignUp = () => {
                 placeholderTextColor="#aaa"
                 autoCapitalize="none"
                 editable={!formState.isSubmitting}
+                autoComplete="family-name"
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>
@@ -150,6 +152,7 @@ const SignUp = () => {
                 placeholderTextColor="#aaa"
                 autoCapitalize="none"
                 editable={!formState.isSubmitting}
+                autoComplete="email"
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>
@@ -202,7 +205,9 @@ const SignUp = () => {
             >
               <Button
                 color="#C9A977"
-                title={value ? value.toLocaleDateString() : t("select_date_of_birth")}
+                title={
+                  value ? value.toLocaleDateString() : t("select_date_of_birth")
+                }
                 onPress={() => setShowPicker(true)}
               />
               <Text

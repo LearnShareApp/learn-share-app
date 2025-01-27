@@ -243,7 +243,7 @@ class ApiService {
 
   async getTeachers(is_mine?: boolean): Promise<TeacherProfile[]> {
     const response = await this.api.get<TeachersResponse>(
-      `/api/teachers?is_mine=${is_mine}`
+      `/api/teachers?${is_mine ? "is_mine=true" : ""}`
     );
     return response.data.teachers || [];
   }

@@ -5,13 +5,14 @@ import { Platform } from "react-native";
 import { useEffect } from "react";
 import { ToastProvider } from "react-native-toast-notifications";
 import { AuthProvider } from "../providers/auth-provider";
-import { LanguageProvider } from "../providers/language-provider";
+import { LanguageProvider, useLanguage } from "../providers/language-provider";
 import { ThemeProvider, useTheme } from "../providers/theme-provider";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const StackNavigator = () => {
   const { theme } = useTheme();
-  
+  const { t } = useLanguage();
+
   return (
     <Stack
       screenOptions={{
@@ -30,8 +31,8 @@ const StackNavigator = () => {
     >
       <Stack.Screen
         name="(main)"
-        options={{ 
-          headerShown: false, 
+        options={{
+          headerShown: false,
           title: "Home",
         }}
       />
@@ -45,38 +46,38 @@ const StackNavigator = () => {
       />
       <Stack.Screen
         name="new-skill"
-        options={{ 
-          headerShown: true, 
+        options={{
+          headerShown: true,
           title: "add your skill",
         }}
       />
       <Stack.Screen
         name="requests"
-        options={{ headerShown: true, title: "New requests" }}
+        options={{ headerShown: true, title: t("new_requests") }}
       />
       <Stack.Screen
         name="stats"
-        options={{ headerShown: true, title: "Your stats" }}
+        options={{ headerShown: true, title: t("your_skills") }}
       />
       <Stack.Screen
         name="rooms"
-        options={{ headerShown: false, title: "Your Lessons" }}
+        options={{ headerShown: false, title: t("your_lessons") }}
       />
       <Stack.Screen
         name="settings"
-        options={{ headerShown: true, title: "Settings" }}
+        options={{ headerShown: true, title: t("settings") }}
       />
       <Stack.Screen
         name="teacher"
-        options={{ headerShown: false, title: "Teacher Profile" }}
+        options={{ headerShown: false, title: t("teacher_profile") }}
       />
       <Stack.Screen
         name="schedule"
-        options={{ headerShown: true, title: "My schedule" }}
+        options={{ headerShown: true, title: t("my_schedule") }}
       />
       <Stack.Screen
         name="about"
-        options={{ headerShown: true, title: "About" }}
+        options={{ headerShown: true, title: t("about") }}
       />
     </Stack>
   );
@@ -85,18 +86,18 @@ const StackNavigator = () => {
 export default function RootLayout() {
   useEffect(() => {
     const setupNavigationBar = async () => {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         try {
-            const savedTheme = await SecureStore.getItemAsync('user_theme');
-            if (savedTheme === 'dark') {
-              await NavigationBar.setBackgroundColorAsync('#000000');
-              await NavigationBar.setButtonStyleAsync('light');
-            } else {
-              await NavigationBar.setBackgroundColorAsync('#FFFFFF'); 
-              await NavigationBar.setButtonStyleAsync('dark');
-            }
+          const savedTheme = await SecureStore.getItemAsync("user_theme");
+          if (savedTheme === "dark") {
+            await NavigationBar.setBackgroundColorAsync("#000000");
+            await NavigationBar.setButtonStyleAsync("light");
+          } else {
+            await NavigationBar.setBackgroundColorAsync("#FFFFFF");
+            await NavigationBar.setButtonStyleAsync("dark");
+          }
         } catch (error) {
-          console.warn('NavigationBar customization is not available:', error);
+          console.warn("NavigationBar customization is not available:", error);
         }
       }
     };

@@ -31,7 +31,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
         }}
       >
         <Image
-          source={require("../../assets/icon.png")}
+          source={require("../../assets/icon.jpg")}
           style={styles.avatar}
         />
         <View style={styles.teacherInfo}>

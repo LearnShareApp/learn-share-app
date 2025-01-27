@@ -21,18 +21,6 @@ import { useLanguage } from "../providers/language-provider";
 const youtubeUrlRegex =
   /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
 
-const authSchema = zod.object({
-  category_id: zod.string().min(1, "Select category"),
-  video_card_link: zod
-    .string()
-    .url("Have to be a link")
-    .refine(
-      (url) => youtubeUrlRegex.test(url),
-      "Мора да буде линк до вашег YouTube видеа"
-    ),
-  about: zod.string().min(8, "Опишите се ученицима!"),
-});
-
 const SkillAdding = () => {
   const { t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -40,6 +28,18 @@ const SkillAdding = () => {
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
 
   const [open, setOpen] = useState(false);
+
+  const authSchema = zod.object({
+    category_id: zod.string().min(1, "Select category"),
+    video_card_link: zod
+      .string()
+      .url(t("have_to_be_a_link"))
+      .refine(
+        (url) => youtubeUrlRegex.test(url),
+        t("have_to_be_a_link_to_your_youtube_video")
+      ),
+    about: zod.string().min(8, t("describe_your_skill")),
+  });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -201,7 +201,7 @@ const SkillAdding = () => {
           disabled={formState.isSubmitting}
           activeOpacity={0.6}
         >
-          <Text style={styles.buttonText}>Додај вештину</Text>
+          <Text style={styles.buttonText}>{t("add_skill")}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

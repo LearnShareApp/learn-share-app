@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import SkillBadge from "../../../components/skill";
+import SkillBadge from "../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
-import Line from "../../../components/line";
-import ReviewItem from "../../../components/review-item";
-import { apiService, TeacherProfile } from "../../../utilities/api";
-import { useLanguage } from "../../../providers/language-provider";
-import { useTheme } from "../../../providers/theme-provider";
+import Line from "../../components/line";
+import ReviewItem from "../../components/review-item";
+import { apiService, TeacherProfile } from "../../utilities/api";
+import { useLanguage } from "../../providers/language-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
@@ -30,7 +30,6 @@ const TeacherProfilePage = () => {
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const fetchTeacher = async () => {
@@ -54,12 +53,6 @@ const TeacherProfilePage = () => {
 
     fetchTeacher();
   }, [id, router]);
-
-  const onStateChange = useCallback((state: string) => {
-    if (state === "ended") {
-      setPlaying(false);
-    }
-  }, []);
 
   if (loading) {
     return (
@@ -95,6 +88,9 @@ const TeacherProfilePage = () => {
     >
       <Stack.Screen
         options={{
+          contentStyle: {
+            backgroundColor: theme.colors.background,
+          },
           title: `${teacher.name} ${teacher.surname}`,
           headerRight: () => (
             <TouchableOpacity
@@ -104,14 +100,8 @@ const TeacherProfilePage = () => {
                 { backgroundColor: theme.colors.primary },
               ]}
               onPress={() => {
-                console.log(
-                  "Navigating to:",
-                  `/teacher/${teacher.teacher_id}/book`
-                );
                 router.push(
-                  `/teacher/${
-                    teacher.teacher_id
-                  }/book?category_id=${1}&teacher_id=${
+                  `/teacher//book?category_id=${1}&teacher_id=${
                     teacher.teacher_id
                   }&user_id=${teacher.user_id}`
                 );
@@ -157,7 +147,7 @@ const TeacherProfilePage = () => {
               ]}
             >
               <Image
-                source={require("../../../../assets/icon.png")}
+                source={require("../../../assets/icon.jpg")}
                 style={styles.image}
                 accessibilityLabel={`${teacher.name}'s profile picture`}
               />
@@ -218,9 +208,7 @@ const TeacherProfilePage = () => {
               ]}
               onPress={() => {
                 router.push(
-                  `/teacher/${
-                    teacher.teacher_id
-                  }/book?category_id=${1}&teacher_id=${
+                  `/teacher/book?category_id=${1}&teacher_id=${
                     teacher.teacher_id
                   }&user_id=${teacher.user_id}`
                 );

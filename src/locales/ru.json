@@ -140,5 +140,12 @@
   "view_all": "Посмотреть все",
   "no_requests": "Пока что нет запросов на урок",
   "here_will_be_your_video_soon": "Ваше видео скоро появится",
-  "start_learning": "Начать обучение"
+  "start_learning": "Начать обучение",
+  "have_to_be_a_link": "Мора да буде линк",
+  "have_to_be_a_link_to_your_youtube_video": "Мора да буде линк до вашег YouTube видеа",
+  "start_lesson": "Начать",
+  "confirm_end_call": "Вы уверены, что хотите завершить звонок?",
+  "yes": "Да",
+  "no": "Нет",
+  "participant_of_the_world_of_learning": "Участник мира обмена знаниями"
 }

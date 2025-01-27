@@ -22,10 +22,10 @@ const HeaderElement = ({
       <View style={styles.buttons}>
         {requireCalendar && (
           <Link href="/rooms">
-            <FontAwesome 
-              size={24} 
-              name="calendar" 
-              style={{ color: theme.colors.primary }} 
+            <FontAwesome
+              size={24}
+              name="calendar"
+              style={{ color: theme.colors.primary }}
             />
           </Link>
         )}
@@ -39,10 +39,10 @@ const HeaderElement = ({
         {requireSettings && (
           <Link href="/settings" asChild>
             <Pressable>
-              <FontAwesome 
-                size={28} 
-                name="gear" 
-                style={{ color: theme.colors.primary }} 
+              <FontAwesome
+                size={28}
+                name="gear"
+                style={{ color: theme.colors.primary }}
               />
             </Pressable>
           </Link>

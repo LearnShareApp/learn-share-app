@@ -82,7 +82,12 @@ const Search = () => {
 
   if (loading || loadingCategories) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background, flex: 1 }]}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: theme.colors.background, flex: 1 },
+        ]}
+      >
         <View style={[styles.search, { backgroundColor: theme.colors.card }]}>
           <TextInput
             style={[styles.input, { color: theme.colors.text }]}
@@ -91,16 +96,25 @@ const Search = () => {
             onChangeText={setSearchText}
             value={searchText}
           />
-          <FontAwesome size={24} name="search" style={{ color: theme.colors.primary }} />
+          <FontAwesome
+            size={24}
+            name="search"
+            style={{ color: theme.colors.primary }}
+          />
         </View>
-        <View style={[styles.dropdownContainer, { backgroundColor: theme.colors.card }]}>
+        <View
+          style={[
+            styles.dropdownContainer,
+            { backgroundColor: theme.colors.card },
+          ]}
+        >
           <DropDownPicker
             open={open}
             value={selectedCategory}
             items={[]}
-            dropDownContainerStyle={{ 
+            dropDownContainerStyle={{
               borderColor: "transparent",
-              backgroundColor: theme.colors.card 
+              backgroundColor: theme.colors.card,
             }}
             setOpen={setOpen}
             setValue={setSelectedCategory}
@@ -116,11 +130,23 @@ const Search = () => {
   }
 
   if (error) {
-    return <Text style={{ color: theme.colors.error, flex: 1, backgroundColor: theme.colors.background }}>Error: {error}</Text>;
+    return (
+      <Text
+        style={{
+          color: theme.colors.error,
+          flex: 1,
+          backgroundColor: theme.colors.background,
+        }}
+      >
+        Error: {error}
+      </Text>
+    );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <View style={[styles.search, { backgroundColor: theme.colors.card }]}>
         <TextInput
           style={[styles.input, { color: theme.colors.text }]}
@@ -129,10 +155,19 @@ const Search = () => {
           onChangeText={setSearchText}
           value={searchText}
         />
-        <FontAwesome size={24} name="search" style={{ color: theme.colors.primary }} />
+        <FontAwesome
+          size={24}
+          name="search"
+          style={{ color: theme.colors.primary }}
+        />
       </View>
 
-      <View style={[styles.dropdownContainer, { backgroundColor: theme.colors.card }]}>
+      <View
+        style={[
+          styles.dropdownContainer,
+          { backgroundColor: theme.colors.card },
+        ]}
+      >
         <DropDownPicker
           open={open}
           value={selectedCategory}
@@ -142,9 +177,9 @@ const Search = () => {
           setItems={setDropdownItems}
           placeholder={t("choose_category")}
           style={[styles.dropdown, { backgroundColor: theme.colors.card }]}
-          dropDownContainerStyle={{ 
+          dropDownContainerStyle={{
             borderColor: "transparent",
-            backgroundColor: theme.colors.card 
+            backgroundColor: theme.colors.card,
           }}
           textStyle={{ color: theme.colors.text }}
         />
@@ -160,7 +195,7 @@ const Search = () => {
           renderItem={({ item }) => <TeacherListItem teacher={item} />}
           keyExtractor={(item) => item.teacher_id.toString()}
           contentContainerStyle={styles.listContainer}
-          stickyHeaderHiddenOnScroll
+          style={{ flex: 1 }}
         />
       )}
     </View>
@@ -172,7 +207,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     gap: 8,
-    paddingBottom: 74,
+    paddingBottom: 8,
     flex: 1,
   },
   input: {
@@ -196,8 +231,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 4,
-    overflow: "visible",
-    height: "100%",
   },
   dropdownContainer: {
     borderRadius: 8,

@@ -14,7 +14,7 @@ function TabBarIcon(props: {
     <FontAwesome
       size={24}
       {...props}
-      style={{ color: props.focused ? theme.colors.primary : '#888' }}
+      style={{ color: props.focused ? theme.colors.primary : "#888" }}
     />
   );
 }
@@ -23,12 +23,15 @@ const TabsLayout = () => {
   const { theme } = useTheme();
 
   return (
-    <SafeAreaView edges={["top"]} style={[styles.safeArea, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView
+      edges={["top"]}
+      style={[styles.safeArea, { backgroundColor: theme.colors.background }]}
+    >
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.text,
-          tabBarLabelStyle: { display: 'none' },
+          tabBarLabelStyle: { display: "none" },
           tabBarStyle: {
             borderTopLeftRadius: 12,
             alignItems: "center",

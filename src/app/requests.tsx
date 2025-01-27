@@ -7,9 +7,9 @@ import { useTheme } from "../providers/theme-provider";
 import { useLanguage } from "../providers/language-provider";
 
 const Requests = () => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const { t } = useLanguage();
-  
+
   const [lessons, setLessons] = useState<TeacherLesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,27 +40,34 @@ const Requests = () => {
   }, []);
 
   useEffect(() => {
-    const subscription = EventEmitter.addListener('lessonRemoved', (lessonId: number) => {
-      setLessons(prevLessons => prevLessons.filter(lesson => lesson.lesson_id !== lessonId));
-    });
+    const subscription = EventEmitter.addListener(
+      "lessonRemoved",
+      (lessonId: number) => {
+        setLessons((prevLessons) =>
+          prevLessons.filter((lesson) => lesson.lesson_id !== lessonId)
+        );
+      }
+    );
 
     return () => subscription.remove();
   }, []);
 
   if (loading) return <ActivityIndicator size="large" color="#C9A977" />;
   if (!lessons) return <Text>error</Text>;
-  return (
-    lessons.length === 0 ? (
-      <Text style={{ color: theme.colors.text, padding: 16, alignSelf: "center" }}>{t("no_requests")}</Text>
-    ) : (
-      <FlatList
-        data={lessons}
-        renderItem={(lesson) => (
-          <LessonItem forTeacher request lesson={lesson.item} />
-        )}
-        contentContainerStyle={styles.skillsList}
-      />
-    )
+  return lessons.length === 0 ? (
+    <Text
+      style={{ color: theme.colors.text, padding: 16, alignSelf: "center" }}
+    >
+      {t("no_requests")}
+    </Text>
+  ) : (
+    <FlatList
+      data={lessons}
+      renderItem={(lesson) => (
+        <LessonItem forTeacher request lesson={lesson.item} />
+      )}
+      contentContainerStyle={styles.skillsList}
+    />
   );
 };
 
@@ -73,7 +80,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 });
-function useTranslation(): { t: any; } {
+function useTranslation(): { t: any } {
   throw new Error("Function not implemented.");
 }
-

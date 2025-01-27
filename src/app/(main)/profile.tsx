@@ -25,7 +25,9 @@ const Profile = () => {
   if (loadingProfile) {
     return (
       <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       </View>
@@ -33,7 +35,17 @@ const Profile = () => {
   }
 
   if (errorProfile) {
-    return <Text style={{ color: theme.colors.error, flex: 1, backgroundColor: theme.colors.background }}>Error: {errorProfile}</Text>;
+    return (
+      <Text
+        style={{
+          color: theme.colors.error,
+          flex: 1,
+          backgroundColor: theme.colors.background,
+        }}
+      >
+        Error: {errorProfile}
+      </Text>
+    );
   }
 
   const copyToClipboard = async () => {
@@ -52,23 +64,48 @@ const Profile = () => {
       />
       <ScrollView style={{ backgroundColor: theme.colors.background }}>
         <View style={styles.container}>
-          <View style={[styles.object, { backgroundColor: theme.colors.card, flexDirection: "row", gap: 16 }]}>
+          <View
+            style={[
+              styles.object,
+              {
+                backgroundColor: theme.colors.card,
+                flexDirection: "row",
+                gap: 16,
+              },
+            ]}
+          >
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/icon.jpg")}
               style={styles.image}
             />
             <View style={styles.userInfo}>
-              <Text style={[styles.user_name, { color: theme.colors.text }]}>
+              <Text
+                style={[
+                  styles.user_name,
+                  { color: theme.colors.text, fontSize: 16 },
+                ]}
+              >
                 {profile?.name} {profile?.surname}
               </Text>
-              <Text style={{ color: theme.colors.text }}>
-                {t("since_joined_the_world_of_learning")}
+              <Text style={{ color: "#888", fontSize: 12 }}>
+                {profile?.email}
+              </Text>
+              <Text style={{ color: theme.colors.text, fontSize: 16 }}>
+                {t("participant_of_the_world_of_learning")}
               </Text>
             </View>
           </View>
 
-          <View style={[styles.object, styles.huge, { backgroundColor: theme.colors.card }]}>
-            <Text style={{ width: "80%", fontSize: 16, color: theme.colors.text }}>
+          <View
+            style={[
+              styles.object,
+              styles.huge,
+              { backgroundColor: theme.colors.card },
+            ]}
+          >
+            <Text
+              style={{ width: "80%", fontSize: 16, color: theme.colors.text }}
+            >
               {t("learning_progress")}
             </Text>
             <Line />
@@ -77,32 +114,52 @@ const Profile = () => {
                 <Text style={{ textAlign: "center", color: theme.colors.text }}>
                   {t("learning_hours")}
                 </Text>
-                <Text style={{ fontSize: 24, color: theme.colors.text }}>0</Text>
+                <Text style={{ fontSize: 24, color: theme.colors.text }}>
+                  0
+                </Text>
               </View>
               <View style={styles.infoSection}>
                 <Text style={{ textAlign: "center", color: theme.colors.text }}>
                   {t("lessons_completed")}
                 </Text>
-                <Text style={{ fontSize: 24, color: theme.colors.text }}>0</Text>
+                <Text style={{ fontSize: 24, color: theme.colors.text }}>
+                  0
+                </Text>
               </View>
             </View>
-            <Text style={{ color: theme.colors.text }}>{t("skills_you_learned")}:</Text>
+            <Text style={{ color: theme.colors.text }}>
+              {t("skills_you_learned")}:
+            </Text>
             <Line />
             <View style={styles.skillList}>
               <SkillBadge text={t("start_learning")} />
             </View>
           </View>
 
-          <View style={[styles.object, styles.huge, { backgroundColor: theme.colors.card }]}>
-            <Text style={{ width: "80%", fontSize: 16, color: theme.colors.text }}>
+          <View
+            style={[
+              styles.object,
+              styles.huge,
+              { backgroundColor: theme.colors.card },
+            ]}
+          >
+            <Text
+              style={{ width: "80%", fontSize: 16, color: theme.colors.text }}
+            >
               {t("your_wallet")}
             </Text>
             <Line />
-            <Text style={{ fontSize: 10, color: theme.colors.text }}>{t("balance_title")}</Text>
+            <Text style={{ fontSize: 10, color: theme.colors.text }}>
+              {t("balance_title")}
+            </Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ width: "50%", fontSize: 18, color: theme.colors.text }}>{t("in_development")}</Text>
+              <Text
+                style={{ width: "50%", fontSize: 18, color: theme.colors.text }}
+              >
+                {t("in_development")}
+              </Text>
               <Pressable
                 style={{
                   backgroundColor: theme.colors.primary,
@@ -127,8 +184,20 @@ const Profile = () => {
 
           <Link href="/teaching" asChild>
             <Pressable>
-              <View style={[styles.object, styles.oneLine, { backgroundColor: theme.colors.card }]}>
-                <Text style={{ width: "80%", fontSize: 16, color: theme.colors.text }}>
+              <View
+                style={[
+                  styles.object,
+                  styles.oneLine,
+                  { backgroundColor: theme.colors.card },
+                ]}
+              >
+                <Text
+                  style={{
+                    width: "80%",
+                    fontSize: 16,
+                    color: theme.colors.text,
+                  }}
+                >
                   {t("become_teacher")}
                 </Text>
                 <View style={styles.iconContainer}>
@@ -144,8 +213,20 @@ const Profile = () => {
 
           <Link href="/settings" asChild>
             <Pressable>
-              <View style={[styles.object, styles.oneLine, { backgroundColor: theme.colors.card }]}>
-                <Text style={{ width: "80%", fontSize: 16, color: theme.colors.text }}>
+              <View
+                style={[
+                  styles.object,
+                  styles.oneLine,
+                  { backgroundColor: theme.colors.card },
+                ]}
+              >
+                <Text
+                  style={{
+                    width: "80%",
+                    fontSize: 16,
+                    color: theme.colors.text,
+                  }}
+                >
                   {t("settings")}
                 </Text>
                 <View style={styles.iconContainer}>
@@ -161,8 +242,22 @@ const Profile = () => {
 
           <Link href="/about" asChild>
             <Pressable>
-              <View style={[styles.object, styles.oneLine, { backgroundColor: theme.colors.card }]}>
-                <Text style={{ width: "80%", fontSize: 16, color: theme.colors.text }}>{t("about")}</Text>
+              <View
+                style={[
+                  styles.object,
+                  styles.oneLine,
+                  { backgroundColor: theme.colors.card },
+                ]}
+              >
+                <Text
+                  style={{
+                    width: "80%",
+                    fontSize: 16,
+                    color: theme.colors.text,
+                  }}
+                >
+                  {t("about")}
+                </Text>
                 <View style={styles.iconContainer}>
                   <FontAwesome
                     size={24}
@@ -178,7 +273,9 @@ const Profile = () => {
             onPress={copyToClipboard}
             style={[styles.object, { backgroundColor: theme.colors.primary }]}
           >
-            <Text style={{ textAlign: "center", color: theme.colors.buttonText }}>
+            <Text
+              style={{ textAlign: "center", color: theme.colors.buttonText }}
+            >
               {t("invite_friends")}
             </Text>
           </Pressable>

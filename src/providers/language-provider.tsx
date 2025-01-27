@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { LanguageCode, translate, changeLanguage, loadSavedLanguage } from "../locales";
+import {
+  LanguageCode,
+  translate,
+  changeLanguage,
+  loadSavedLanguage,
+} from "../locales";
 
 type LanguageContextType = {
   language: LanguageCode;
