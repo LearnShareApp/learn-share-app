@@ -38,9 +38,10 @@ const formatDateTime = (date: Date): string => {
 };
 
 export default function BookLesson() {
-  const { id, category_id } = useLocalSearchParams<{
+  const { id, category_id, teacher_id } = useLocalSearchParams<{
     id: string;
     category_id?: string;
+    teacher_id?: string;
   }>();
   const router = useRouter();
   const { t } = useLanguage();

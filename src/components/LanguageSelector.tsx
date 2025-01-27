@@ -44,14 +44,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         borderRadius: 8,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
+        overflow: "hidden",
     },
     languageButton: {
         paddingVertical: 8,
         paddingHorizontal: 16,
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 4,
     },
     buttonWithBorder: {
         borderRightWidth: 1,

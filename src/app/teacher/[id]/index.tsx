@@ -12,29 +12,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import SkillBadge from "../../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
-import YoutubePlayer from "react-native-youtube-iframe";
 import Line from "../../../components/line";
 import ReviewItem from "../../../components/review-item";
 import { apiService, TeacherProfile } from "../../../utilities/api";
 import { useLanguage } from "../../../providers/language-provider";
 import { useTheme } from "../../../providers/theme-provider";
 
-interface Review {
-  id: number;
-  teacherId: number;
-}
-
-const extractYoutubeId = (url: string): string => {
-  const regExp =
-    /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|watch\?v=|\&v=))([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[1].length === 11 ? match[1] : "";
-};
-
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, category_id } = useLocalSearchParams<{ id: string, category_id?: string }>();
   const router = useRouter();
 
   const { t } = useLanguage();
@@ -90,8 +77,6 @@ const TeacherProfilePage = () => {
     );
   }
 
-  const videoId = extractYoutubeId(teacher.skills[0].video_card_link || "");
-
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Stack.Screen
@@ -103,10 +88,7 @@ const TeacherProfilePage = () => {
               style={[styles.bookBtn, { backgroundColor: theme.colors.primary }]}
               onPress={() => {
                 console.log("Navigating to:", `/teacher/${id}/book`);
-                router.push({
-                  pathname: `/teacher/${id}/book`,
-                  params: { category_id: teacher.skills[0].category_id },
-                });
+                router.push(`/teacher/${id}/book?category_id=${1}&teacher_id=${id}`);
               }}
             >
               <Text style={[styles.bookText, { color: theme.colors.buttonText }]}>{t("book_lesson")}</Text>
@@ -162,13 +144,13 @@ const TeacherProfilePage = () => {
               />
               <StatsItem
                 icon="graduation-cap"
-                value="1345"
+                value="0"
                 label={t("lessons")}
                 iconColor="#ccc"
               />
               <StatsItem
                 icon="user"
-                value="234"
+                value="0"
                 label={t("students")}
                 iconColor="#ccc"
               />
@@ -176,7 +158,7 @@ const TeacherProfilePage = () => {
             <Pressable
               style={[styles.bookBtnMain, { backgroundColor: theme.colors.primary }]}
               onPress={() => {
-                router.push(`/teacher/${id}/book?category_id=${1}`);
+                router.push(`/teacher/${id}/book?category_id=${1}&teacher_id=${id}`);
               }}
             >
               <Text style={[styles.bookTextMain, { color: theme.colors.buttonText }]}>{t("book_lesson")}</Text>
