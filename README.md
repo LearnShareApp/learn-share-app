@@ -1,26 +1,3 @@
-# Instructions for developers
-
-## For Copying use
-
-```npm
-git clone https://github.com/LearnShareApp/learn-share-app.git
-```
-
-## Then install dependencies
-
-```npm
-npm i
-```
-
-## And start project with
-
-```npm
-npx expo start
-//or
-npx expo start -c
-```
-
-
 # Learn&Share - Техническое описание
 ## Общее описание
 Learn&Share - это мобильное приложение для обмена знаниями, где пользователи могут выступать как в роли учеников, так и преподавателей. Приложение разработано с использованием React Native и Expo.
