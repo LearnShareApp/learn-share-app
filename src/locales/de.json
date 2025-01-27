@@ -140,5 +140,7 @@
   "view_all": "Anzeigen",
   "no_requests": "Noch keine Anfragen",
   "here_will_be_your_video_soon": "Hier wird Ihr Video bald erscheinen",
-  "start_learning": "Starten Sie zu lernen"
+  "start_learning": "Starten Sie zu lernen",
+  "have_to_be_a_link": "Muss ein Link sein",
+  "have_to_be_a_link_to_your_youtube_video": "Muss ein Link zu Ihrem YouTube-Video sein"
 }
