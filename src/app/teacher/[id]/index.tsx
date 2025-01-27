@@ -9,32 +9,23 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import SkillBadge from "../../../components/skill";
 import { FontAwesome } from "@expo/vector-icons";
-import YoutubePlayer from "react-native-youtube-iframe";
 import Line from "../../../components/line";
 import ReviewItem from "../../../components/review-item";
-import { REVIEWS } from "../../../../assets/reviews";
 import { apiService, TeacherProfile } from "../../../utilities/api";
-
-interface Review {
-  id: number;
-  teacherId: number;
-}
-
-const extractYoutubeId = (url: string): string => {
-  const regExp =
-    /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|watch\?v=|\&v=))([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[1].length === 11 ? match[1] : "";
-};
+import { useLanguage } from "../../../providers/language-provider";
+import { useTheme } from "../../../providers/theme-provider";
 
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, category_id } = useLocalSearchParams<{ id: string, category_id?: string }>();
   const router = useRouter();
+
+  const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -70,125 +61,115 @@ const TeacherProfilePage = () => {
     }
   }, []);
 
-  const reviews = REVIEWS.filter(
-    (review: Review) => review.teacherId === Number(id)
-  );
-
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#C9A977" />
+      <View style={[styles.centerContainer, { backgroundColor: theme.colors.background }]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   if (error || !teacher) {
     return (
-      <View style={styles.centerContainer}>
-        <Text>Error: {error || "Teacher not found"}</Text>
+      <View style={[styles.centerContainer, { backgroundColor: theme.colors.background }]}>
+        <Text style={{ color: theme.colors.text }}>Error: {error || "Teacher not found"}</Text>
       </View>
     );
   }
 
-  const videoId = extractYoutubeId(teacher.skills[0].video_card_link || "");
-
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Stack.Screen
         options={{
           title: `${teacher.name} ${teacher.surname}`,
           headerRight: () => (
             <TouchableOpacity
               activeOpacity={0.6}
-              style={styles.bookBtn}
+              style={[styles.bookBtn, { backgroundColor: theme.colors.primary }]}
               onPress={() => {
                 console.log("Navigating to:", `/teacher/${id}/book`);
-                router.push({
-                  pathname: `/teacher/${id}/book`,
-                  params: { category_id: teacher.skills[0].category_id },
-                });
+                router.push(`/teacher/${id}/book?category_id=${1}&teacher_id=${id}`);
               }}
             >
-              <Text style={styles.bookText}>Book lesson</Text>
+              <Text style={[styles.bookText, { color: theme.colors.buttonText }]}>{t("book_lesson")}</Text>
             </TouchableOpacity>
           ),
         }}
       />
       <FlatList
-        data={reviews}
+        data={[{userName: 'tester',
+          grade: 5,
+          text: 'It is just a test, does not affect anything'}]}
         ListHeaderComponent={
           <View style={styles.headerContainer}>
-            <View style={styles.contentContainer}>
-              <YoutubePlayer
-                height={300}
-                videoId={videoId}
-                play={playing}
-                onChangeState={onStateChange}
-                onError={(e) => {
-                  console.error("YouTube Error: ", e);
-                }}
-              />
+            <View style={{height: 180,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: theme.colors.card, borderRadius: 8}}>
+              <Text style={{ color: theme.colors.text }}>{t("here_will_be_your_video_soon")}</Text>
             </View>
-            <View style={[styles.white, styles.mainCard]}>
+            <View style={[styles.white, styles.mainCard, { backgroundColor: theme.colors.card }]}>
               <Image
                 source={require("../../../../assets/icon.png")}
                 style={styles.image}
                 accessibilityLabel={`${teacher.name}'s profile picture`}
               />
               <View style={styles.teacherInfo}>
-                <Text style={styles.teacherName}>
+                <Text style={[styles.teacherName, { color: theme.colors.text }]}>
                   {teacher.name} {teacher.surname}
                 </Text>
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
                     <SkillBadge
-                      text={item.category_id.toString()}
+                      text={item.category_name}
                       key={item.skill_id}
                     />
                   ))}
                 </View>
               </View>
             </View>
-            <View style={styles.white}>
-              <Text style={styles.sectionTitle}>About me:</Text>
+            <View style={[styles.white, { backgroundColor: theme.colors.card }]}>
+              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{t("about_me")}:</Text>
               <Line />
-              <Text style={styles.aboutText}>
-                {teacher.skills[0].about || "No description available"}
+              <Text style={[styles.aboutText, { color: theme.colors.text }]}>
+                {teacher.skills[0].about || t("no_description")}
               </Text>
             </View>
-            <View style={[styles.white, styles.rate]}>
+            <View style={[styles.white, styles.rate, { backgroundColor: theme.colors.card }]}>
               <StatsItem
                 icon="star"
                 value={teacher.skills[0].rate.toFixed(1)}
-                label="rate"
+                label={t("rate")}
                 iconColor="gold"
               />
               <StatsItem
                 icon="graduation-cap"
-                value="1345"
-                label="lessons"
+                value="0"
+                label={t("lessons")}
                 iconColor="#ccc"
               />
               <StatsItem
                 icon="user"
-                value="234"
-                label="students"
+                value="0"
+                label={t("students")}
                 iconColor="#ccc"
               />
             </View>
             <Pressable
-              style={styles.bookBtnMain}
+              style={[styles.bookBtnMain, { backgroundColor: theme.colors.primary }]}
               onPress={() => {
-                router.push(`/teacher/${id}/book?category_id=${1}`);
+                router.push(`/teacher/${id}/book?category_id=${1}&teacher_id=${id}`);
               }}
             >
-              <Text style={styles.bookTextMain}>Book lesson</Text>
+              <Text style={[styles.bookTextMain, { color: theme.colors.buttonText }]}>{t("book_lesson")}</Text>
             </Pressable>
-            <Text style={styles.reviewsTitle}>Reviews ({reviews.length})</Text>
+            <Text style={[styles.reviewsTitle, { color: theme.colors.text }]}>
+              {t("teacher_reviews")} (1)
+            </Text>
           </View>
         }
         renderItem={({ item }) => <ReviewItem review={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.userName}
         contentContainerStyle={styles.listContainer}
       />
     </View>
@@ -205,19 +186,21 @@ const StatsItem = ({
   value: string;
   label: string;
   iconColor: string;
-}) => (
-  <View style={styles.rates}>
-    <Text style={icon === "star" ? styles.goldText : undefined}>
-      <FontAwesome size={18} name={icon} style={{ color: iconColor }} /> {value}
-    </Text>
-    <Text style={styles.labelText}>{label}</Text>
-  </View>
-);
+}) => {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.rates}>
+      <Text style={{ color: theme.colors.text }}>
+        <FontAwesome size={18} name={icon} style={{ color: icon === "star" ? theme.colors.primary : theme.colors.text }} /> {value}
+      </Text>
+      <Text style={[styles.labelText, { color: theme.colors.text }]}>{label}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
   },
   centerContainer: {
     flex: 1,
@@ -227,12 +210,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     gap: 12,
   },
-  contentContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
   white: {
-    backgroundColor: "white",
     borderRadius: 8,
     gap: 8,
     paddingHorizontal: 16,

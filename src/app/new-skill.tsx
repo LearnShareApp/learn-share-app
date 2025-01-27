@@ -16,6 +16,7 @@ import { apiService, Category, Skill } from "../utilities/api";
 import axios from "axios";
 import { router } from "expo-router";
 import { useTeacher } from "../utilities/teacher-hook";
+import { useLanguage } from "../providers/language-provider";
 
 const youtubeUrlRegex =
   /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
@@ -27,12 +28,13 @@ const authSchema = zod.object({
     .url("Have to be a link")
     .refine(
       (url) => youtubeUrlRegex.test(url),
-      "Have to be a link to your YouTube video"
+      "Мора да буде линк до вашег YouTube видеа"
     ),
-  about: zod.string().min(8, "Describe yourself for students!"),
+  about: zod.string().min(8, "Опишите се ученицима!"),
 });
 
 const SkillAdding = () => {
+  const { t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategory, setLoadingCategory] = useState(true);
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
@@ -83,7 +85,7 @@ const SkillAdding = () => {
         about: data.about,
       };
       const response = await apiService.addSkill(postData);
-      Toast.show("Signed in successfully", {
+      Toast.show(t("request_success"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -93,7 +95,7 @@ const SkillAdding = () => {
       if (axios.isAxiosError(error)) {
         const errorMessage =
           error.response?.data?.error || "An unknown error occurred";
-        Toast.show(errorMessage, {
+        Toast.show(t("unknown_error"), {
           type: "warning",
           placement: "top",
           duration: 3000,
@@ -101,8 +103,8 @@ const SkillAdding = () => {
         console.log(errorMessage);
       } else {
         console.error("Unexpected error:", error);
-        Toast.show("An unexpected error occurred", {
-          type: "warning",
+        Toast.show(t("unexpected_error"), {
+          type: "error",
           placement: "top",
           duration: 3000,
         });
@@ -116,8 +118,8 @@ const SkillAdding = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Add your skill</Text>
-        <Text style={styles.subtitle}>Please register your new skill:</Text>
+        <Text style={styles.title}>{t("add_skill")}</Text>
+        <Text style={styles.subtitle}>{t("register_new_skill")}</Text>
 
         <Controller
           control={control}
@@ -138,7 +140,7 @@ const SkillAdding = () => {
                   onChange(newValue);
                 }}
                 setItems={setItems}
-                placeholder="Choose skill"
+                placeholder={t("select_category")}
                 style={styles.dropDown}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
@@ -155,7 +157,7 @@ const SkillAdding = () => {
           }) => (
             <>
               <TextInput
-                placeholder="link to YouTube promo video"
+                placeholder={t("youtube_link")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -178,7 +180,7 @@ const SkillAdding = () => {
           }) => (
             <>
               <TextInput
-                placeholder="describe your skill"
+                placeholder={t("describe_your_skill")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -186,6 +188,7 @@ const SkillAdding = () => {
                 placeholderTextColor="#aaa"
                 autoCapitalize="none"
                 editable={!formState.isSubmitting}
+                multiline={true}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
             </>
@@ -198,7 +201,7 @@ const SkillAdding = () => {
           disabled={formState.isSubmitting}
           activeOpacity={0.6}
         >
-          <Text style={styles.buttonText}>Add Skill</Text>
+          <Text style={styles.buttonText}>Додај вештину</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

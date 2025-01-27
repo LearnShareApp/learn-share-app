@@ -2,6 +2,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
+// const BACKEND_URL = "http://adoe.ru:81";
 const BACKEND_URL = "http://192.168.1.8:81";
 
 export interface LoginData {
@@ -28,7 +29,7 @@ export interface AddTimeData {
 export interface LessonRequestData {
   teacher_id: number;
   category_id: number;
-  datetime_id: number;
+  schedule_time_id: number;
 }
 
 export interface LoginResponse {
@@ -85,6 +86,36 @@ export interface TeacherProfile {
   surname: string;
   birthdate: string;
   skills: TeacherSkill[];
+}
+
+export interface TeacherLesson {
+  lesson_id: number;
+  student_id: number;
+  student_name: string;
+  student_surname: string;
+  category_id: number;
+  category_name: string;
+  status: string;
+  datetime: Date;
+}
+
+export interface Lesson {
+  lesson_id: number;
+  teacher_id: number;
+  teacher_name: string;
+  teacher_surname: string;
+  category_id: number;
+  category_name: string;
+  status: string;
+  datetime: Date;
+}
+
+export interface TeacherLessonResponse {
+  lessons: TeacherLesson[];
+}
+
+export interface LessonResponse {
+  lessons: Lesson[];
 }
 
 export interface TeachersResponse {
@@ -152,9 +183,28 @@ class ApiService {
   }
 
   async lessonRequest(data: LessonRequestData): Promise<String> {
-    return data.category_id.toString();
-    // const response = await this.api.post("/api/teacher/skill", data);
-    // return response.statusText;
+    const response = await this.api.post("/api/lesson", data);
+    return response.statusText;
+  }
+
+  async lessonApprove(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/approve`);
+    return response.statusText;
+  }
+
+  async lessonCancel(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/cancel`);
+    return response.statusText;
+  }
+
+  async lessonFinish(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/finish`);
+    return response.statusText;
+  }
+
+  async lessonStart(id: number): Promise<String> {
+    const response = await this.api.put(`/api/lessons/${id}/start`);
+    return response.statusText;
   }
 
   async getCategories(): Promise<Category[]> {
@@ -172,6 +222,24 @@ class ApiService {
     return response.data;
   }
 
+  async getTeacherLessons(): Promise<TeacherLesson[]> {
+    const response = await this.api.get<TeacherLessonResponse>(
+      "/api/teacher/lessons"
+    );
+    return response.data.lessons;
+  }
+
+  async getLessons(): Promise<Lesson[]> {
+    const response = await this.api.get<LessonResponse>("/api/lessons");
+    return response.data.lessons;
+  }
+
+  async getLessonToken(id: number): Promise<string> {
+    const response = await this.api.get<{ token: string }>(`/api/lessons/${id}/join`);
+    return response.data.token;
+  }
+
+
   async getTeachers(): Promise<TeacherProfile[]> {
     const response = await this.api.get<TeachersResponse>("/api/teachers");
     return response.data.teachers || [];
@@ -184,6 +252,11 @@ class ApiService {
 
   async request<T>(config: AxiosRequestConfig): Promise<T> {
     const response = await this.api.request<T>(config);
+    return response.data;
+  }
+
+  async getRoomToken(lessonId: string): Promise<{ token: string }> {
+    const response = await this.api.get(`/api/lesson/${lessonId}/token`);
     return response.data;
   }
 }

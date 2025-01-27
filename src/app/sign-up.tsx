@@ -17,12 +17,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../providers/language-provider";
+import { LanguageSelector } from "../components/LanguageSelector";
 
 const authSchema = zod.object({
-  email: zod.string().email({ message: "Invalid email address" }),
+  email: zod.string().email({ message: "Неважећа адреса " }),
   password: zod
     .string()
-    .min(4, { message: "Password must be at least 8 characters long" }),
+    .min(4, { message: "Лозинка мора да има најмање 4 знака" }),
   name: zod.string(),
   surname: zod.string(),
   birthdate: zod.date(),
@@ -33,6 +35,8 @@ type AuthFormData = zod.infer<typeof authSchema>;
 const SignUp = () => {
   const { token, signIn } = useAuth();
   if (token) return <Redirect href={"/"} />;
+
+  const { t } = useLanguage();
 
   const [showPicker, setShowPicker] = useState(false);
 
@@ -51,7 +55,7 @@ const SignUp = () => {
     try {
       const response = await apiService.signUp(data);
       await signIn(response.token);
-      Toast.show("Signed up successfully", {
+      Toast.show(t("successfully_signed_up"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -80,8 +84,8 @@ const SignUp = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.subtitle}>Please register to continue</Text>
+        <Text style={styles.title}>{t("welcome")}</Text>
+        <Text style={styles.subtitle}>{t("sign_up")}</Text>
 
         <Controller
           control={control}
@@ -92,7 +96,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="name"
+                placeholder={t("first_name")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -115,7 +119,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="surname"
+                placeholder={t("last_name")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -161,7 +165,7 @@ const SignUp = () => {
           }) => (
             <>
               <TextInput
-                placeholder="password"
+                placeholder={t("password")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -180,7 +184,7 @@ const SignUp = () => {
           control={control}
           name="birthdate"
           rules={{
-            required: "Date of birth is required",
+            required: t("birthdate_required"),
           }}
           render={({
             field: { value, onChange, onBlur },
@@ -198,7 +202,7 @@ const SignUp = () => {
             >
               <Button
                 color="#C9A977"
-                title={value ? value.toDateString() : "select Date of Birth"}
+                title={value ? value.toLocaleDateString() : t("select_date_of_birth")}
                 onPress={() => setShowPicker(true)}
               />
               <Text
@@ -207,7 +211,7 @@ const SignUp = () => {
                   fontSize: 16,
                 }}
               >
-                Your birthdate:
+                {t("your_date_of_birth")}:
               </Text>
               {showPicker && (
                 <DateTimePicker
@@ -232,14 +236,17 @@ const SignUp = () => {
           onPress={handleSubmit(signUp)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>{t("sign_up")}</Text>
         </TouchableOpacity>
 
         <Link href={"/sign-in"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            or Sign In
+            {t("or_you_have_an_account")}
           </Text>
         </Link>
+      </View>
+      <View style={{ width: "100%", padding: 16, alignItems: "center" }}>
+        <LanguageSelector />
       </View>
     </SafeAreaView>
   );
@@ -294,6 +301,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
+    width: "80%",
   },
   error: {
     color: "red",

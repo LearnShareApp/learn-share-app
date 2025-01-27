@@ -1,6 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import {
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -14,19 +15,25 @@ import { Link, Redirect } from "expo-router";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../providers/language-provider";
+import { LanguageSelector } from "../components/LanguageSelector";
+import { useTheme } from "../providers/theme-provider";
 
 const authSchema = zod.object({
-  email: zod.string().email({ message: "Invalid email address" }),
+  email: zod.string().email({ message: "Неважећа адреса" }),
   password: zod
     .string()
-    .min(4, { message: "Password must be at least 4 characters long" }),
+    .min(4, { message: "Лозинка мора да има најмање 4 знака" }),
 });
 
 type AuthFormData = zod.infer<typeof authSchema>;
 
 const Auth = () => {
+  const { theme, isDark, toggleTheme } = useTheme();
   const { token, signIn } = useAuth();
   if (token) return <Redirect href="/" />;
+
+  const { t } = useLanguage();
 
   const { control, handleSubmit, formState } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
@@ -40,7 +47,7 @@ const Auth = () => {
     try {
       const response = await apiService.login(data);
       await signIn(response.token);
-      Toast.show("Signed in successfully", {
+      Toast.show(t("successfully_signed_in"), {
         type: "success",
         placement: "top",
         duration: 1500,
@@ -48,7 +55,7 @@ const Auth = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
-          error.response?.data?.error || "An unknown error occurred";
+          error.response?.data?.error || t("an_unknown_error_occurred");
         Toast.show(errorMessage, {
           type: "warning",
           placement: "top",
@@ -58,7 +65,7 @@ const Auth = () => {
         console.log(errorMessage);
       } else {
         console.error("Unexpected error:", error);
-        Toast.show("An unexpected error occurred", {
+        Toast.show(t("an_unexpected_error_occurred"), {
           type: "warning",
           placement: "top",
           duration: 3000,
@@ -70,8 +77,14 @@ const Auth = () => {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.subtitle}>Please Authenticate to continue</Text>
+      {/* <Switch
+            value={isDark}
+            onValueChange={toggleTheme}
+            trackColor={{ false: "#767577", true: theme.colors.primary }}
+            thumbColor={isDark ? theme.colors.card : "#f4f3f4"}
+          /> */}
+      <Text style={styles.title}>{t('welcome')}</Text>
+      <Text style={styles.subtitle}>{t('enter_credentials')}</Text>
 
         <Controller
           control={control}
@@ -105,7 +118,7 @@ const Auth = () => {
           }) => (
             <>
               <TextInput
-                placeholder="password"
+                placeholder={t("password")}
                 style={styles.input}
                 value={value}
                 onChangeText={onChange}
@@ -125,15 +138,18 @@ const Auth = () => {
           onPress={handleSubmit(signInFunction)}
           disabled={formState.isSubmitting}
         >
-          <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.buttonText}>{t("sign_in")}</Text>
         </TouchableOpacity>
 
         <Link href={"/sign-up"}>
           <Text style={[styles.buttonText, styles.signUpButtonText]}>
-            or Sign Up
+            {t("or_register_a_new_account")}
           </Text>
         </Link>
       </View>
+      <View style={{ width: "100%", padding: 16, alignItems: "center" }}>
+        <LanguageSelector />
+      </View> 
     </SafeAreaView>
   );
 };
@@ -158,6 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#aaa",
     marginBottom: 32,
+    textAlign: "center",
   },
   input: {
     width: "90%",
@@ -183,11 +200,15 @@ const styles = StyleSheet.create({
   },
   signUpButtonText: {
     color: "#C9A977",
+    textAlign: "center",
+    width: "70%",
   },
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
+    width: "80%",
   },
   error: {
     color: "red",

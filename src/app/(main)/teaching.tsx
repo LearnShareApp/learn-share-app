@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Pressable,
@@ -8,77 +9,177 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import { LESSONS } from "../../../assets/lessons";
 import LessonItem from "../../components/lesson-item";
 import HeaderElement from "../../components/header-element";
 import { useTeacher } from "../../utilities/teacher-hook";
+import { apiService, TeacherLesson } from "../../utilities/api";
+import { Toast } from "react-native-toast-notifications";
+import { useLanguage } from "../../providers/language-provider";
+import { useFocusEffect } from '@react-navigation/native';
+import EventEmitter from "../../utilities/event-emitter";
+import { useTheme } from "../../providers/theme-provider";
+
 
 const Teaching = () => {
-  const { teacher, loading, error } = useTeacher();
+  const { theme } = useTheme();
+  const { t } = useLanguage();
+  const { teacher, loadingTeacher, errorTeacher } = useTeacher();
 
-  if (loading) {
-    return <HeaderElement text="Loading..." requireChanges requireSettings />;
+  const [lessons, setLessons] = useState<TeacherLesson[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchLessons = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getTeacherLessons();
+      const sortedLessons = response.sort((a, b) => {
+        const dateA = new Date(a.datetime);
+        const dateB = new Date(b.datetime);
+        return dateA.getTime() - dateB.getTime();
+      });
+      setLessons(sortedLessons || []);
+    } catch (err) {
+      console.error("Error details:", err);
+      setError(t("failed_fetch_teachers"));
+      setLessons([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Обновление при фокусе на экране
+  useFocusEffect(
+    useCallback(() => {
+      fetchLessons();
+    }, [])
+  );
+
+  // Подписка на событие обновления уроков
+  useEffect(() => {
+    const subscription = EventEmitter.addListener('lessonsUpdated', () => {
+      fetchLessons();
+    });
+
+    return () => subscription.remove();
+  }, []);
+
+  if (loadingTeacher) {
+    return <>
+      <HeaderElement text="Loading..." requireChanges requireSettings />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: theme.colors.background }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    </>;
   }
 
   if (teacher)
     return (
       <>
-        <HeaderElement text="Teaching" requireChanges requireSettings />
+        <HeaderElement text={t("teaching")} requireChanges requireSettings />
         <View
-          style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
+          style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 8, gap: 8, backgroundColor: theme.colors.background }}
         >
           <View style={styles.topNav}>
             <Link href={"/requests"} asChild>
-              <Pressable style={styles.navBtn}>
+            <Pressable style={{
+                width: "48%",
+                minHeight: 32,
+                borderRadius: 8,
+                padding: 16,
+                gap: 8,
+                alignItems: "center",
+                backgroundColor: theme.colors.card }}>
                 <FontAwesome
                   size={24}
                   name="bell"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>New requests (0)</Text>
+                <Text style={{ textAlign: "center", color: theme.colors.text }}>
+                  {t("new_requests")} (
+                  {
+                    lessons.filter((lesson) => lesson.status == "verification")
+                      .length
+                  }
+                  )
+                </Text>
               </Pressable>
             </Link>
 
             <Link href={"/schedule"} asChild>
-              <Pressable style={styles.navBtn}>
+              <Pressable style={{
+                width: "48%",
+                minHeight: 32,
+                borderRadius: 8,
+                padding: 16,
+                gap: 8,
+                alignItems: "center",
+                backgroundColor: theme.colors.card
+              }}>
                 <FontAwesome
                   size={24}
                   name="calendar"
                   style={{ color: "#C9A977" }}
                 />
-                <Text style={{ textAlign: "center" }}>My schedule</Text>
+                <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("my_schedule")}</Text>
               </Pressable>
             </Link>
           </View>
           <Link href={"/stats"} asChild>
-            <Pressable style={styles.navBtnSkills}>
+            <Pressable style={{
+              width: "100%",
+              borderRadius: 8,
+              padding: 24,
+              gap: 12,
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: theme.colors.card
+            }}>
               <FontAwesome
                 size={24}
                 name="pie-chart"
                 style={{ color: "#C9A977" }}
               />
-              <Text style={{ textAlign: "center" }}>Manage my skills</Text>
+              <Text style={{ textAlign: "center", color: theme.colors.text }}>{t("manage_skills")}</Text>
             </Pressable>
           </Link>
-          <Text style={{ fontSize: 20, paddingHorizontal: 16 }}>
-            Your next lessons:
+          <Text style={{ fontSize: 20, paddingHorizontal: 16, color: theme.colors.text }}>
+            {t("next_lesson")}:
           </Text>
-          <FlatList
-            data={LESSONS}
-            renderItem={(item) => <LessonItem lesson={item.item} forTeacher />}
-            contentContainerStyle={{ gap: 8 }}
-          />
+
+          {lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled")
+            .length ? (
+            <FlatList
+              data={lessons.filter((lesson) => lesson.status !== "verification" && lesson.status !== "cancelled" && lesson.status !== "finished")}
+              renderItem={(item) => (
+                <LessonItem lesson={item.item} forTeacher />
+              )}
+              contentContainerStyle={{ gap: 8 }}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ textAlign: "center", color: "#999" }}>
+                {t("no_lessons")}
+              </Text>
+            </View>
+          )}
         </View>
       </>
     );
   return (
     <>
       <HeaderElement text="Teaching" requireChanges requireSettings />
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={[styles.card]}>
+      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach1.png")}
@@ -88,12 +189,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>Wanna teach? Your are welcome!</Text>
-            <Text>You can start just in 3 easy steps:</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_welcome")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_intro")}</Text>
           </View>
         </View>
 
-        <View style={[styles.card]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach2.png")}
@@ -103,12 +204,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>1: Make a YouTube video</Text>
-            <Text>Where you describe and show your skill</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step1")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_step1_desc")}</Text>
           </View>
         </View>
 
-        <View style={[styles.card]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach3.png")}
@@ -118,14 +219,12 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>
-              2: Make a requests to register your skill
-            </Text>
-            <Text>With link on your youtube video and text description</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step2")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_step2_desc")}</Text>
           </View>
         </View>
 
-        <View style={[styles.card]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <View style={styles.imagePart}>
             <Image
               source={require("../../../assets/teach4.png")}
@@ -135,14 +234,16 @@ const Teaching = () => {
           </View>
 
           <View style={styles.textPart}>
-            <Text style={styles.cardText}>3: Wait until approvement</Text>
-            <Text>We need some time to check you request</Text>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{t("teach_step3")}</Text>
+            <Text style={{ color: theme.colors.text }}>{t("teach_step3_desc")}</Text>
           </View>
         </View>
 
         <Link href={"/new-skill"} asChild>
-          <TouchableOpacity activeOpacity={0.6} style={styles.btn}>
-            <Text style={styles.text}>Start sharing my skills</Text>
+          <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: theme.colors.primary,padding: 16,
+    marginVertical: 32,
+    borderRadius: 8, }}>
+            <Text style={[styles.text, { color: theme.colors.text }]}>{t("start_sharing")}</Text>
           </TouchableOpacity>
         </Link>
       </ScrollView>
@@ -157,12 +258,6 @@ const styles = StyleSheet.create({
     gap: 16,
     alignItems: "center",
     paddingBottom: 24,
-  },
-  btn: {
-    padding: 16,
-    marginVertical: 32,
-    backgroundColor: "#C9A977",
-    borderRadius: 8,
   },
   text: {
     textAlign: "center",
@@ -180,24 +275,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-  },
-  navBtn: {
-    width: "48%",
-    backgroundColor: "white",
-    minHeight: 32,
-    borderRadius: 8,
-    padding: 16,
-    gap: 8,
-    alignItems: "center",
-  },
-  navBtnSkills: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 24,
-    gap: 12,
-    flexDirection: "row",
-    alignItems: "center",
   },
   imagePart: {
     width: "100%",

@@ -19,11 +19,12 @@ import {
   TeacherProfile,
 } from "../../../utilities/api";
 import axios from "axios";
+import { useLanguage } from "../../../providers/language-provider";
+import { useTheme } from "../../../providers/theme-provider";
 
 const authSchema = zod.object({
-  teacher_id: zod.number(),
   category_id: zod.number(),
-  datetime_id: zod.number(),
+  schedule_time_id: zod.number(),
 });
 
 // Функция форматирования даты
@@ -37,11 +38,14 @@ const formatDateTime = (date: Date): string => {
 };
 
 export default function BookLesson() {
-  const { id, category_id } = useLocalSearchParams<{
+  const { id, category_id, teacher_id } = useLocalSearchParams<{
     id: string;
     category_id?: string;
+    teacher_id?: string;
   }>();
   const router = useRouter();
+  const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [availableTimes, setAvailableTimes] = useState<DateTime[]>([]);
@@ -62,9 +66,8 @@ export default function BookLesson() {
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      teacher_id: Number(id),
       category_id: category_id ? Number(category_id) : -1,
-      datetime_id: -1,
+      schedule_time_id: -1,
     },
   });
 
@@ -72,14 +75,12 @@ export default function BookLesson() {
     const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        // Загрузка данных учителя
         const teacherResponse = await apiService.getTeacherById(id);
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
         setTeacher(teacherResponse);
 
-        // Загрузка доступного времени
         const timesResponse = await apiService.getTimeById(id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available
@@ -111,7 +112,7 @@ export default function BookLesson() {
     if (teacher?.skills) {
       const items = teacher.skills.map((skill) => ({
         label: skill.category_name,
-        value: skill.skill_id.toString(),
+        value: skill.category_id.toString(),
       }));
       setSkillItems(items);
     }
@@ -130,13 +131,12 @@ export default function BookLesson() {
   const SendRequest = async (data: zod.infer<typeof authSchema>) => {
     try {
       const postData = {
-        teacher_id: data.teacher_id,
+        teacher_id: Number(id),
         category_id: data.category_id,
-        datetime_id: data.datetime_id,
+        schedule_time_id: data.schedule_time_id,
       };
 
       console.log("Sending request with data:", postData);
-
       await apiService.lessonRequest(postData);
       Toast.show("Request sent successfully", {
         type: "success",
@@ -166,22 +166,23 @@ export default function BookLesson() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#C9A977" />
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ color: theme.colors.text }}>{t("loading")}</Text>
       </View>
     );
   }
 
   if (error || !teacher) {
     return (
-      <View style={styles.container}>
-        <Text>Error: {error || "Teacher not found"}</Text>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <Text style={{ color: theme.colors.text }}>{t("teacher_not_found")}</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Controller
         control={control}
         name="category_id"
@@ -192,7 +193,11 @@ export default function BookLesson() {
               value={selectedSkill}
               items={skillItems}
               setOpen={setOpenSkill}
-              dropDownContainerStyle={{ borderColor: "transparent" }}
+              
+              dropDownContainerStyle={{ 
+                borderColor: "transparent",
+                backgroundColor: theme.colors.card 
+              }}
               setValue={(callback) => {
                 const newValue =
                   typeof callback === "function"
@@ -204,18 +209,22 @@ export default function BookLesson() {
                 }
               }}
               setItems={setSkillItems}
-              placeholder="Choose skill"
-              style={styles.dropDown}
+              placeholder={t("select_skill")}
+              style={[styles.dropDown, { 
+                backgroundColor: theme.colors.card,
+                borderColor: "transparent" 
+              }]}
+              textStyle={{ color: theme.colors.text }}
               zIndex={2000}
             />
-            {error && <Text style={styles.error}>{error.message}</Text>}
+            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
           </>
         )}
       />
 
       <Controller
         control={control}
-        name="datetime_id"
+        name="schedule_time_id"
         render={({ field: { onChange }, fieldState: { error } }) => (
           <>
             <DropDownPicker
@@ -223,7 +232,10 @@ export default function BookLesson() {
               value={selectedTime}
               items={timeItems}
               setOpen={setOpenTime}
-              dropDownContainerStyle={{ borderColor: "transparent" }}
+              dropDownContainerStyle={{ 
+                borderColor: "transparent",
+                backgroundColor: theme.colors.card 
+              }}
               setValue={(callback) => {
                 const newValue =
                   typeof callback === "function"
@@ -235,21 +247,27 @@ export default function BookLesson() {
                 }
               }}
               setItems={setTimeItems}
-              placeholder="Choose time"
-              style={styles.dropDown}
+              placeholder={t("select_time")}
+              style={[styles.dropDown, { 
+                backgroundColor: theme.colors.card,
+                borderColor: "transparent" 
+              }]}
+              textStyle={{ color: theme.colors.text }}
               zIndex={1000}
             />
-            {error && <Text style={styles.error}>{error.message}</Text>}
+            {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error.message}</Text>}
           </>
         )}
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: theme.colors.primary }]}
         onPress={handleSubmit(SendRequest)}
         disabled={formState.isSubmitting}
       >
-        <Text style={styles.buttonText}>Book Lesson</Text>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>
+          {t("book_lesson")}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -266,31 +284,25 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     marginBottom: 16,
     borderRadius: 8,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    color: "#000",
     fontSize: 16,
     alignSelf: "center",
-    borderColor: "transparent",
   },
   error: {
-    color: "red",
     fontSize: 12,
     marginBottom: 16,
     textAlign: "left",
     width: "90%",
   },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-  },
   button: {
-    backgroundColor: "#C9A977",
     padding: 16,
     borderRadius: 8,
     marginBottom: 16,
     width: "100%",
     maxWidth: 600,
     alignItems: "center",
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
