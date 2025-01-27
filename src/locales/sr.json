@@ -138,5 +138,9 @@
   "start_learning": "Започните учење",
   "have_to_be_a_link": "Мора да буде линк",
   "have_to_be_a_link_to_your_youtube_video": "Мора да буде линк до вашег YouTube видеа",
-  "start_lesson": "Започни"
+  "start_lesson": "Започни",
+  "confirm_end_call": "Јесте ли сигурни да желите да закључите позив?",
+  "yes": "Да",
+  "no": "Не",
+  "participant_of_the_world_of_learning": "Ученик света учења"
 }

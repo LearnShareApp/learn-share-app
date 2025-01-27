@@ -48,6 +48,7 @@ const Finish = () => {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
+      <Text>{t("lesson_finished")}</Text>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: theme.colors.primary }]}
         onPress={lessonCancel}

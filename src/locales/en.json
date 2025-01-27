@@ -143,5 +143,9 @@
   "start_learning": "Start learning",
   "have_to_be_a_link": "Have to be a link",
   "have_to_be_a_link_to_your_youtube_video": "Have to be a link to your YouTube video",
-  "start_lesson": "Begin"
+  "start_lesson": "Begin",
+  "confirm_end_call": "Are you sure you want to end the call?",
+  "yes": "Yes",
+  "no": "No",
+  "participant_of_the_world_of_learning": "Participant of the world of learning"
 }

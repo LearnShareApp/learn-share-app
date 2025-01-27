@@ -1,8 +1,10 @@
 import { Stack } from "expo-router";
 import { useTheme } from "../../providers/theme-provider";
+import { useLanguage } from "../../providers/language-provider";
 
 export default function LessonsLayout() {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   return (
     <Stack
       screenOptions={{
@@ -21,7 +23,7 @@ export default function LessonsLayout() {
     >
       <Stack.Screen
         name="index"
-        options={{ title: "Your lessons", headerShown: true }}
+        options={{ title: t("your_lessons"), headerShown: true }}
       />
       <Stack.Screen
         name="[id]"

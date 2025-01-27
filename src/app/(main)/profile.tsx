@@ -83,7 +83,7 @@ const Profile = () => {
                 {profile?.name} {profile?.surname}
               </Text>
               <Text style={{ color: theme.colors.text }}>
-                {t("since_joined_the_world_of_learning")}
+                {t("participant_of_the_world_of_learning")}
               </Text>
             </View>
           </View>

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Text,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -26,7 +27,7 @@ import { apiService } from "../../utilities/api";
 
 registerGlobals();
 
-const wsURL = "wss://learn-and-share-app-raalcu2w.livekit.cloud"
+const wsURL = "wss://learn-and-share-app-raalcu2w.livekit.cloud";
 
 export default function Lesson() {
   const { id, lesson_id } = useLocalSearchParams();
@@ -34,6 +35,7 @@ export default function Lesson() {
   const [isLoading, setIsLoading] = useState(true);
   const [roomToken, setRoomToken] = useState<string | null>(null);
   const [isCallActive, setIsCallActive] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const getRoomToken = async () => {
@@ -66,9 +68,12 @@ export default function Lesson() {
     };
   }, []);
 
-  
-  
   const handleEndCall = () => {
+    setIsModalVisible(true);
+  };
+
+  const confirmEndCall = () => {
+    setIsModalVisible(false);
     setIsCallActive(false);
     Toast.show(t("call_ended"), {
       type: "success",
@@ -117,6 +122,32 @@ export default function Lesson() {
       video={true}
     >
       <RoomView onEndCall={handleEndCall} />
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{t("confirm_end_call")}</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={confirmEndCall}
+              >
+                <Text style={styles.modalButtonText}>{t("yes")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setIsModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>{t("no")}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </LiveKitRoom>
   );
 }
@@ -206,5 +237,37 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 24,
     fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "white",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  modalButton: {
+    padding: 10,
+    borderRadius: 5,
+    width: "40%",
+    alignItems: "center",
+    backgroundColor: "#C9A977",
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 16,
   },
 });

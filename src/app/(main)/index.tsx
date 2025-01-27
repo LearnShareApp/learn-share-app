@@ -143,7 +143,7 @@ const Home = () => {
               <Text style={{ color: theme.colors.text }}>
                 {t("your_lessons")}
               </Text>
-              <Link href="/lessons" asChild>
+              <Link href="/rooms" asChild>
                 <Text style={{ color: "#888" }}>
                   {t("view_all")} {">"}
                 </Text>

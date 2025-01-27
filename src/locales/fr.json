@@ -141,5 +141,9 @@
   "start_learning": "Commencer à apprendre",
   "have_to_be_a_link": "Doit être un lien",
   "have_to_be_a_link_to_your_youtube_video": "Doit être un lien vers votre vidéo YouTube",
-  "start_lesson": "Commencer"
+  "start_lesson": "Commencer",
+  "confirm_end_call": "Voulez-vous vraiment terminer l'appel ?",
+  "yes": "Oui",
+  "no": "Non",
+  "participant_of_the_world_of_learning": "Participant du monde de l'apprentissage"
 }

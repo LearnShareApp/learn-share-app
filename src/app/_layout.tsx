@@ -5,12 +5,13 @@ import { Platform } from "react-native";
 import { useEffect } from "react";
 import { ToastProvider } from "react-native-toast-notifications";
 import { AuthProvider } from "../providers/auth-provider";
-import { LanguageProvider } from "../providers/language-provider";
+import { LanguageProvider, useLanguage } from "../providers/language-provider";
 import { ThemeProvider, useTheme } from "../providers/theme-provider";
 import * as SecureStore from "expo-secure-store";
 
 const StackNavigator = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <Stack
@@ -52,31 +53,31 @@ const StackNavigator = () => {
       />
       <Stack.Screen
         name="requests"
-        options={{ headerShown: true, title: "New requests" }}
+        options={{ headerShown: true, title: t("new_requests") }}
       />
       <Stack.Screen
         name="stats"
-        options={{ headerShown: true, title: "Your stats" }}
+        options={{ headerShown: true, title: t("your_skills") }}
       />
       <Stack.Screen
         name="rooms"
-        options={{ headerShown: false, title: "Your Lessons" }}
+        options={{ headerShown: false, title: t("your_lessons") }}
       />
       <Stack.Screen
         name="settings"
-        options={{ headerShown: true, title: "Settings" }}
+        options={{ headerShown: true, title: t("settings") }}
       />
       <Stack.Screen
         name="teacher"
-        options={{ headerShown: false, title: "Teacher Profile" }}
+        options={{ headerShown: false, title: t("teacher_profile") }}
       />
       <Stack.Screen
         name="schedule"
-        options={{ headerShown: true, title: "My schedule" }}
+        options={{ headerShown: true, title: t("my_schedule") }}
       />
       <Stack.Screen
         name="about"
-        options={{ headerShown: true, title: "About" }}
+        options={{ headerShown: true, title: t("about") }}
       />
     </Stack>
   );
