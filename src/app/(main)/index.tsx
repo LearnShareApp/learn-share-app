@@ -10,7 +10,6 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, Redirect } from "expo-router";
 import { useAuth } from "../../providers/auth-provider";
-import { TEACHERS } from "../../../assets/teachers";
 import TeacherListItem from "../../components/teacher-item";
 import HeaderElement from "../../components/header-element";
 import Line from "../../components/line";
@@ -19,7 +18,7 @@ import { useCategories } from "../../utilities/category-hook";
 import SkillBadge from "../../components/skill";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
-import { apiService } from "../../utilities/api";
+import { apiService, TeacherProfile } from "../../utilities/api";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Lesson } from "../../utilities/api";
@@ -35,6 +34,7 @@ const Home = () => {
   const { loadingCategories, errorCategories } = useCategories();
 
   const [nextLesson, setNextLesson] = useState<Lesson[]>([]);
+  const [previousTeachers, setPreviousTeachers] = useState<TeacherProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,6 +44,10 @@ const Home = () => {
         setLoading(true);
         const response = await apiService.getLessons();
         setNextLesson((response || []).filter((lesson) => lesson.status === "ongoing" || lesson.status === "waiting").sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime()));
+
+        const responseTeachers = await apiService.getTeachers(true);
+        console.log(responseTeachers);
+        setPreviousTeachers(responseTeachers || []);
       } catch (err) {
         console.error("Error details:", err);
         setError("Failed to fetch teachers");
@@ -158,9 +162,13 @@ const Home = () => {
             {t("your_previous_teachers")}:
           </Text>
           <View style={[styles.listContainer, { flex: 1}]}>
-            <View style={{ width: "100%", height: 120, backgroundColor: theme.colors.card, borderRadius: 8, justifyContent: "center", alignItems: "center", padding: 16 }}>
+            {previousTeachers.length > 0 ? previousTeachers.map((previousTeacher) => (
+              <TeacherListItem teacher={previousTeacher} />
+            )) : (
+              <View style={{ width: "100%", height: 120, backgroundColor: theme.colors.card, borderRadius: 8, justifyContent: "center", alignItems: "center", padding: 16 }}>
                 <Text style={{ color: theme.colors.text }}>{t("you_will_see_your_previous_teachers_here")}</Text>
-            </View>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

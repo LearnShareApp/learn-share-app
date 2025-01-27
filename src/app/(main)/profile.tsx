@@ -89,9 +89,7 @@ const Profile = () => {
             <Text style={{ color: theme.colors.text }}>{t("skills_you_learned")}:</Text>
             <Line />
             <View style={styles.skillList}>
-              <SkillBadge text="programming" />
-              <SkillBadge text="cooking" />
-              <SkillBadge text="english" />
+              <SkillBadge text={t("start_learning")} />
             </View>
           </View>
 

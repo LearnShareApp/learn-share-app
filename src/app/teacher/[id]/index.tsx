@@ -21,7 +21,7 @@ import { useTheme } from "../../../providers/theme-provider";
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
-  const { id, category_id } = useLocalSearchParams<{ id: string, category_id?: string }>();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
 
   const { t } = useLanguage();
