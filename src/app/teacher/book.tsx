@@ -126,7 +126,7 @@ export default function BookLesson() {
   const SendRequest = async (data: zod.infer<typeof authSchema>) => {
     try {
       const postData = {
-        teacher_id: Number(user_id),
+        teacher_id: Number(teacher_id),
         category_id: data.category_id,
         schedule_time_id: data.schedule_time_id,
       };
