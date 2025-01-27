@@ -87,6 +87,7 @@ Learn&Share - это мобильное приложение для обмена
  - expo-router
  - react-native-screens
  - react-native-safe-area-context
+
 ## Состояние и формы
  - react-hook-form
  - zod (валидация)
@@ -96,12 +97,11 @@ Learn&Share - это мобильное приложение для обмена
  - react-native-dropdown-picker
  - react-native-toast-notifications
  - react-native-sticky-parallax-header
- - lucide-react-native (иконки)
 
 ## Мультимедиа и коммуникации
  - @livekit/react-native (видеозвонки)
  - react-native-webrtc
- - react-native-youtube-iframe
+ - FontAwesome (иконки)
 
 ## Хранение данных
  - expo-secure-store
@@ -116,12 +116,15 @@ Learn&Share - это мобильное приложение для обмена
 
 ## Структура проекта
 ```
-/src
-/app - основные экраны приложения
-/components - переиспользуемые компоненты
-/utilities - утилиты и хуки
-/providers - провайдеры контекста
-/locales - файлы локализации
+|──android - настройки сборки на android
+|──assets - хранение дополнительных ресурсов 
+|──ios - настройки сборки на ios 
+|--src 
+|  |──app - основные экраны приложения
+|  |──cmponents - переиспользуемые компоненты
+|  |──utilities - утилиты и хуки
+|  |──providers - провайдеры контекста
+|  └──locales - файлы локализации
 ```
 
 ## Основной функционал
