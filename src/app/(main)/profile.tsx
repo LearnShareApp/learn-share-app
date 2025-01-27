@@ -79,10 +79,18 @@ const Profile = () => {
               style={styles.image}
             />
             <View style={styles.userInfo}>
-              <Text style={[styles.user_name, { color: theme.colors.text }]}>
+              <Text
+                style={[
+                  styles.user_name,
+                  { color: theme.colors.text, fontSize: 16 },
+                ]}
+              >
                 {profile?.name} {profile?.surname}
               </Text>
-              <Text style={{ color: theme.colors.text }}>
+              <Text style={{ color: "#888", fontSize: 12 }}>
+                {profile?.email}
+              </Text>
+              <Text style={{ color: theme.colors.text, fontSize: 16 }}>
                 {t("participant_of_the_world_of_learning")}
               </Text>
             </View>

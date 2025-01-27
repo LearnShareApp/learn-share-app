@@ -28,7 +28,10 @@ const Rooms = () => {
         setLoading(true);
         const response = await apiService.getLessons();
         setLessons(
-          response.filter((lesson) => lesson.status !== "cancelled") || []
+          response.filter(
+            (lesson) =>
+              lesson.status !== "cancelled" && lesson.status !== "finished"
+          ) || []
         );
       } catch (err) {
         console.error("Error details:", err);
