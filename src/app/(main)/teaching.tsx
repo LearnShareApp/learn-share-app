@@ -306,7 +306,7 @@ const Teaching = () => {
               borderRadius: 8,
             }}
           >
-            <Text style={[styles.text, { color: theme.colors.text }]}>
+            <Text style={[styles.text, { color: "white" }]}>
               {t("start_sharing")}
             </Text>
           </TouchableOpacity>

@@ -147,5 +147,7 @@
   "confirm_end_call": "Sind Sie sicher, dass Sie den Anruf beenden möchten?",
   "yes": "Ja",
   "no": "Nein",
-  "participant_of_the_world_of_learning": "Teilnehmer des Wissenschaft teilen"
+  "participant_of_the_world_of_learning": "Teilnehmer des Wissenschaft teilen",
+  "edit_profile": "Profil bearbeiten",
+  "save_changes": "Änderungen speichern"
 }

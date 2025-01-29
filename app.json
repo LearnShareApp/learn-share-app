@@ -47,6 +47,12 @@
           "supportsPictureInPicture": true
         }
       ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
       "expo-font",
       "@livekit/react-native-expo-plugin",
       "@config-plugins/react-native-webrtc",

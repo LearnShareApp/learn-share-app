@@ -1,4 +1,3 @@
-// services/api.ts
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
@@ -158,6 +157,11 @@ class ApiService {
       data
     );
     return response.data;
+  }
+
+  async updateProfile(data: UserProfile): Promise<String> {
+    const response = await this.api.put("/api/user/profile", data);
+    return response.statusText;
   }
 
   async addSkill(data: AddSkillData): Promise<String> {

@@ -147,5 +147,7 @@
   "confirm_end_call": "Are you sure you want to end the call?",
   "yes": "Yes",
   "no": "No",
-  "participant_of_the_world_of_learning": "Participant of the world of exchange of knowledge"
+  "participant_of_the_world_of_learning": "Participant of the world of exchange of knowledge",
+  "edit_profile": "Edit profile",
+  "save_changes": "Save changes"
 }

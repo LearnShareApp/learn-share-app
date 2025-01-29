@@ -56,6 +56,10 @@ const StackNavigator = () => {
         options={{ headerShown: true, title: t("new_requests") }}
       />
       <Stack.Screen
+        name="edit"
+        options={{ headerShown: true, title: t("edit_profile") }}
+      />
+      <Stack.Screen
         name="stats"
         options={{ headerShown: true, title: t("your_skills") }}
       />

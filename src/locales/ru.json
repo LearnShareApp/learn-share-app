@@ -147,5 +147,7 @@
   "confirm_end_call": "Вы уверены, что хотите завершить звонок?",
   "yes": "Да",
   "no": "Нет",
-  "participant_of_the_world_of_learning": "Участник мира обмена знаниями"
+  "participant_of_the_world_of_learning": "Участник мира обмена знаниями",
+  "edit_profile": "Редактировать профиль",
+  "save_changes": "Сохранить изменения"
 }
