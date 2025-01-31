@@ -159,10 +159,20 @@ class ApiService {
     return response.data;
   }
 
-  async updateProfile(data: UserProfile): Promise<String> {
-    const response = await this.api.put("/api/user/profile", data);
-    return response.statusText;
+  async updateProfile(data: {
+    id: number;
+    email: string;
+    name: string;
+    surname: string;
+    birthdate: string;
+    photo: string;
+  }): Promise<String> {
+    // const response = await this.api.put("/api/user/profile", data);
+    console.log(data);
+    return "success";
+
   }
+
 
   async addSkill(data: AddSkillData): Promise<String> {
     const response = await this.api.post("/api/teacher/skill", data);

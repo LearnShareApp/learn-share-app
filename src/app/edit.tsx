@@ -13,24 +13,23 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
-import { useAuth } from "../providers/auth-provider";
 import { useLanguage } from "../providers/language-provider";
 import { useTheme } from "../providers/theme-provider";
 import { apiService } from "../utilities/api";
 import { Toast } from "react-native-toast-notifications";
-import { Redirect } from "expo-router";
 import { useProfile } from "../utilities/profile-hook";
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const profileSchema = zod.object({
   name: zod
     .string()
-    .min(2, { message: "Имя должно содержать минимум 2 символа" }),
+    .min(2, { message: "Имя должно содержать минимум 2 символа" }).optional(),
   surname: zod
     .string()
-    .min(2, { message: "Фамилия должна содержать минимум 2 символа" }),
-  email: zod.string().email("Неверный формат email"),
-  birthdate: zod.string(),
-  id: zod.number(),
+    .min(2, { message: "Фамилия должна содержать минимум 2 символа" }).optional(),
+  email: zod.string().email("Неверный формат email").optional(),
+  birthdate: zod.string().optional(),
+  id: zod.number().optional(),
 });
 
 type ProfileFormData = zod.infer<typeof profileSchema>;
@@ -54,7 +53,16 @@ const EditProfile = () => {
 
   const handleSave = async (data: ProfileFormData) => {
     try {
-      await apiService.updateProfile(data);
+      const requestData = {
+        id: data.id ?? profile?.id ?? 0,
+        email: data.email ?? profile?.email ?? "",
+        name: data.name ?? profile?.name ?? "",
+        surname: data.surname ?? profile?.surname ?? "",
+        birthdate: data.birthdate ?? profile?.birthdate ?? "",
+        photo: base64Image ?? "",
+      };
+
+      await apiService.updateProfile(requestData);
       Toast.show("Профиль успешно обновлен", {
         type: "success",
         placement: "top",
@@ -70,21 +78,46 @@ const EditProfile = () => {
   };
 
   const [image, setImage] = useState<string | null>(null);
+  const [base64Image, setBase64Image] = useState<string | null>(null);
+
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images", "videos"],
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
+      base64: true,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const imageUri = result.assets[0].uri;
+      try {
+        const manipResult = await ImageManipulator.manipulateAsync(
+          imageUri,
+          [{ resize: { width: 512, height: 512 } }],
+          { 
+            compress: 0.5, 
+            format: ImageManipulator.SaveFormat.JPEG,
+            base64: true
+          }
+
+        );
+
+        setImage(manipResult.uri);
+        setBase64Image(manipResult.base64 ?? "");
+
+      } catch (error) {
+        console.error('Ошибка обработки изображения:', error);
+        Toast.show('Не удалось обработать изображение', {
+          type: 'error',
+          placement: 'top',
+          duration: 3000,
+        });
+      }
     }
   };
+
 
   if (loadingProfile) {
     return (

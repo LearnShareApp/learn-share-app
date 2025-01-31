@@ -24,6 +24,8 @@
     "expo-dev-client": "~5.0.10",
     "expo-file-system": "~18.0.7",
     "expo-font": "~13.0.3",
+    "expo-image-manipulator": "^13.0.6",
+    "expo-image-picker": "~16.0.4",
     "expo-linking": "~7.0.4",
     "expo-localization": "~16.0.1",
     "expo-navigation-bar": "^4.0.7",
@@ -49,8 +51,7 @@
     "react-native-toast-notifications": "^3.4.0",
     "react-native-webview": "13.12.5",
     "rimraf": "^6.0.1",
-    "zod": "^3.24.1",
-    "expo-image-picker": "~16.0.4"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
