@@ -21,7 +21,6 @@ const Finish = () => {
         duration: 1500,
       });
       eventEmitter.emit("lessonRemoved", Number(lesson_id));
-      router.replace(`/`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -42,6 +41,7 @@ const Finish = () => {
         });
       }
     }
+    router.replace(`/`);
   };
 
   return (

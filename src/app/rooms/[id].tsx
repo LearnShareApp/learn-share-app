@@ -18,8 +18,9 @@ import {
   VideoTrack,
   isTrackReference,
   registerGlobals,
+  useLocalParticipant,
 } from "@livekit/react-native";
-import { Track } from "livekit-client";
+import { LocalParticipant, Track } from "livekit-client";
 import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
@@ -154,6 +155,36 @@ export default function Lesson() {
 
 const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
   const tracks = useTracks([Track.Source.Camera]);
+  const { localParticipant } = useLocalParticipant();
+  const [isMuted, setIsMuted] = useState(false);
+
+  const switchCamera = async () => {
+    try {
+      const videoTrack = localParticipant?.getTrackPublication(Track.Source.Camera)?.track;
+      if (videoTrack?.mediaStreamTrack) {
+        // @ts-ignore - метод существует в react-native-webrtc
+        await videoTrack.mediaStreamTrack._switchCamera();
+      }
+    } catch (error) {
+      console.error('Ошибка при переключении камеры:', error);
+    }
+  };
+
+  const toggleMicrophone = async () => {
+    try {
+      const audioTrack = localParticipant?.getTrackPublication(Track.Source.Microphone)?.track;
+      if (audioTrack) {
+        if (isMuted) {
+          await audioTrack.unmute();
+        } else {
+          await audioTrack.mute();
+        }
+        setIsMuted(!isMuted);
+      }
+    } catch (error) {
+      console.error('Ошибка при управлении микрофоном:', error);
+    }
+  };
 
   const renderTrack: ListRenderItem<TrackReferenceOrPlaceholder> = ({
     item,
@@ -172,6 +203,18 @@ const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
         renderItem={renderTrack}
         style={styles.trackList}
       />
+      <TouchableOpacity 
+        style={[styles.endCallButton, { bottom: 140, backgroundColor: '#4287f5' }]} 
+        onPress={switchCamera}
+      >
+        <Text style={styles.endCallButtonText}>Switch Camera</Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        style={[styles.endCallButton, { bottom: 80, backgroundColor: isMuted ? '#ff6b6b' : '#4CAF50' }]} 
+        onPress={toggleMicrophone}
+      >
+        <Text style={styles.endCallButtonText}>{isMuted ? 'Unmute' : 'Mute'}</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.endCallButton} onPress={onEndCall}>
         <Text style={styles.endCallButtonText}>End Call</Text>
       </TouchableOpacity>

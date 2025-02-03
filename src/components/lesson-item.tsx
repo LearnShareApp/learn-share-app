@@ -151,7 +151,7 @@ const LessonItem = ({
       const lessonTime = new Date(lessonItemData.datetime);
       const currentTime = new Date();
 
-      const fiveMinutesBefore = new Date(lessonTime.getTime() - 5 * 60 * 1000);
+      const fiveMinutesBefore = new Date(lessonTime.getTime() - 15 * 60 * 1000);
       const anHourAfter = new Date(lessonTime.getTime() + 60 * 60 * 1000);
 
       if (
