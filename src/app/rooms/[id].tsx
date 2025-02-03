@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Modal,
 } from "react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AudioSession,
   LiveKitRoom,

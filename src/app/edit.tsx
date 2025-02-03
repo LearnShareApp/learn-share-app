@@ -21,6 +21,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import { useAvatar } from "../utilities/avatar-hook";
 
 const profileSchema = zod.object({
+  avatar: zod.string().optional(),
   name: zod
     .string()
     .min(2, { message: "Имя должно содержать минимум 2 символа" }).optional(),
@@ -44,6 +45,7 @@ const EditProfile = () => {
   const { control, handleSubmit, formState } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
+      avatar: profile?.avatar,
       name: profile?.name,
       surname: profile?.surname,
       email: profile?.email,
@@ -60,7 +62,7 @@ const EditProfile = () => {
         name: data.name ?? profile?.name ?? "",
         surname: data.surname ?? profile?.surname ?? "",
         birthdate: data.birthdate ?? profile?.birthdate ?? "",
-        photo: base64Image ?? "",
+        avatar: base64Image ?? "",
       };
 
       await apiService.updateProfile(requestData);

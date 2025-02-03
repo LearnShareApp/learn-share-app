@@ -168,7 +168,7 @@ class ApiService {
     name: string;
     surname: string;
     birthdate: string;
-    photo: string;
+    avatar: string;
   }): Promise<String> {
     // const response = await this.api.put("/api/user/profile", data);
     console.log(data);
