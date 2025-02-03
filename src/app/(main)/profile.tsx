@@ -80,6 +80,7 @@ const Profile = () => {
             <Image
               source={avatarSource}
               style={styles.image}
+              onError={(e) => console.error('Image loading error:', e.nativeEvent.error)}
             />
             <View style={styles.userInfo}>
               <Text
@@ -290,9 +291,8 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    gap: 8,
+    padding: 16,
+    gap: 16,
   },
   object: {
     borderRadius: 8,
@@ -328,9 +328,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    width: 64,
-    height: 64,
-    borderRadius: 50,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#eee'
   },
   userInfo: {
     flex: 1,

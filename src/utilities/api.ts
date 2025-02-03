@@ -199,11 +199,15 @@ class ApiService {
     return response.data.datetimes;
   }
 
-  async getAvatar(id: string): Promise<string> {
-    const response = await this.api.get<{ avatar: string }>(
-      `/api/image?filename=${id}`
-    );
-    return response.data.avatar;
+  async getAvatar(avatarId: string): Promise<ArrayBuffer> {
+    const response = await this.api.get(`/api/image?filename=${avatarId}`, {
+      headers: {
+        'Accept': 'image/*'
+      },
+      responseType: 'arraybuffer'
+    });
+    
+    return response.data;
   }
 
   async lessonRequest(data: LessonRequestData): Promise<String> {

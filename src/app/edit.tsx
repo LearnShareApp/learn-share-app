@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
   ActivityIndicator,
-  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -19,6 +18,7 @@ import { apiService } from "../utilities/api";
 import { Toast } from "react-native-toast-notifications";
 import { useProfile } from "../utilities/profile-hook";
 import * as ImageManipulator from 'expo-image-manipulator';
+import { useAvatar } from "../utilities/avatar-hook";
 
 const profileSchema = zod.object({
   name: zod
@@ -39,6 +39,7 @@ const EditProfile = () => {
   const { theme } = useTheme();
 
   const { profile, loadingProfile, errorProfile } = useProfile();
+  const { avatarSource, loadingAvatar } = useAvatar(profile?.avatar ?? null);
 
   const { control, handleSubmit, formState } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -132,14 +133,12 @@ const EditProfile = () => {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
       <View style={{ alignItems: "center" }}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
+
           <Image
-            source={require("../../assets/icon.jpg")}
+            source={image ? { uri: image } : avatarSource}
             style={styles.image}
           />
-        )}
+          {loadingAvatar && <ActivityIndicator size="small" color={theme.colors.primary} />}      
         <TouchableOpacity onPress={pickImage}>
           <Text style={{ color: theme.colors.primary, paddingTop: 16 }}>
             Change photo

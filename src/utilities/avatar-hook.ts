@@ -14,14 +14,22 @@ export const useAvatar = (avatarId: string | null) => {
 
     try {
       setLoading(true);
-      const data = await apiService.getAvatar(avatarId);
-      if (typeof data === 'string') {
-        setAvatar(data);
+      const response = await apiService.getAvatar(avatarId);
+      
+      if (response) {
+        // Конвертируем ArrayBuffer в base64
+        const bytes = new Uint8Array(response);
+        let binary = '';
+        bytes.forEach(byte => binary += String.fromCharCode(byte));
+        const base64 = btoa(binary);
+        
+        setAvatar(`data:image/jpeg;base64,${base64}`);
         setError(null);
       } else {
-        throw new Error('Invalid avatar data format');
+        throw new Error('No avatar data received');
       }
     } catch (err) {
+      console.error('Avatar fetch error:', err);
       setError("Failed to fetch avatar");
       setAvatar(null);
     } finally {
@@ -34,7 +42,7 @@ export const useAvatar = (avatarId: string | null) => {
   }, [avatarId]);
 
   const avatarSource = avatar 
-    ? { uri: `data:image/jpeg;base64,${avatar}` }
+    ? { uri: avatar }
     : require("../../assets/icon.jpg");
 
   return { 
