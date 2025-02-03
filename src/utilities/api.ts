@@ -65,7 +65,9 @@ export interface UserProfile {
   name: string;
   surname: string;
   birthdate: string;
+  avatar: string;
 }
+
 
 export interface TeacherSkill {
   about: string;
@@ -77,6 +79,7 @@ export interface TeacherSkill {
 }
 
 export interface TeacherProfile {
+  avatar: string;
   user_id: number;
   teacher_id: number;
   registration_date: Date;
@@ -196,10 +199,18 @@ class ApiService {
     return response.data.datetimes;
   }
 
+  async getAvatar(id: string): Promise<string> {
+    const response = await this.api.get<{ avatar: string }>(
+      `/api/image?filename=${id}`
+    );
+    return response.data.avatar;
+  }
+
   async lessonRequest(data: LessonRequestData): Promise<String> {
     const response = await this.api.post("/api/lesson", data);
     return response.statusText;
   }
+
 
   async lessonApprove(id: number): Promise<String> {
     const response = await this.api.put(`/api/lessons/${id}/approve`);

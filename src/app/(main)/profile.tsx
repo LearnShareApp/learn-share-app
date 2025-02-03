@@ -16,15 +16,18 @@ import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
+import { useAvatar } from "../../utilities/avatar-hook";
 
 const Profile = () => {
   const { profile, loadingProfile, errorProfile } = useProfile();
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const { avatarSource, loadingAvatar } = useAvatar(profile?.avatar ?? null);
 
   if (loadingProfile) {
     return (
       <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
+
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
@@ -75,7 +78,7 @@ const Profile = () => {
             ]}
           >
             <Image
-              source={require("../../../assets/icon.jpg")}
+              source={avatarSource}
               style={styles.image}
             />
             <View style={styles.userInfo}>

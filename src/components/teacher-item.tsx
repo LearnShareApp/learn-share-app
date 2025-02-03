@@ -5,10 +5,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { TeacherProfile } from "../utilities/api";
 import { useLanguage } from "../providers/language-provider";
 import { useTheme } from "../providers/theme-provider";
+import { useAvatar } from "../utilities/avatar-hook";
 
 const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar);
 
   if (!teacher) {
     return null;
@@ -31,7 +33,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
         }}
       >
         <Image
-          source={require("../../assets/icon.jpg")}
+          source={avatarSource}
           style={styles.avatar}
         />
         <View style={styles.teacherInfo}>
