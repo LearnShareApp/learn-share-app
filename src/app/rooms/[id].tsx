@@ -20,11 +20,11 @@ import {
   registerGlobals,
   useLocalParticipant,
 } from "@livekit/react-native";
-import { LocalParticipant, Track } from "livekit-client";
+import { Track } from "livekit-client";
 import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
-import { apiService } from "../../utilities/api";
+import { FontAwesome } from "@expo/vector-icons";
 
 registerGlobals();
 
@@ -203,21 +203,27 @@ const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
         renderItem={renderTrack}
         style={styles.trackList}
       />
-      <TouchableOpacity 
-        style={[styles.endCallButton, { bottom: 140, backgroundColor: '#4287f5' }]} 
-        onPress={switchCamera}
-      >
-        <Text style={styles.endCallButtonText}>Switch Camera</Text>
-      </TouchableOpacity>
-      <TouchableOpacity 
-        style={[styles.endCallButton, { bottom: 80, backgroundColor: isMuted ? '#ff6b6b' : '#4CAF50' }]} 
-        onPress={toggleMicrophone}
-      >
-        <Text style={styles.endCallButtonText}>{isMuted ? 'Unmute' : 'Mute'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.endCallButton} onPress={onEndCall}>
-        <Text style={styles.endCallButtonText}>End Call</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity 
+          style={styles.grayButton} 
+          onPress={switchCamera}
+        >
+          <FontAwesome name="video-camera" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={isMuted ? styles.whiteButton : styles.grayButton} 
+          onPress={toggleMicrophone}
+        >
+          <FontAwesome name={isMuted ? "microphone-slash" : "microphone"} size={24} color={isMuted ? "grey" : "white"} />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.endCallButton} 
+
+          onPress={onEndCall}
+        >
+          <FontAwesome name="phone" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -237,21 +243,42 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
   },
-  endCallButton: {
-    backgroundColor: "#FF4D4D",
-    padding: 15,
-    margin: 20,
-    borderRadius: 10,
-    alignItems: "center",
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 20,
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
   },
-  endCallButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
+  grayButton: {
+    backgroundColor: "#808080", // Серый цвет для кнопок камеры и микрофона
+    padding: 16,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 64,
+    height: 64,
+  },
+  whiteButton: {
+    backgroundColor: "#FFFFFF", // Белый цвет для кнопок камеры и микрофона
+    padding: 16,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 64,
+    height: 64,
+  },
+  endCallButton: {
+    backgroundColor: "#F44336", // Красный цвет для кнопки завершения звонка
+    padding: 16,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 64,
+    height: 64,
+
   },
   endCallContainer: {
     flex: 1,
