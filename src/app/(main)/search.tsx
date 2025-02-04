@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   listContainer: {
-    gap: 4,
+    gap: 8,
   },
   dropdownContainer: {
     borderRadius: 8,

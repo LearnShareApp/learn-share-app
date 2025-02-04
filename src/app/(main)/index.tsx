@@ -234,8 +234,8 @@ const Home = () => {
           </Text>
           <View style={[styles.listContainer, { flex: 1 }]}>
             {previousTeachers.length > 0 ? (
-              previousTeachers.map((previousTeacher) => (
-                <TeacherListItem teacher={previousTeacher} />
+              previousTeachers.map((previousTeacher, index) => (
+                <TeacherListItem key={index} teacher={previousTeacher} />
               ))
             ) : (
               <View
