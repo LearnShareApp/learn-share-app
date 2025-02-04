@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 
 const YouTubeVideo = ({ videoId }: { videoId: string }) => {

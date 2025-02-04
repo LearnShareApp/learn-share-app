@@ -32,10 +32,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
           backgroundColor: theme.colors.card,
         }}
       >
-        <Image
-          source={avatarSource}
-          style={styles.avatar}
-        />
+        <Image source={avatarSource} style={styles.avatar} />
         <View style={styles.teacherInfo}>
           <View style={styles.names}>
             <Text style={{ color: theme.colors.text }}>{teacher.name}</Text>
@@ -56,7 +53,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
             )}
           </View>
         </View>
-        <View style={styles.grades}>
+        <View style={[styles.grades, { flexShrink: 1 }]}>
           <Text
             style={{
               fontSize: 18,
@@ -101,10 +98,12 @@ const styles = StyleSheet.create({
   },
   teacherInfo: {
     gap: 8,
+    flex: 1,
   },
   names: {
     flexDirection: "row",
     gap: 4,
+    flexWrap: "wrap",
   },
   skillsList: {
     gap: 5,
@@ -115,5 +114,6 @@ const styles = StyleSheet.create({
   grades: {
     alignItems: "flex-end",
     marginLeft: "auto",
+    flexShrink: 1,
   },
 });

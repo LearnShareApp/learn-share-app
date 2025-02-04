@@ -35,7 +35,7 @@ const TeacherProfilePage = () => {
 
   const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar ?? null);
 
-  const videoId = "3OpdP5DocEI";
+  const videoId = "jNQXAC9IVRw";
 
   useEffect(() => {
     const fetchTeacher = async () => {
@@ -341,7 +341,6 @@ const styles = StyleSheet.create({
   },
   bookText: {
     color: "white",
-    fontWeight: "900",
   },
   sectionTitle: {
     fontSize: 18,
