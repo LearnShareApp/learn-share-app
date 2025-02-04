@@ -50,6 +50,7 @@
     "react-native-sticky-parallax-header": "^1.0.0-rc.9",
     "react-native-toast-notifications": "^3.4.0",
     "react-native-webview": "13.12.5",
+    "react-native-youtube-iframe": "^2.3.0",
     "rimraf": "^6.0.1",
     "zod": "^3.24.1"
   },

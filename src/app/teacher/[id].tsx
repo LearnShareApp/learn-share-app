@@ -11,6 +11,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import SkillBadge from "../../components/skill";
+import YouTubeIframe from "react-native-youtube-iframe";
 import { FontAwesome } from "@expo/vector-icons";
 import Line from "../../components/line";
 import ReviewItem from "../../components/review-item";
@@ -18,6 +19,7 @@ import { apiService, TeacherProfile } from "../../utilities/api";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
+import YouTubeVideo from "../../components/youtube-video";
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
@@ -32,6 +34,8 @@ const TeacherProfilePage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar ?? null);
+
+  const videoId = "3OpdP5DocEI";
 
   useEffect(() => {
     const fetchTeacher = async () => {
@@ -130,16 +134,21 @@ const TeacherProfilePage = () => {
           <View style={styles.headerContainer}>
             <View
               style={{
-                height: 180,
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: theme.colors.card,
                 borderRadius: 8,
+                aspectRatio: 16 / 9,
               }}
             >
-              <Text style={{ color: theme.colors.text }}>
-                {t("here_will_be_your_video_soon")}
-              </Text>
+              <YouTubeVideo videoId={videoId} />
+              {/* <YouTubeIframe
+                width={"100%"}
+                height={"100%"}
+                videoId={videoId}
+                play={true}
+                onReady={() => console.log("Video is ready")}
+              /> */}
             </View>
             <View
               style={[
