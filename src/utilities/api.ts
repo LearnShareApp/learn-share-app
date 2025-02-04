@@ -68,7 +68,6 @@ export interface UserProfile {
   avatar: string;
 }
 
-
 export interface TeacherSkill {
   about: string;
   category_id: number;
@@ -163,19 +162,16 @@ class ApiService {
   }
 
   async updateProfile(data: {
-    id: number;
     email: string;
     name: string;
     surname: string;
     birthdate: string;
     avatar: string;
   }): Promise<String> {
-    // const response = await this.api.put("/api/user/profile", data);
-    console.log(data);
+    const response = await this.api.patch("/api/user/profile", data);
+    console.log(data, response.statusText);
     return "success";
-
   }
-
 
   async addSkill(data: AddSkillData): Promise<String> {
     const response = await this.api.post("/api/teacher/skill", data);
@@ -202,11 +198,11 @@ class ApiService {
   async getAvatar(avatarId: string): Promise<ArrayBuffer> {
     const response = await this.api.get(`/api/image?filename=${avatarId}`, {
       headers: {
-        'Accept': 'image/*'
+        Accept: "image/*",
       },
-      responseType: 'arraybuffer'
+      responseType: "arraybuffer",
     });
-    
+
     return response.data;
   }
 
@@ -214,7 +210,6 @@ class ApiService {
     const response = await this.api.post("/api/lesson", data);
     return response.statusText;
   }
-
 
   async lessonApprove(id: number): Promise<String> {
     const response = await this.api.put(`/api/lessons/${id}/approve`);

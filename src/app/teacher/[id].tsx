@@ -17,7 +17,7 @@ import ReviewItem from "../../components/review-item";
 import { apiService, TeacherProfile } from "../../utilities/api";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
-
+import { useAvatar } from "../../utilities/avatar-hook";
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
@@ -30,6 +30,8 @@ const TeacherProfilePage = () => {
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar ?? null);
 
   useEffect(() => {
     const fetchTeacher = async () => {
@@ -99,7 +101,7 @@ const TeacherProfilePage = () => {
                 styles.bookBtn,
                 { backgroundColor: theme.colors.primary },
               ]}
-              onPress={() => {
+              onPressOut={() => {
                 router.push(
                   `/teacher//book?category_id=${1}&teacher_id=${
                     teacher.teacher_id
@@ -147,7 +149,7 @@ const TeacherProfilePage = () => {
               ]}
             >
               <Image
-                source={require("../../../assets/icon.jpg")}
+                source={avatarSource}
                 style={styles.image}
                 accessibilityLabel={`${teacher.name}'s profile picture`}
               />
@@ -289,13 +291,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    width: 64,
-    height: 64,
+    width: 72,
+    height: 72,
     borderRadius: 10,
   },
   teacherInfo: {
     flex: 1,
     gap: 8,
+    justifyContent: "space-between",
   },
   teacherName: {
     fontSize: 16,
@@ -349,7 +352,7 @@ const styles = StyleSheet.create({
   bookBtnMain: {
     padding: 16,
     backgroundColor: "#C9A977",
-    borderRadius: 4,
+    borderRadius: 8,
     zIndex: 1000,
   },
   bookTextMain: {

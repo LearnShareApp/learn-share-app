@@ -27,7 +27,6 @@ const Profile = () => {
   if (loadingProfile) {
     return (
       <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
-
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
@@ -80,7 +79,9 @@ const Profile = () => {
             <Image
               source={avatarSource}
               style={styles.image}
-              onError={(e) => console.error('Image loading error:', e.nativeEvent.error)}
+              onError={(e) =>
+                console.error("Image loading error:", e.nativeEvent.error)
+              }
             />
             <View style={styles.userInfo}>
               <Text
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#eee'
+    backgroundColor: "#eee",
   },
   userInfo: {
     flex: 1,
