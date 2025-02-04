@@ -7,6 +7,7 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -20,6 +21,7 @@ import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
 import YouTubeVideo from "../../components/youtube-video";
+import { useRefresh } from "../../providers/refresh-provider";
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
@@ -33,32 +35,40 @@ const TeacherProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { refreshing, setRefreshing } = useRefresh();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTeacher();
+    setRefreshing(false);
+  };
+
   const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar ?? null);
 
   const videoId = "jNQXAC9IVRw";
 
-  useEffect(() => {
-    const fetchTeacher = async () => {
-      try {
-        setLoading(true);
-        const response = await apiService.getTeacherById(id);
-        if (!response) {
-          throw new Error("Teacher not found");
-        }
-        setTeacher(response);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch teacher";
-        setError(errorMessage);
-        console.error("Error details:", err);
-        router.replace("/404");
-      } finally {
-        setLoading(false);
+  const fetchTeacher = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getTeacherById(id);
+      if (!response) {
+        throw new Error("Teacher not found");
       }
-    };
+      setTeacher(response);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch teacher";
+      setError(errorMessage);
+      console.error("Error details:", err);
+      router.replace("/404");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTeacher();
-  }, [id, router]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -123,6 +133,9 @@ const TeacherProfilePage = () => {
         }}
       />
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={[
           {
             userName: "tester",

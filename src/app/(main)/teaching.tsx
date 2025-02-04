@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,11 +17,11 @@ import LessonItem from "../../components/lesson-item";
 import HeaderElement from "../../components/header-element";
 import { useTeacher } from "../../utilities/teacher-hook";
 import { apiService, TeacherLesson } from "../../utilities/api";
-import { Toast } from "react-native-toast-notifications";
 import { useLanguage } from "../../providers/language-provider";
 import { useFocusEffect } from "@react-navigation/native";
 import EventEmitter from "../../utilities/event-emitter";
 import { useTheme } from "../../providers/theme-provider";
+import { useRefresh } from "../../providers/refresh-provider";
 
 const Teaching = () => {
   const { theme } = useTheme();
@@ -30,6 +31,14 @@ const Teaching = () => {
   const [lessons, setLessons] = useState<TeacherLesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { refreshing, setRefreshing } = useRefresh();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const fetchLessons = useCallback(async () => {
     try {
@@ -88,116 +97,87 @@ const Teaching = () => {
     return (
       <>
         <HeaderElement text={t("teaching")} requireChanges requireSettings />
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: 16,
-            paddingVertical: 8,
+        <FlatList
+          ListHeaderComponentStyle={{
+            paddingHorizontal: 8,
             gap: 8,
-            backgroundColor: theme.colors.background,
           }}
-        >
-          <View style={styles.topNav}>
-            <Link href={"/requests"} asChild>
-              <Pressable
-                style={{
-                  width: "48%",
-                  minHeight: 32,
-                  borderRadius: 8,
-                  padding: 16,
-                  gap: 8,
-                  alignItems: "center",
-                  backgroundColor: theme.colors.card,
-                }}
-              >
-                <FontAwesome
-                  size={24}
-                  name="bell"
-                  style={{ color: "#C9A977" }}
-                />
-                <Text style={{ textAlign: "center", color: theme.colors.text }}>
-                  {t("new_requests")} (
-                  {
-                    lessons.filter((lesson) => lesson.status == "verification")
-                      .length
-                  }
-                  )
-                </Text>
-              </Pressable>
-            </Link>
+          ListHeaderComponent={
+            <>
+              <View style={styles.topNav}>
+                <Link href={"/requests"} asChild>
+                  <Pressable style={styles.navButton}>
+                    <FontAwesome
+                      size={24}
+                      name="bell"
+                      style={{ color: "#C9A977" }}
+                    />
+                    <Text
+                      style={{ textAlign: "center", color: theme.colors.text }}
+                    >
+                      {t("new_requests")} (
+                      {
+                        lessons.filter(
+                          (lesson) => lesson.status == "verification"
+                        ).length
+                      }
+                      )
+                    </Text>
+                  </Pressable>
+                </Link>
 
-            <Link href={"/schedule"} asChild>
-              <Pressable
+                <Link href={"/schedule"} asChild>
+                  <Pressable style={styles.navButton}>
+                    <FontAwesome
+                      size={24}
+                      name="calendar"
+                      style={{ color: "#C9A977" }}
+                    />
+                    <Text
+                      style={{ textAlign: "center", color: theme.colors.text }}
+                    >
+                      {t("my_schedule")}
+                    </Text>
+                  </Pressable>
+                </Link>
+              </View>
+              <Link href={"/stats"} asChild>
+                <Pressable style={styles.statsButton}>
+                  <FontAwesome
+                    size={24}
+                    name="pie-chart"
+                    style={{ color: "#C9A977" }}
+                  />
+                  <Text
+                    style={{ textAlign: "center", color: theme.colors.text }}
+                  >
+                    {t("manage_skills")}
+                  </Text>
+                </Pressable>
+              </Link>
+              <Text
                 style={{
-                  width: "48%",
-                  minHeight: 32,
-                  borderRadius: 8,
-                  padding: 16,
-                  gap: 8,
-                  alignItems: "center",
-                  backgroundColor: theme.colors.card,
+                  fontSize: 20,
+                  paddingHorizontal: 16,
+                  color: theme.colors.text,
                 }}
               >
-                <FontAwesome
-                  size={24}
-                  name="calendar"
-                  style={{ color: "#C9A977" }}
-                />
-                <Text style={{ textAlign: "center", color: theme.colors.text }}>
-                  {t("my_schedule")}
-                </Text>
-              </Pressable>
-            </Link>
-          </View>
-          <Link href={"/stats"} asChild>
-            <Pressable
-              style={{
-                width: "100%",
-                borderRadius: 8,
-                padding: 24,
-                gap: 12,
-                flexDirection: "row",
-                alignItems: "center",
-                backgroundColor: theme.colors.card,
-              }}
-            >
-              <FontAwesome
-                size={24}
-                name="pie-chart"
-                style={{ color: "#C9A977" }}
-              />
-              <Text style={{ textAlign: "center", color: theme.colors.text }}>
-                {t("manage_skills")}
+                {t("next_lesson")}:
               </Text>
-            </Pressable>
-          </Link>
-          <Text
-            style={{
-              fontSize: 20,
-              paddingHorizontal: 16,
-              color: theme.colors.text,
-            }}
-          >
-            {t("next_lesson")}:
-          </Text>
-
-          {lessons.filter(
+            </>
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          data={lessons.filter(
             (lesson) =>
-              lesson.status !== "verification" && lesson.status !== "cancelled"
-          ).length ? (
-            <FlatList
-              data={lessons.filter(
-                (lesson) =>
-                  lesson.status !== "verification" &&
-                  lesson.status !== "cancelled" &&
-                  lesson.status !== "finished"
-              )}
-              renderItem={(item) => (
-                <LessonItem lesson={item.item} forTeacher />
-              )}
-              contentContainerStyle={{ gap: 8 }}
-            />
-          ) : (
+              lesson.status !== "verification" &&
+              lesson.status !== "cancelled" &&
+              lesson.status !== "finished"
+          )}
+          renderItem={({ item }) => <LessonItem lesson={item} forTeacher />}
+          contentContainerStyle={{ gap: 8 }}
+          ListEmptyComponent={
             <View
               style={{
                 flex: 1,
@@ -209,14 +189,17 @@ const Teaching = () => {
                 {t("no_lessons")}
               </Text>
             </View>
-          )}
-        </View>
+          }
+        />
       </>
     );
   return (
     <>
       <HeaderElement text="Teaching" requireChanges requireSettings />
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         contentContainerStyle={[
           styles.container,
           { backgroundColor: theme.colors.background },
@@ -350,5 +333,23 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
+  },
+  navButton: {
+    flex: 1,
+    minHeight: 32,
+    borderRadius: 8,
+    padding: 16,
+    marginHorizontal: 4,
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  statsButton: {
+    width: "100%",
+    borderRadius: 8,
+    padding: 24,
+    gap: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
   },
 });

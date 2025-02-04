@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from "react-native";
 import { Link } from "expo-router";
 import * as Clipboard from "expo-clipboard";
@@ -17,12 +18,20 @@ import { useProfile } from "../../utilities/profile-hook";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
+import { useRefresh } from "../../providers/refresh-provider";
 
 const Profile = () => {
-  const { profile, loadingProfile, errorProfile } = useProfile();
+  const { profile, loadingProfile, errorProfile, refetch } = useProfile();
   const { t } = useLanguage();
   const { theme } = useTheme();
   const { avatarSource, loadingAvatar } = useAvatar(profile?.avatar ?? null);
+  const { refreshing, setRefreshing } = useRefresh();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   if (loadingProfile) {
     return (
@@ -64,7 +73,12 @@ const Profile = () => {
         requireChanges
         requireSettings
       />
-      <ScrollView style={{ backgroundColor: theme.colors.background }}>
+      <ScrollView
+        style={{ backgroundColor: theme.colors.background }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.container}>
           <View
             style={[
@@ -117,7 +131,7 @@ const Profile = () => {
             <View style={styles.infoSections}>
               <View style={styles.infoSection}>
                 <Text style={{ textAlign: "center", color: theme.colors.text }}>
-                  {t("learning_hours")}
+                  {t("teachers_amount")}
                 </Text>
                 <Text style={{ fontSize: 24, color: theme.colors.text }}>
                   0

@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   Image,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -22,16 +23,24 @@ import { apiService, TeacherProfile } from "../../utilities/api";
 import { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { Lesson } from "../../utilities/api";
+import { useRefresh } from "../../providers/refresh-provider";
 
 const Home = () => {
   const { token, signOut } = useAuth();
   const { t } = useLanguage();
   const { theme } = useTheme();
-
   if (!token) return <Redirect href={"/sign-in"} />;
 
-  const { profile, loadingProfile, errorProfile } = useProfile();
+  const { profile, loadingProfile, errorProfile, refetch } = useProfile();
   const { loadingCategories, errorCategories } = useCategories();
+
+  const { refreshing, setRefreshing } = useRefresh();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const [nextLesson, setNextLesson] = useState<Lesson[]>([]);
   const [previousTeachers, setPreviousTeachers] = useState<TeacherProfile[]>(
@@ -106,7 +115,12 @@ const Home = () => {
         requireCalendar
         requireSettings
       />
-      <ScrollView style={{ backgroundColor: theme.colors.background }}>
+      <ScrollView
+        style={{ backgroundColor: theme.colors.background }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.container}>
           <Link href="/search" asChild>
             <Pressable
