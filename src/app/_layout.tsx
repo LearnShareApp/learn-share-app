@@ -9,6 +9,7 @@ import { LanguageProvider, useLanguage } from "../providers/language-provider";
 import { ThemeProvider, useTheme } from "../providers/theme-provider";
 import * as SecureStore from "expo-secure-store";
 import { RefreshProvider } from "../providers/refresh-provider";
+import "react-native-reanimated";
 
 const StackNavigator = () => {
   const { theme } = useTheme();

@@ -122,7 +122,7 @@ const Home = () => {
         }
       >
         <View style={styles.container}>
-          <Link href="/search" asChild>
+          <Link href="/chats" asChild>
             <Pressable
               style={{
                 backgroundColor: theme.colors.card,
