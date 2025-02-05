@@ -86,6 +86,8 @@ export interface TeacherProfile {
   name: string;
   surname: string;
   birthdate: string;
+  finished_lessons: number;
+  count_of_students: number;
   skills: TeacherSkill[];
 }
 

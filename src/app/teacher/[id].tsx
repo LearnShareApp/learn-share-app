@@ -45,8 +45,6 @@ const TeacherProfilePage = () => {
 
   const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar ?? null);
 
-  const videoId = "jNQXAC9IVRw";
-
   const fetchTeacher = async () => {
     try {
       setLoading(true);
@@ -97,6 +95,11 @@ const TeacherProfilePage = () => {
       </View>
     );
   }
+
+  const videoId =
+    teacher?.skills[0].video_card_link.length > 14
+      ? teacher?.skills[0].video_card_link.split("v=")[1]?.split("&")[0]
+      : teacher?.skills[0].video_card_link ?? "";
 
   return (
     <View
@@ -214,13 +217,13 @@ const TeacherProfilePage = () => {
               />
               <StatsItem
                 icon="graduation-cap"
-                value="0"
+                value={teacher.finished_lessons.toString()}
                 label={t("lessons")}
                 iconColor="#ccc"
               />
               <StatsItem
                 icon="user"
-                value="0"
+                value={teacher.count_of_students.toString()}
                 label={t("students")}
                 iconColor="#ccc"
               />

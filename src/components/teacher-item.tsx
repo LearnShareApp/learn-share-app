@@ -7,7 +7,13 @@ import { useLanguage } from "../providers/language-provider";
 import { useTheme } from "../providers/theme-provider";
 import { useAvatar } from "../utilities/avatar-hook";
 
-const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
+const TeacherListItem = ({
+  teacher,
+  category,
+}: {
+  teacher: TeacherProfile;
+  category?: string;
+}) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar);
@@ -81,7 +87,9 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
               </>
             )}{" "}
           </Text>
-          <Text style={{ color: theme.colors.text }}>0 {t("classes")}</Text>
+          <Text style={{ color: theme.colors.text }}>
+            {teacher.finished_lessons.toString()} {t("classes")}
+          </Text>
         </View>
       </Pressable>
     </Link>

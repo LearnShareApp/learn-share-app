@@ -35,6 +35,7 @@ const Search = () => {
       try {
         setLoading(true);
         const response = await apiService.getTeachers();
+        console.log(response);
         setTeachers(response || []);
       } catch (err) {
         console.error("Error details:", err);
