@@ -22,10 +22,24 @@ const TeacherListItem = ({
     return null;
   }
 
-  const firstSkillRate = teacher.skills?.[0]?.rate ?? 0;
+  let skillToShow = teacher.skills[0];
+
+  if (category) {
+    const skill = teacher.skills.find(
+      (skill) => skill.category_id.toString() === category
+    );
+    if (skill) {
+      skillToShow = skill;
+    }
+  }
+
+  const firstSkillRate = skillToShow?.rate ?? 0;
 
   return (
-    <Link href={`/teacher/${teacher.user_id}`} asChild>
+    <Link
+      href={`/teacher/${teacher.user_id}?skill_id=${skillToShow?.skill_id}`}
+      asChild
+    >
       <Pressable
         style={{
           flexDirection: "row",

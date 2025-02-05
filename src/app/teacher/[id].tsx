@@ -12,7 +12,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import SkillBadge from "../../components/skill";
-import YouTubeIframe from "react-native-youtube-iframe";
+import YouTubeVideo from "../../components/youtube-video";
 import { FontAwesome } from "@expo/vector-icons";
 import Line from "../../components/line";
 import ReviewItem from "../../components/review-item";
@@ -20,12 +20,13 @@ import { apiService, TeacherProfile } from "../../utilities/api";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
-import YouTubeVideo from "../../components/youtube-video";
 import { useRefresh } from "../../providers/refresh-provider";
+
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { skill_id } = useLocalSearchParams<{ skill_id?: string }>();
   const router = useRouter();
 
   const { t } = useLanguage();
@@ -43,7 +44,7 @@ const TeacherProfilePage = () => {
     setRefreshing(false);
   };
 
-  const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar ?? null);
+  const { avatarSource } = useAvatar(teacher?.avatar ?? null);
 
   const fetchTeacher = async () => {
     try {
@@ -81,7 +82,7 @@ const TeacherProfilePage = () => {
     );
   }
 
-  if (error || !teacher) {
+  if (error || !teacher || teacher.skills.length === 0) {
     return (
       <View
         style={[
@@ -96,10 +97,26 @@ const TeacherProfilePage = () => {
     );
   }
 
+  const selectedSkill = skill_id
+    ? teacher?.skills.find((skill) => skill.skill_id.toString() === skill_id)
+    : teacher?.skills[0];
+
+  if (!selectedSkill) {
+    return (
+      <View
+        style={[
+          styles.centerContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
+        <Text style={{ color: theme.colors.text }}>Skill not found</Text>
+      </View>
+    );
+  }
   const videoId =
-    teacher?.skills[0].video_card_link.length > 14
-      ? teacher?.skills[0].video_card_link.split("v=")[1]?.split("&")[0]
-      : teacher?.skills[0].video_card_link ?? "";
+    selectedSkill.video_card_link?.length > 14
+      ? selectedSkill?.video_card_link.split("v=")[1]?.split("&")[0]
+      : selectedSkill?.video_card_link ?? "";
 
   return (
     <View
@@ -120,9 +137,7 @@ const TeacherProfilePage = () => {
               ]}
               onPressOut={() => {
                 router.push(
-                  `/teacher//book?category_id=${1}&teacher_id=${
-                    teacher.teacher_id
-                  }&user_id=${teacher.user_id}`
+                  `/teacher/book?category_id=${selectedSkill.category_id}&teacher_id=${teacher.teacher_id}&user_id=${teacher.user_id}`
                 );
               }}
             >
@@ -158,13 +173,6 @@ const TeacherProfilePage = () => {
               }}
             >
               <YouTubeVideo videoId={videoId} />
-              {/* <YouTubeIframe
-                width={"100%"}
-                height={"100%"}
-                videoId={videoId}
-                play={true}
-                onReady={() => console.log("Video is ready")}
-              /> */}
             </View>
             <View
               style={[
@@ -199,7 +207,7 @@ const TeacherProfilePage = () => {
               </Text>
               <Line />
               <Text style={[styles.aboutText, { color: theme.colors.text }]}>
-                {teacher.skills[0].about || t("no_description")}
+                {selectedSkill.about || t("no_description")}
               </Text>
             </View>
             <View
@@ -211,7 +219,7 @@ const TeacherProfilePage = () => {
             >
               <StatsItem
                 icon="star"
-                value={teacher.skills[0].rate.toFixed(1)}
+                value={selectedSkill.rate.toFixed(1)}
                 label={t("rate")}
                 iconColor="gold"
               />
@@ -235,9 +243,7 @@ const TeacherProfilePage = () => {
               ]}
               onPress={() => {
                 router.push(
-                  `/teacher/book?category_id=${1}&teacher_id=${
-                    teacher.teacher_id
-                  }&user_id=${teacher.user_id}`
+                  `/teacher/book?category_id=${selectedSkill.category_id}&teacher_id=${teacher.teacher_id}&user_id=${teacher.user_id}`
                 );
               }}
             >
@@ -342,9 +348,6 @@ const styles = StyleSheet.create({
   },
   rates: {
     alignItems: "center",
-  },
-  goldText: {
-    color: "#C9A977",
   },
   labelText: {
     color: "#777",

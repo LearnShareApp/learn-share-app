@@ -35,7 +35,6 @@ const Search = () => {
       try {
         setLoading(true);
         const response = await apiService.getTeachers();
-        console.log(response);
         setTeachers(response || []);
       } catch (err) {
         console.error("Error details:", err);
@@ -193,7 +192,14 @@ const Search = () => {
       ) : (
         <FlatList
           data={filteredTeachers}
-          renderItem={({ item }) => <TeacherListItem teacher={item} />}
+          renderItem={({ item }) => (
+            <TeacherListItem
+              teacher={item}
+              {...(selectedCategory && {
+                category: selectedCategory,
+              })}
+            />
+          )}
           keyExtractor={(item) => item.teacher_id.toString()}
           contentContainerStyle={styles.listContainer}
           style={{ flex: 1 }}
