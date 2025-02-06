@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import SkillBadge from "../../components/skill";
 import YouTubeVideo from "../../components/youtube-video";
 import { FontAwesome } from "@expo/vector-icons";
@@ -194,7 +194,12 @@ const TeacherProfilePage = () => {
                 </Text>
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
-                    <SkillBadge text={item.category_name} key={item.skill_id} />
+                    <Link
+                      href={`/teacher/${teacher.user_id}?skill_id=${item.skill_id}`}
+                      key={item.skill_id}
+                    >
+                      <SkillBadge text={item.category_name} />
+                    </Link>
                   ))}
                 </View>
               </View>

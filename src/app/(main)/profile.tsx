@@ -134,7 +134,7 @@ const Profile = () => {
                   {t("teachers_amount")}
                 </Text>
                 <Text style={{ fontSize: 24, color: theme.colors.text }}>
-                  0
+                  {profile?.count_of_teachers}
                 </Text>
               </View>
               <View style={styles.infoSection}>
@@ -142,7 +142,7 @@ const Profile = () => {
                   {t("lessons_completed")}
                 </Text>
                 <Text style={{ fontSize: 24, color: theme.colors.text }}>
-                  0
+                  {profile?.finished_lessons}
                 </Text>
               </View>
             </View>

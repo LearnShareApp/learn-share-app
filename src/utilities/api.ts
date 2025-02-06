@@ -43,7 +43,7 @@ export interface Category {
 
 export interface Skill {
   label: string;
-  value: string;
+  value: string | null;
 }
 
 export interface CategoriesResponse {
@@ -66,6 +66,10 @@ export interface UserProfile {
   surname: string;
   birthdate: string;
   avatar: string;
+  count_of_teachers: number;
+  waiting_lessons: number;
+  verification_lessons: number;
+  finished_lessons: number;
 }
 
 export interface TeacherSkill {

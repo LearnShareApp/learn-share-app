@@ -167,7 +167,7 @@ const Home = () => {
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
                 <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
-                  0
+                  {profile?.finished_lessons}
                 </Text>
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
@@ -177,7 +177,7 @@ const Home = () => {
               </View>
               <View style={styles.infoSection}>
                 <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
-                  0
+                  {profile?.verification_lessons}
                 </Text>
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
@@ -187,7 +187,7 @@ const Home = () => {
               </View>
               <View style={styles.infoSection}>
                 <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
-                  0
+                  {profile?.waiting_lessons}
                 </Text>
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}

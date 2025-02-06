@@ -55,10 +55,13 @@ const Search = () => {
 
   useEffect(() => {
     if (categories) {
-      const items: Skill[] = categories.map((category) => ({
-        label: category.name,
-        value: category.id.toString(),
-      }));
+      const items: Skill[] = [
+        { label: t("All"), value: null },
+        ...categories.map((category) => ({
+          label: category.name,
+          value: category.id.toString(),
+        })),
+      ];
       setDropdownItems(items);
     }
   }, [categories]);
