@@ -25,10 +25,10 @@ import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
 import { FontAwesome } from "@expo/vector-icons";
-
+import { LiveKit_URL } from "@env";
 registerGlobals();
 
-const wsURL = "wss://learn-and-share-app-raalcu2w.livekit.cloud";
+const wsURL = LiveKit_URL;
 
 export default function Lesson() {
   const { id, lesson_id } = useLocalSearchParams();
@@ -160,19 +160,23 @@ const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
 
   const switchCamera = async () => {
     try {
-      const videoTrack = localParticipant?.getTrackPublication(Track.Source.Camera)?.track;
+      const videoTrack = localParticipant?.getTrackPublication(
+        Track.Source.Camera
+      )?.track;
       if (videoTrack?.mediaStreamTrack) {
         // @ts-ignore - метод существует в react-native-webrtc
         await videoTrack.mediaStreamTrack._switchCamera();
       }
     } catch (error) {
-      console.error('Ошибка при переключении камеры:', error);
+      console.error("Ошибка при переключении камеры:", error);
     }
   };
 
   const toggleMicrophone = async () => {
     try {
-      const audioTrack = localParticipant?.getTrackPublication(Track.Source.Microphone)?.track;
+      const audioTrack = localParticipant?.getTrackPublication(
+        Track.Source.Microphone
+      )?.track;
       if (audioTrack) {
         if (isMuted) {
           await audioTrack.unmute();
@@ -182,7 +186,7 @@ const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
         setIsMuted(!isMuted);
       }
     } catch (error) {
-      console.error('Ошибка при управлении микрофоном:', error);
+      console.error("Ошибка при управлении микрофоном:", error);
     }
   };
 
@@ -204,23 +208,20 @@ const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
         style={styles.trackList}
       />
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity 
-          style={styles.grayButton} 
-          onPress={switchCamera}
-        >
+        <TouchableOpacity style={styles.grayButton} onPress={switchCamera}>
           <FontAwesome name="video-camera" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={isMuted ? styles.whiteButton : styles.grayButton} 
+        <TouchableOpacity
+          style={isMuted ? styles.whiteButton : styles.grayButton}
           onPress={toggleMicrophone}
         >
-          <FontAwesome name={isMuted ? "microphone-slash" : "microphone"} size={24} color={isMuted ? "grey" : "white"} />
+          <FontAwesome
+            name={isMuted ? "microphone-slash" : "microphone"}
+            size={24}
+            color={isMuted ? "grey" : "white"}
+          />
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.endCallButton} 
-
-          onPress={onEndCall}
-        >
+        <TouchableOpacity style={styles.endCallButton} onPress={onEndCall}>
           <FontAwesome name="phone" size={24} color="white" />
         </TouchableOpacity>
       </View>
@@ -278,7 +279,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 64,
     height: 64,
-
   },
   endCallContainer: {
     flex: 1,
