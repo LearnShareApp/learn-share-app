@@ -55,10 +55,13 @@ const Search = () => {
 
   useEffect(() => {
     if (categories) {
-      const items: Skill[] = categories.map((category) => ({
-        label: category.name,
-        value: category.id.toString(),
-      }));
+      const items: Skill[] = [
+        { label: t("All"), value: null },
+        ...categories.map((category) => ({
+          label: category.name,
+          value: category.id.toString(),
+        })),
+      ];
       setDropdownItems(items);
     }
   }, [categories]);
@@ -192,7 +195,14 @@ const Search = () => {
       ) : (
         <FlatList
           data={filteredTeachers}
-          renderItem={({ item }) => <TeacherListItem teacher={item} />}
+          renderItem={({ item }) => (
+            <TeacherListItem
+              teacher={item}
+              {...(selectedCategory && {
+                category: selectedCategory,
+              })}
+            />
+          )}
           keyExtractor={(item) => item.teacher_id.toString()}
           contentContainerStyle={styles.listContainer}
           style={{ flex: 1 }}
@@ -230,7 +240,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   listContainer: {
-    gap: 4,
+    gap: 8,
   },
   dropdownContainer: {
     borderRadius: 8,

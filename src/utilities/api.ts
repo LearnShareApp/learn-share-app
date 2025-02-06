@@ -1,4 +1,3 @@
-// services/api.ts
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 
@@ -44,7 +43,7 @@ export interface Category {
 
 export interface Skill {
   label: string;
-  value: string;
+  value: string | null;
 }
 
 export interface CategoriesResponse {
@@ -66,6 +65,11 @@ export interface UserProfile {
   name: string;
   surname: string;
   birthdate: string;
+  avatar: string;
+  count_of_teachers: number;
+  waiting_lessons: number;
+  verification_lessons: number;
+  finished_lessons: number;
 }
 
 export interface TeacherSkill {
@@ -78,6 +82,7 @@ export interface TeacherSkill {
 }
 
 export interface TeacherProfile {
+  avatar: string;
   user_id: number;
   teacher_id: number;
   registration_date: Date;
@@ -85,6 +90,8 @@ export interface TeacherProfile {
   name: string;
   surname: string;
   birthdate: string;
+  finished_lessons: number;
+  count_of_students: number;
   skills: TeacherSkill[];
 }
 
@@ -160,6 +167,18 @@ class ApiService {
     return response.data;
   }
 
+  async updateProfile(data: {
+    email: string;
+    name: string;
+    surname: string;
+    birthdate: string;
+    avatar: string;
+  }): Promise<String> {
+    const response = await this.api.patch("/api/user/profile", data);
+    console.log(data, response.statusText);
+    return "success";
+  }
+
   async addSkill(data: AddSkillData): Promise<String> {
     const response = await this.api.post("/api/teacher/skill", data);
     return response.statusText;
@@ -180,6 +199,17 @@ class ApiService {
       `/api/teachers/${id}/schedule`
     );
     return response.data.datetimes;
+  }
+
+  async getAvatar(avatarId: string): Promise<ArrayBuffer> {
+    const response = await this.api.get(`/api/image?filename=${avatarId}`, {
+      headers: {
+        Accept: "image/*",
+      },
+      responseType: "arraybuffer",
+    });
+
+    return response.data;
   }
 
   async lessonRequest(data: LessonRequestData): Promise<String> {

@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Modal,
 } from "react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AudioSession,
   LiveKitRoom,
@@ -18,12 +18,13 @@ import {
   VideoTrack,
   isTrackReference,
   registerGlobals,
+  useLocalParticipant,
 } from "@livekit/react-native";
 import { Track } from "livekit-client";
 import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
-import { apiService } from "../../utilities/api";
+import { FontAwesome } from "@expo/vector-icons";
 
 registerGlobals();
 
@@ -154,6 +155,36 @@ export default function Lesson() {
 
 const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
   const tracks = useTracks([Track.Source.Camera]);
+  const { localParticipant } = useLocalParticipant();
+  const [isMuted, setIsMuted] = useState(false);
+
+  const switchCamera = async () => {
+    try {
+      const videoTrack = localParticipant?.getTrackPublication(Track.Source.Camera)?.track;
+      if (videoTrack?.mediaStreamTrack) {
+        // @ts-ignore - метод существует в react-native-webrtc
+        await videoTrack.mediaStreamTrack._switchCamera();
+      }
+    } catch (error) {
+      console.error('Ошибка при переключении камеры:', error);
+    }
+  };
+
+  const toggleMicrophone = async () => {
+    try {
+      const audioTrack = localParticipant?.getTrackPublication(Track.Source.Microphone)?.track;
+      if (audioTrack) {
+        if (isMuted) {
+          await audioTrack.unmute();
+        } else {
+          await audioTrack.mute();
+        }
+        setIsMuted(!isMuted);
+      }
+    } catch (error) {
+      console.error('Ошибка при управлении микрофоном:', error);
+    }
+  };
 
   const renderTrack: ListRenderItem<TrackReferenceOrPlaceholder> = ({
     item,
@@ -172,9 +203,27 @@ const RoomView = ({ onEndCall }: { onEndCall: () => void }) => {
         renderItem={renderTrack}
         style={styles.trackList}
       />
-      <TouchableOpacity style={styles.endCallButton} onPress={onEndCall}>
-        <Text style={styles.endCallButtonText}>End Call</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity 
+          style={styles.grayButton} 
+          onPress={switchCamera}
+        >
+          <FontAwesome name="video-camera" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={isMuted ? styles.whiteButton : styles.grayButton} 
+          onPress={toggleMicrophone}
+        >
+          <FontAwesome name={isMuted ? "microphone-slash" : "microphone"} size={24} color={isMuted ? "grey" : "white"} />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.endCallButton} 
+
+          onPress={onEndCall}
+        >
+          <FontAwesome name="phone" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -194,21 +243,42 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
   },
-  endCallButton: {
-    backgroundColor: "#FF4D4D",
-    padding: 15,
-    margin: 20,
-    borderRadius: 10,
-    alignItems: "center",
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 20,
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
   },
-  endCallButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
+  grayButton: {
+    backgroundColor: "#808080", // Серый цвет для кнопок камеры и микрофона
+    padding: 16,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 64,
+    height: 64,
+  },
+  whiteButton: {
+    backgroundColor: "#FFFFFF", // Белый цвет для кнопок камеры и микрофона
+    padding: 16,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 64,
+    height: 64,
+  },
+  endCallButton: {
+    backgroundColor: "#F44336", // Красный цвет для кнопки завершения звонка
+    padding: 16,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 64,
+    height: 64,
+
   },
   endCallContainer: {
     flex: 1,

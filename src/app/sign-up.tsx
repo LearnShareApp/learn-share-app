@@ -17,10 +17,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
 import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from 'expo-image-manipulator';
 import { useLanguage } from "../providers/language-provider";
 import { LanguageSelector } from "../components/LanguageSelector";
+import { useTheme } from "../providers/theme-provider";
 
 const authSchema = zod.object({
+  avatar: zod.string().optional(),
   email: zod.string().email({ message: "Неважећа адреса " }),
   password: zod
     .string()
@@ -37,12 +41,14 @@ const SignUp = () => {
   if (token) return <Redirect href={"/"} />;
 
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const [showPicker, setShowPicker] = useState(false);
 
   const { control, handleSubmit, formState } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     defaultValues: {
+      avatar: "",
       email: "",
       password: "",
       name: "",
@@ -53,6 +59,10 @@ const SignUp = () => {
 
   const signUp = async (data: AuthFormData) => {
     try {
+      if (base64Image) {
+        data.avatar = base64Image;
+      }
+
       const response = await apiService.signUp(data);
       await signIn(response.token);
       Toast.show(t("successfully_signed_up"), {
@@ -81,12 +91,61 @@ const SignUp = () => {
     }
   };
 
+  const [image, setImage] = useState<string | null>(null);
+  const [base64Image, setBase64Image] = useState<string | null>(null);
+
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+      try {
+        const manipResult = await ImageManipulator.manipulateAsync(
+          imageUri,
+          [{ resize: { width: 512, height: 512 } }],
+          { 
+            compress: 0.5, 
+            format: ImageManipulator.SaveFormat.JPEG,
+            base64: true
+          }
+
+        );
+
+        setImage(manipResult.uri);
+        setBase64Image(manipResult.base64 ?? "");
+
+      } catch (error) {
+        console.error('Ошибка обработки изображения:', error);
+        Toast.show('Не удалось обработать изображение', {
+          type: 'error',
+          placement: 'top',
+          duration: 3000,
+        });
+      }
+    }
+  };
+
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
       <View style={styles.container}>
         <Text style={styles.title}>{t("welcome")}</Text>
         <Text style={styles.subtitle}>{t("sign_up")}</Text>
 
+        <View>
+        <TouchableOpacity onPress={pickImage}>
+          <Text style={{ color: theme.colors.primary, paddingTop: 16 }}>
+            Change photo
+          </Text>
+        </TouchableOpacity>
+
+        </View>
         <Controller
           control={control}
           name="name"

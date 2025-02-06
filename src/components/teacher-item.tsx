@@ -5,19 +5,41 @@ import { FontAwesome } from "@expo/vector-icons";
 import { TeacherProfile } from "../utilities/api";
 import { useLanguage } from "../providers/language-provider";
 import { useTheme } from "../providers/theme-provider";
+import { useAvatar } from "../utilities/avatar-hook";
 
-const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
+const TeacherListItem = ({
+  teacher,
+  category,
+}: {
+  teacher: TeacherProfile;
+  category?: string;
+}) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const { avatarSource, loadingAvatar } = useAvatar(teacher?.avatar);
 
   if (!teacher) {
     return null;
   }
 
-  const firstSkillRate = teacher.skills?.[0]?.rate ?? 0;
+  let skillToShow = teacher.skills[0];
+
+  if (category) {
+    const skill = teacher.skills.find(
+      (skill) => skill.category_id.toString() === category
+    );
+    if (skill) {
+      skillToShow = skill;
+    }
+  }
+
+  const firstSkillRate = skillToShow?.rate ?? 0;
 
   return (
-    <Link href={`/teacher/${teacher.user_id}`} asChild>
+    <Link
+      href={`/teacher/${teacher.user_id}?skill_id=${skillToShow?.skill_id}`}
+      asChild
+    >
       <Pressable
         style={{
           flexDirection: "row",
@@ -30,10 +52,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
           backgroundColor: theme.colors.card,
         }}
       >
-        <Image
-          source={require("../../assets/icon.jpg")}
-          style={styles.avatar}
-        />
+        <Image source={avatarSource} style={styles.avatar} />
         <View style={styles.teacherInfo}>
           <View style={styles.names}>
             <Text style={{ color: theme.colors.text }}>{teacher.name}</Text>
@@ -54,7 +73,7 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
             )}
           </View>
         </View>
-        <View style={styles.grades}>
+        <View style={[styles.grades, { flexShrink: 1 }]}>
           <Text
             style={{
               fontSize: 18,
@@ -82,7 +101,9 @@ const TeacherListItem = ({ teacher }: { teacher: TeacherProfile }) => {
               </>
             )}{" "}
           </Text>
-          <Text style={{ color: theme.colors.text }}>0 {t("classes")}</Text>
+          <Text style={{ color: theme.colors.text }}>
+            {teacher.finished_lessons.toString()} {t("classes")}
+          </Text>
         </View>
       </Pressable>
     </Link>
@@ -99,10 +120,12 @@ const styles = StyleSheet.create({
   },
   teacherInfo: {
     gap: 8,
+    flex: 1,
   },
   names: {
     flexDirection: "row",
     gap: 4,
+    flexWrap: "wrap",
   },
   skillsList: {
     gap: 5,
@@ -113,5 +136,6 @@ const styles = StyleSheet.create({
   grades: {
     alignItems: "flex-end",
     marginLeft: "auto",
+    flexShrink: 1,
   },
 });

@@ -19,7 +19,7 @@ import { useTeacher } from "../utilities/teacher-hook";
 import { useLanguage } from "../providers/language-provider";
 
 const youtubeUrlRegex =
-  /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
+  /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}(\?.*)?$/;
 
 const SkillAdding = () => {
   const { t } = useLanguage();
@@ -37,7 +37,14 @@ const SkillAdding = () => {
       .refine(
         (url) => youtubeUrlRegex.test(url),
         t("have_to_be_a_link_to_your_youtube_video")
-      ),
+      )
+      .transform((url) => {
+        const match = url.match(
+          /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+        );
+        const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+        return match ? match[1] : shortMatch ? shortMatch[1] : url;
+      }),
     about: zod.string().min(8, t("describe_your_skill")),
   });
 
@@ -84,6 +91,7 @@ const SkillAdding = () => {
         video_card_link: data.video_card_link,
         about: data.about,
       };
+      console.log(postData);
       const response = await apiService.addSkill(postData);
       Toast.show(t("request_success"), {
         type: "success",

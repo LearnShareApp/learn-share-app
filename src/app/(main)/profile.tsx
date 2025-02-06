@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from "react-native";
 import { Link } from "expo-router";
 import * as Clipboard from "expo-clipboard";
@@ -16,11 +17,21 @@ import Line from "../../components/line";
 import { useProfile } from "../../utilities/profile-hook";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
+import { useAvatar } from "../../utilities/avatar-hook";
+import { useRefresh } from "../../providers/refresh-provider";
 
 const Profile = () => {
-  const { profile, loadingProfile, errorProfile } = useProfile();
+  const { profile, loadingProfile, errorProfile, refetch } = useProfile();
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const { avatarSource, loadingAvatar } = useAvatar(profile?.avatar ?? null);
+  const { refreshing, setRefreshing } = useRefresh();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   if (loadingProfile) {
     return (
@@ -62,7 +73,12 @@ const Profile = () => {
         requireChanges
         requireSettings
       />
-      <ScrollView style={{ backgroundColor: theme.colors.background }}>
+      <ScrollView
+        style={{ backgroundColor: theme.colors.background }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.container}>
           <View
             style={[
@@ -75,8 +91,11 @@ const Profile = () => {
             ]}
           >
             <Image
-              source={require("../../../assets/icon.jpg")}
+              source={avatarSource}
               style={styles.image}
+              onError={(e) =>
+                console.error("Image loading error:", e.nativeEvent.error)
+              }
             />
             <View style={styles.userInfo}>
               <Text
@@ -112,10 +131,10 @@ const Profile = () => {
             <View style={styles.infoSections}>
               <View style={styles.infoSection}>
                 <Text style={{ textAlign: "center", color: theme.colors.text }}>
-                  {t("learning_hours")}
+                  {t("teachers_amount")}
                 </Text>
                 <Text style={{ fontSize: 24, color: theme.colors.text }}>
-                  0
+                  {profile?.count_of_teachers}
                 </Text>
               </View>
               <View style={styles.infoSection}>
@@ -123,7 +142,7 @@ const Profile = () => {
                   {t("lessons_completed")}
                 </Text>
                 <Text style={{ fontSize: 24, color: theme.colors.text }}>
-                  0
+                  {profile?.finished_lessons}
                 </Text>
               </View>
             </View>
@@ -287,9 +306,9 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    padding: 16,
     gap: 8,
+    paddingTop: 0,
   },
   object: {
     borderRadius: 8,
@@ -325,9 +344,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    width: 64,
-    height: 64,
-    borderRadius: 50,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#eee",
   },
   userInfo: {
     flex: 1,

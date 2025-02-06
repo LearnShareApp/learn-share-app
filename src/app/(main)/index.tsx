@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   Image,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -22,16 +23,24 @@ import { apiService, TeacherProfile } from "../../utilities/api";
 import { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { Lesson } from "../../utilities/api";
+import { useRefresh } from "../../providers/refresh-provider";
 
 const Home = () => {
   const { token, signOut } = useAuth();
   const { t } = useLanguage();
   const { theme } = useTheme();
-
   if (!token) return <Redirect href={"/sign-in"} />;
 
-  const { profile, loadingProfile, errorProfile } = useProfile();
+  const { profile, loadingProfile, errorProfile, refetch } = useProfile();
   const { loadingCategories, errorCategories } = useCategories();
+
+  const { refreshing, setRefreshing } = useRefresh();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const [nextLesson, setNextLesson] = useState<Lesson[]>([]);
   const [previousTeachers, setPreviousTeachers] = useState<TeacherProfile[]>(
@@ -106,7 +115,12 @@ const Home = () => {
         requireCalendar
         requireSettings
       />
-      <ScrollView style={{ backgroundColor: theme.colors.background }}>
+      <ScrollView
+        style={{ backgroundColor: theme.colors.background }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.container}>
           <Link href="/search" asChild>
             <Pressable
@@ -153,7 +167,7 @@ const Home = () => {
             <View style={styles.infoStats}>
               <View style={styles.infoSection}>
                 <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
-                  0
+                  {profile?.finished_lessons}
                 </Text>
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
@@ -163,7 +177,7 @@ const Home = () => {
               </View>
               <View style={styles.infoSection}>
                 <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
-                  0
+                  {profile?.verification_lessons}
                 </Text>
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
@@ -173,7 +187,7 @@ const Home = () => {
               </View>
               <View style={styles.infoSection}>
                 <Text style={[styles.infoNumber, { color: theme.colors.text }]}>
-                  0
+                  {profile?.waiting_lessons}
                 </Text>
                 <Text
                   style={{ color: "#888", width: 100, textAlign: "center" }}
@@ -234,8 +248,8 @@ const Home = () => {
           </Text>
           <View style={[styles.listContainer, { flex: 1 }]}>
             {previousTeachers.length > 0 ? (
-              previousTeachers.map((previousTeacher) => (
-                <TeacherListItem teacher={previousTeacher} />
+              previousTeachers.map((previousTeacher, index) => (
+                <TeacherListItem key={index} teacher={previousTeacher} />
               ))
             ) : (
               <View

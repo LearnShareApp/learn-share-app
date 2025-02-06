@@ -8,6 +8,7 @@ import { AuthProvider } from "../providers/auth-provider";
 import { LanguageProvider, useLanguage } from "../providers/language-provider";
 import { ThemeProvider, useTheme } from "../providers/theme-provider";
 import * as SecureStore from "expo-secure-store";
+import { RefreshProvider } from "../providers/refresh-provider";
 
 const StackNavigator = () => {
   const { theme } = useTheme();
@@ -54,6 +55,10 @@ const StackNavigator = () => {
       <Stack.Screen
         name="requests"
         options={{ headerShown: true, title: t("new_requests") }}
+      />
+      <Stack.Screen
+        name="edit"
+        options={{ headerShown: true, title: t("edit_profile") }}
       />
       <Stack.Screen
         name="stats"
@@ -110,8 +115,10 @@ export default function RootLayout() {
       <ThemeProvider>
         <ToastProvider>
           <AuthProvider>
-            <StatusBar style="auto" />
-            <StackNavigator />
+            <RefreshProvider>
+              <StatusBar style="auto" />
+              <StackNavigator />
+            </RefreshProvider>
           </AuthProvider>
         </ToastProvider>
       </ThemeProvider>

@@ -30,11 +30,15 @@ const HeaderElement = ({
           </Link>
         )}
         {requireChanges && (
-          <FontAwesome
-            size={28}
-            name="pencil-square"
-            style={{ color: theme.colors.primary }}
-          />
+          <Link href="/edit" asChild>
+            <Pressable>
+              <FontAwesome
+                size={28}
+                name="pencil-square"
+                style={{ color: theme.colors.primary }}
+              />
+            </Pressable>
+          </Link>
         )}
         {requireSettings && (
           <Link href="/settings" asChild>

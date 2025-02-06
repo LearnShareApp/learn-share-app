@@ -13,7 +13,7 @@ const TeacherSkillListItem = ({ skill }: { skill: TeacherSkill }) => {
   const { teacher } = useTeacher();
 
   return (
-    <Link href={`/teachers/${teacher?.teacher_id}`} asChild>
+    <Link href={`/teacher/${teacher?.user_id}`} asChild>
       <Pressable
         style={{
           backgroundColor: theme.colors.card,
