@@ -11,6 +11,9 @@ const Finish = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const { lesson_id } = useLocalSearchParams();
+  const { user_id } = useLocalSearchParams();
+  const { category } = useLocalSearchParams();
+  const { is_teacher } = useLocalSearchParams();
 
   const lessonFinish = async () => {
     try {
@@ -59,6 +62,16 @@ const Finish = () => {
           {t("go_back_home")}
         </Text>
       </TouchableOpacity>
+
+      {is_teacher && (
+        <Link href={`/teacher/${user_id}?category=${category}&review=1`}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={[styles.buttonText, { color: theme.colors.text }]}>
+              {t("leave_review")}
+            </Text>
+          </TouchableOpacity>
+        </Link>
+      )}
     </View>
   );
 };

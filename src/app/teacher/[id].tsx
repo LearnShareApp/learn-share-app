@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   RefreshControl,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -21,20 +23,25 @@ import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
 import { useRefresh } from "../../providers/refresh-provider";
+import { StatusBar } from "expo-status-bar";
 
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
 const TeacherProfilePage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { skill_id } = useLocalSearchParams<{ skill_id?: string }>();
+  const { category } = useLocalSearchParams<{ category?: string }>();
+  const { review } = useLocalSearchParams<{ review?: string }>();
   const router = useRouter();
 
   const { t } = useLanguage();
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
 
   const [teacher, setTeacher] = useState<TeacherProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(
+    review === "1" ? true : false
+  );
 
   const { refreshing, setRefreshing } = useRefresh();
 
@@ -67,7 +74,12 @@ const TeacherProfilePage = () => {
 
   useEffect(() => {
     fetchTeacher();
-  }, [id]);
+  }, [id, review]);
+
+  const closeModal = () => {
+    setModalVisible(false);
+    // router.replace(`/teacher/${id}?skill_id=${skill_id}&review=0`);
+  };
 
   if (loading) {
     return (
@@ -97,8 +109,8 @@ const TeacherProfilePage = () => {
     );
   }
 
-  const selectedSkill = skill_id
-    ? teacher?.skills.find((skill) => skill.skill_id.toString() === skill_id)
+  const selectedSkill = category
+    ? teacher?.skills.find((skill) => skill.category_id.toString() === category)
     : teacher?.skills[0];
 
   if (!selectedSkill) {
@@ -149,6 +161,10 @@ const TeacherProfilePage = () => {
             </TouchableOpacity>
           ),
         }}
+      />
+      <StatusBar
+        style={!isDark ? "light" : "dark"}
+        backgroundColor={theme.colors.card}
       />
       <FlatList
         refreshControl={
@@ -270,6 +286,30 @@ const TeacherProfilePage = () => {
         keyExtractor={(item) => item.userName}
         contentContainerStyle={styles.listContainer}
       />
+      <Modal visible={modalVisible} transparent={true} animationType="fade">
+        <TouchableWithoutFeedback onPress={closeModal}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View
+                style={[
+                  styles.modalContent,
+                  { backgroundColor: theme.colors.card },
+                ]}
+              >
+                <Text style={{ color: theme.colors.text }}>
+                  {t("leave_review")}
+                </Text>
+                <TouchableOpacity
+                  onPress={closeModal}
+                  style={styles.closeButton}
+                >
+                  <Text style={{ color: "white" }}>{t("leave_review")}</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
@@ -308,6 +348,10 @@ const StatsItem = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  fullscreen: {
+    width: "100%",
+    height: "100%",
   },
   centerContainer: {
     flex: 1,
@@ -391,6 +435,26 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     textAlign: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalContent: {
+    width: "100%",
+    padding: 20,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    backgroundColor: "#fff",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#C9A977",
+    borderRadius: 5,
+    alignItems: "center",
   },
 });
 

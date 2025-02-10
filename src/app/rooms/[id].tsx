@@ -32,7 +32,12 @@ const wsURL = LiveKit_URL;
 
 export default function Lesson() {
   const { id, lesson_id } = useLocalSearchParams();
+  const { user_id } = useLocalSearchParams();
+  const { category } = useLocalSearchParams();
+  const { is_teacher } = useLocalSearchParams();
+
   const { t } = useLanguage();
+
   const [isLoading, setIsLoading] = useState(true);
   const [roomToken, setRoomToken] = useState<string | null>(null);
   const [isCallActive, setIsCallActive] = useState(true);
@@ -83,7 +88,9 @@ export default function Lesson() {
     });
 
     setTimeout(() => {
-      router.replace(`/rooms/finish?lesson_id=${lesson_id}`);
+      router.replace(
+        `/rooms/finish?lesson_id=${lesson_id}&user_id=${user_id}&category=${category}$is_teacher=${is_teacher}`
+      );
     }, 3000);
   };
 

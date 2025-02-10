@@ -179,7 +179,11 @@ const LessonItem = ({
           duration: 1500,
         };
       router.push(
-        `/rooms/${tokenResponse}?lesson_id=${lessonItemData.lesson_id}`
+        `/rooms/${tokenResponse}?lesson_id=${
+          lessonItemData.lesson_id
+        }&user_id=${lessonItemData.user_id}&category=${
+          lessonItemData.category_id
+        }$is_teacher=${forTeacher ? "1" : "0"}`
       );
     } catch (error) {
       if (axios.isAxiosError(error)) {

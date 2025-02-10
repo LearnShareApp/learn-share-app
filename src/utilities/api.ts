@@ -25,6 +25,13 @@ export interface AddTimeData {
   datetime: Date;
 }
 
+export interface AddReview {
+  category_id: number;
+  comment: string;
+  rate: number;
+  teacher_id: number;
+}
+
 export interface LessonRequestData {
   teacher_id: number;
   category_id: number;
@@ -189,6 +196,11 @@ class ApiService {
     return response.statusText;
   }
 
+  async addReview(data: AddReview): Promise<String> {
+    const response = await this.api.post("/api/review", data);
+    return response.statusText;
+  }
+
   async getTime(): Promise<DateTime[]> {
     const response = await this.api.get<TimesResponse>("/api/teacher/schedule");
     return response.data.datetimes;
@@ -260,7 +272,7 @@ class ApiService {
   }
 
   async getLessons(): Promise<Lesson[]> {
-    const response = await this.api.get<LessonResponse>("/api/lessons");
+    const response = await this.api.get<LessonResponse>("/api/student/lessons");
     return response.data.lessons;
   }
 
