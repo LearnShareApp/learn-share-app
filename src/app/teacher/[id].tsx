@@ -211,10 +211,14 @@ const TeacherProfilePage = () => {
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
                     <Link
-                      href={`/teacher/${teacher.user_id}?skill_id=${item.skill_id}`}
+                      href={`/teacher/${teacher.user_id}?category=${item.category_id}`}
                       key={item.skill_id}
                     >
-                      <SkillBadge text={item.category_name} />
+                      <SkillBadge
+                        text={item.category_name}
+                        {...(item.category_name !==
+                          selectedSkill.category_name && { inactive: true })}
+                      />
                     </Link>
                   ))}
                 </View>
@@ -339,7 +343,7 @@ const StatsItem = ({
         {value}
       </Text>
       <Text style={[styles.labelText, { color: theme.colors.text }]}>
-        {label}
+        {value}
       </Text>
     </View>
   );

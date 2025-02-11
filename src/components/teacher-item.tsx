@@ -83,7 +83,9 @@ const TeacherListItem = ({
           >
             {firstSkillRate ? (
               <>
-                {firstSkillRate.toFixed(1)}
+                <Text style={{ color: theme.colors.text }}>
+                  {firstSkillRate.toFixed(1)}
+                </Text>
                 <FontAwesome
                   size={24}
                   name="star"
@@ -92,7 +94,7 @@ const TeacherListItem = ({
               </>
             ) : (
               <>
-                {"--"}
+                <Text style={{ color: theme.colors.text }}>--</Text>
                 <FontAwesome
                   size={24}
                   name="star"

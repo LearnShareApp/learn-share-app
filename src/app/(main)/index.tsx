@@ -101,11 +101,7 @@ const Home = () => {
   }
 
   if (errorProfile || errorCategories) {
-    return (
-      <Pressable onPress={signOut}>
-        <Text>Error: {errorProfile || errorCategories}</Text>
-      </Pressable>
-    );
+    return <Redirect href={"/sign-in"} />;
   }
 
   return (
