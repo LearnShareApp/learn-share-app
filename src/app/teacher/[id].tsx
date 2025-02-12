@@ -390,7 +390,6 @@ const styles = StyleSheet.create({
   },
   skillsContainer: {
     flexDirection: "row",
-    gap: 8,
     flexWrap: "wrap",
   },
   rate: {

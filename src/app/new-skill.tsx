@@ -91,7 +91,6 @@ const SkillAdding = () => {
         video_card_link: data.video_card_link,
         about: data.about,
       };
-      console.log(postData);
       const response = await apiService.addSkill(postData);
       Toast.show(t("request_success"), {
         type: "success",

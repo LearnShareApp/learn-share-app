@@ -9,7 +9,7 @@ const SkillBadge = ({
 }) => {
   return (
     <View
-      style={inactive ? styles.skillContainer : styles.skillContainerInactive}
+      style={!inactive ? styles.skillContainer : styles.skillContainerInactive}
     >
       <Text style={styles.text}>{text}</Text>
     </View>

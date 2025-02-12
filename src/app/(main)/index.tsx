@@ -101,6 +101,7 @@ const Home = () => {
   }
 
   if (errorProfile || errorCategories) {
+    signOut();
     return <Redirect href={"/sign-in"} />;
   }
 
