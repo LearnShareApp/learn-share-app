@@ -148,5 +148,21 @@
   "participant_of_the_world_of_learning": "Participant du monde de l'échange de connaissances",
   "edit_profile": "Modifier le profil",
   "save_changes": "Enregistrer les modifications",
-  "teachers_amount": "Nombre de professeurs"
+  "teachers_amount": "Nombre de professeurs",
+  "students_amount": "Nombre d'étudiants",
+  "students_amount_description": "Le nombre d'étudiants qui ont appris votre compétence",
+  "teachers_amount_description": "Le nombre de professeurs qui ont appris votre compétence",
+  "students_amount_title": "Étudiants",
+  "teachers_amount_title": "Professeurs",
+  "submit_review": "Soumettre une critique",
+  "review_description": "Critiquez ce professeur",
+  "review_placeholder": "Critiquez ce professeur",
+  "review_title": "Critique",
+  "review_success": "Critique soumise avec succès",
+  "review_error": "Erreur lors de la soumission de la critique",
+  "leave_review": "Laisser une critique",
+  "comment_placeholder": "Ajouter un commentaire",
+  "rate": "Note",
+  "comment": "Commentaire",
+  "category": "Catégorie"
 }

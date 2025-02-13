@@ -10,6 +10,7 @@ import {
   RefreshControl,
   Modal,
   TouchableWithoutFeedback,
+  TextInput,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -24,6 +25,12 @@ import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
 import { useRefresh } from "../../providers/refresh-provider";
 import { StatusBar } from "expo-status-bar";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import DropDownPicker from "react-native-dropdown-picker";
+import { Toast } from "react-native-toast-notifications";
+import axios from "axios";
 
 type FontAwesomeIconName = "star" | "graduation-cap" | "user";
 
@@ -44,6 +51,53 @@ const TeacherProfilePage = () => {
   );
 
   const { refreshing, setRefreshing } = useRefresh();
+
+  // Состояния для управления открытием выпадающих списков
+  const [openCategory, setOpenCategory] = useState(false);
+  const [openRate, setOpenRate] = useState(false);
+
+  // Задаем схему валидации для формы отзыва
+  const reviewSchema = z.object({
+    category_id: z.number({ required_error: "Выберите категорию" }),
+    comment: z.string().min(1, "Комментарий не может быть пустым"),
+    rate: z
+      .number({ required_error: "Укажите рейтинг" })
+      .min(1, "Рейтинг должен быть минимум 1")
+      .max(5, "Рейтинг не может превышать 5"),
+    teacher_id: z.number(),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: {
+      category_id: 0,
+      comment: "",
+      rate: 3,
+      teacher_id: 0,
+    },
+  });
+
+  // Получаем выбранный навык (либо по параметру, либо первый из списка)
+  const selectedSkill = category
+    ? teacher?.skills.find((skill) => skill.category_id.toString() === category)
+    : teacher?.skills[0];
+
+  // Сброс значений формы при загрузке учителя и выбранного навыка
+  useEffect(() => {
+    if (teacher && selectedSkill) {
+      reset({
+        category_id: selectedSkill.category_id,
+        comment: "",
+        rate: 3,
+        teacher_id: teacher.teacher_id,
+      });
+    }
+  }, [teacher, selectedSkill, reset]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -72,13 +126,44 @@ const TeacherProfilePage = () => {
     }
   };
 
+  const onSubmitReview = async (data: z.infer<typeof reviewSchema>) => {
+    try {
+      const response = await apiService.addReview(data);
+      Toast.show(t("request_success"), {
+        type: "success",
+        placement: "top",
+        duration: 1500,
+      });
+      console.log(response);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || "An unknown error occurred";
+        Toast.show(t("unknown_error"), {
+          type: "warning",
+          placement: "top",
+          duration: 3000,
+        });
+        console.log(errorMessage);
+      } else {
+        console.error("Unexpected error:", error);
+        Toast.show(t("unexpected_error"), {
+          type: "error",
+          placement: "top",
+          duration: 3000,
+        });
+      }
+    }
+
+    setModalVisible(false);
+  };
+
   useEffect(() => {
     fetchTeacher();
   }, [id, review]);
 
   const closeModal = () => {
     setModalVisible(false);
-    // router.replace(`/teacher/${id}?skill_id=${skill_id}&review=0`);
   };
 
   if (loading) {
@@ -108,10 +193,6 @@ const TeacherProfilePage = () => {
       </View>
     );
   }
-
-  const selectedSkill = category
-    ? teacher?.skills.find((skill) => skill.category_id.toString() === category)
-    : teacher?.skills[0];
 
   if (!selectedSkill) {
     return (
@@ -161,10 +242,6 @@ const TeacherProfilePage = () => {
             </TouchableOpacity>
           ),
         }}
-      />
-      <StatusBar
-        style={!isDark ? "light" : "dark"}
-        backgroundColor={theme.colors.card}
       />
       <FlatList
         refreshControl={
@@ -300,14 +377,146 @@ const TeacherProfilePage = () => {
                   { backgroundColor: theme.colors.card },
                 ]}
               >
-                <Text style={{ color: theme.colors.text }}>
+                {/* Заголовок формы */}
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    fontSize: 18,
+                    fontWeight: "bold",
+                    marginBottom: 12,
+                  }}
+                >
                   {t("leave_review")}
                 </Text>
+
+                {/* Поле выбора категории */}
+                <Text style={{ color: theme.colors.text }}>
+                  {t("category")}
+                </Text>
+                <Controller
+                  control={control}
+                  name="category_id"
+                  render={({ field: { onChange, value } }) => (
+                    <View style={{ zIndex: 3000 }}>
+                      <DropDownPicker
+                        open={openCategory}
+                        value={value}
+                        items={
+                          teacher
+                            ? teacher.skills.map((skill) => ({
+                                label: skill.category_name,
+                                value: skill.category_id,
+                              }))
+                            : []
+                        }
+                        setOpen={setOpenCategory}
+                        setValue={(callback) => {
+                          const newValue = callback(value);
+                          onChange(newValue);
+                        }}
+                        containerStyle={{ marginVertical: 8 }}
+                        style={{ backgroundColor: theme.colors.background }}
+                        textStyle={{ color: theme.colors.text }}
+                      />
+                    </View>
+                  )}
+                />
+                {errors.category_id && (
+                  <Text style={{ color: "red" }}>
+                    {errors.category_id.message}
+                  </Text>
+                )}
+
+                {/* Поле выбора рейтинга */}
+                <Text style={{ color: theme.colors.text }}>{t("rate")}</Text>
+                <Controller
+                  control={control}
+                  name="rate"
+                  render={({ field: { onChange, value } }) => (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginVertical: 8,
+                      }}
+                    >
+                      {[1, 2, 3, 4, 5].map((num) => {
+                        const isSelected = value === num;
+                        return (
+                          <TouchableOpacity
+                            key={num}
+                            onPress={() => onChange(num)}
+                            style={[
+                              {
+                                borderWidth: 1,
+                                borderRadius: 8,
+                                borderColor: theme.colors.primary,
+                                marginHorizontal: 4,
+                                width: 40,
+                                height: 40,
+                                alignItems: "center",
+                                justifyContent: "center",
+                              },
+                              isSelected && {
+                                backgroundColor: theme.colors.primary,
+                              },
+                            ]}
+                          >
+                            <Text
+                              style={[
+                                { fontSize: 16 },
+                                isSelected && { color: "#fff" },
+                              ]}
+                            >
+                              {num}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  )}
+                />
+                {errors.rate && (
+                  <Text style={{ color: "red" }}>{errors.rate.message}</Text>
+                )}
+
+                {/* Поле ввода комментария */}
+                <Text style={{ color: theme.colors.text }}>{t("comment")}</Text>
+                <Controller
+                  control={control}
+                  name="comment"
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={[
+                        styles.input,
+                        {
+                          color: theme.colors.text,
+                          borderColor: theme.colors.primary,
+                        },
+                      ]}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder={t("comment_placeholder")}
+                      placeholderTextColor={theme.colors.text}
+                      multiline
+                    />
+                  )}
+                />
+                {errors.comment && (
+                  <Text style={{ color: "red" }}>{errors.comment.message}</Text>
+                )}
+
+                {/* Кнопка отправки формы */}
                 <TouchableOpacity
-                  onPress={closeModal}
-                  style={styles.closeButton}
+                  style={[
+                    styles.submitButton,
+                    { backgroundColor: theme.colors.primary },
+                  ]}
+                  onPress={handleSubmit(onSubmitReview)}
                 >
-                  <Text style={{ color: "white" }}>{t("leave_review")}</Text>
+                  <Text style={{ color: "white", textAlign: "center" }}>
+                    {t("submit_review") || "Отправить"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
@@ -458,6 +667,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#C9A977",
     borderRadius: 5,
     alignItems: "center",
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+    marginVertical: 8,
+  },
+  submitButton: {
+    borderRadius: 4,
+    padding: 12,
+    marginTop: 12,
   },
 });
 

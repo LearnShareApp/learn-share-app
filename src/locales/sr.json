@@ -146,5 +146,16 @@
   "edit_profile": "Редактирајте профил",
   "save_changes": "Сачувајте измене",
   "call_ended": "Позив завршен",
-  "teachers_amount": "Број наставника"
+  "teachers_amount": "Број наставника",
+  "submit_review": "Пошаљите рецензију",
+  "review_description": "Оцените овај наставник",
+  "review_placeholder": "Оцените овај наставник",
+  "review_title": "Рецензија",
+  "review_success": "Рецензија је успешно послана",
+  "review_error": "Дошло је до грешке при слању рецензије",
+  "leave_review": "Оставите рецензију",
+  "comment_placeholder": "Оставите коментар",
+  "rate": "Оцена",
+  "comment": "Коментар",
+  "category": "Категорија"
 }
