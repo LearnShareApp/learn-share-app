@@ -74,13 +74,13 @@ export default function BookLesson() {
     const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        const teacherResponse = await apiService.getTeacherById(user_id);
+        const teacherResponse = await apiService.getTeacherById(teacher_id);
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
         setTeacher(teacherResponse);
 
-        const timesResponse = await apiService.getTimeById(user_id);
+        const timesResponse = await apiService.getTimeById(teacher_id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available
         );

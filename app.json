@@ -66,6 +66,7 @@
       "expo-localization"
     ],
     "extra": {
+      // "BACKEND_URL": process.env.BACKEND_URL,
       "router": {
         "origin": false
       },

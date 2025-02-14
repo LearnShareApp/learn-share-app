@@ -19,7 +19,7 @@ import YouTubeVideo from "../../components/youtube-video";
 import { FontAwesome } from "@expo/vector-icons";
 import Line from "../../components/line";
 import ReviewItem from "../../components/review-item";
-import { apiService, TeacherProfile } from "../../utilities/api";
+import { apiService, Review, TeacherProfile } from "../../utilities/api";
 import { useLanguage } from "../../providers/language-provider";
 import { useTheme } from "../../providers/theme-provider";
 import { useAvatar } from "../../utilities/avatar-hook";
@@ -126,6 +126,29 @@ const TeacherProfilePage = () => {
     }
   };
 
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
+
+  const fetchReviews = async () => {
+    try {
+      setReviewsLoading(true);
+      const response = await apiService.getTeacherReviews(id);
+      if (!response) {
+        throw new Error("Teacher not found");
+      }
+      setReviews(response);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch teacher";
+      setReviewsError(errorMessage);
+      console.error("Error details:", err);
+      router.replace("/404");
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
   const onSubmitReview = async (data: z.infer<typeof reviewSchema>) => {
     try {
       const response = await apiService.addReview(data);
@@ -160,6 +183,7 @@ const TeacherProfilePage = () => {
 
   useEffect(() => {
     fetchTeacher();
+    fetchReviews();
   }, [id, review]);
 
   const closeModal = () => {
@@ -247,13 +271,7 @@ const TeacherProfilePage = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        data={[
-          {
-            userName: "tester",
-            grade: 5,
-            text: "It is just a test, does not affect anything",
-          },
-        ]}
+        data={reviews}
         ListHeaderComponent={
           <View style={styles.headerContainer}>
             <View
@@ -364,7 +382,7 @@ const TeacherProfilePage = () => {
           </View>
         }
         renderItem={({ item }) => <ReviewItem review={item} />}
-        keyExtractor={(item) => item.userName}
+        keyExtractor={(item) => item.user_id.toString()}
         contentContainerStyle={styles.listContainer}
       />
       <Modal visible={modalVisible} transparent={true} animationType="fade">

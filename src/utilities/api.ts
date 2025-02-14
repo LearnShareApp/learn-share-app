@@ -32,6 +32,19 @@ export interface AddReview {
   teacher_id: number;
 }
 
+export interface Review {
+  id: number;
+  comment: string;
+  rate: number;
+  user_id: number;
+  user_name: string;
+  user_surname: string;
+}
+
+export interface ReviewResponse {
+  reviews: Review[];
+}
+
 export interface LessonRequestData {
   teacher_id: number;
   category_id: number;
@@ -293,6 +306,13 @@ class ApiService {
   async getTeacherById(id: string): Promise<TeacherProfile> {
     const response = await this.api.get<TeacherProfile>(`/api/teachers/${id}`);
     return response.data;
+  }
+
+  async getTeacherReviews(id: string): Promise<Review[]> {
+    const response = await this.api.get<ReviewResponse>(
+      `/api/teachers/${id}/reviews`
+    );
+    return response.data.reviews;
   }
 
   async request<T>(config: AxiosRequestConfig): Promise<T> {

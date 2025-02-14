@@ -3,13 +3,7 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Line from "./line";
 import { useTheme } from "../providers/theme-provider";
-
-interface Review {
-  userName: string;
-  grade: number;
-  text: string;
-}
-
+import { Review } from "../utilities/api";
 const ReviewItem = ({ review }: { review: Review }) => {
   const { theme } = useTheme();
 
@@ -17,11 +11,13 @@ const ReviewItem = ({ review }: { review: Review }) => {
     <View style={[styles.white, { backgroundColor: theme.colors.card }]}>
       <View style={styles.top}>
         <View style={styles.horizontal}>
-          <Text style={{ color: theme.colors.text }}>{review.userName}</Text>
+          <Text style={{ color: theme.colors.text }}>
+            {review.user_name} {review.user_surname}
+          </Text>
         </View>
         <View style={styles.horizontal}>
           <Text style={{ color: theme.colors.text }}>
-            {review.grade.toFixed(1)}
+            {review.rate.toFixed(1)}
           </Text>
           <FontAwesome
             size={18}
@@ -31,7 +27,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
         </View>
       </View>
       <Line />
-      <Text style={{ color: theme.colors.text }}>{review.text}</Text>
+      <Text style={{ color: theme.colors.text }}>{review.comment}</Text>
     </View>
   );
 };
