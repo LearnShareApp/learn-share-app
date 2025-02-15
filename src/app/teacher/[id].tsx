@@ -345,13 +345,13 @@ const TeacherProfilePage = () => {
               />
               <StatsItem
                 icon="graduation-cap"
-                value={teacher.finished_lessons.toString()}
+                value={(teacher.finished_lessons ?? 0).toString()}
                 label={t("lessons")}
                 iconColor="#ccc"
               />
               <StatsItem
                 icon="user"
-                value={teacher.count_of_students.toString()}
+                value={(teacher.count_of_students ?? 0).toString()}
                 label={t("students")}
                 iconColor="#ccc"
               />
@@ -377,13 +377,20 @@ const TeacherProfilePage = () => {
               </Text>
             </Pressable>
             <Text style={[styles.reviewsTitle, { color: theme.colors.text }]}>
-              {t("teacher_reviews")} (1)
+              {t("teacher_reviews")} ({teacher.common_reviews_count})
             </Text>
           </View>
         }
         renderItem={({ item }) => <ReviewItem review={item} />}
-        keyExtractor={(item) => item.user_id.toString()}
+        keyExtractor={(item, index) =>
+          item.id ? item.id.toString() : index.toString()
+        }
         contentContainerStyle={styles.listContainer}
+        ListEmptyComponent={
+          <View style={styles.centerContainer}>
+            <Text style={{ color: theme.colors.text }}>{t("no_reviews")}</Text>
+          </View>
+        }
       />
       <Modal visible={modalVisible} transparent={true} animationType="fade">
         <TouchableWithoutFeedback onPress={closeModal}>

@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
-import { API_URL } from "@env";
+import Constants from "expo-constants";
 
-const BACKEND_URL = API_URL;
+const BACKEND_URL = Constants.expoConfig?.extra?.API_URL;
 
 export interface LoginData {
   email: string;
@@ -112,6 +112,7 @@ export interface TeacherProfile {
   birthdate: string;
   finished_lessons: number;
   count_of_students: number;
+  common_reviews_count: number;
   skills: TeacherSkill[];
 }
 
@@ -188,7 +189,6 @@ class ApiService {
   }
 
   async updateProfile(data: {
-    email: string;
     name: string;
     surname: string;
     birthdate: string;

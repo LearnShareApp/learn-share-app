@@ -101,12 +101,23 @@ const Teaching = () => {
           ListHeaderComponentStyle={{
             paddingHorizontal: 8,
             gap: 8,
+            backgroundColor: theme.colors.background,
           }}
           ListHeaderComponent={
             <>
               <View style={styles.topNav}>
                 <Link href={"/requests"} asChild>
-                  <Pressable style={styles.navButton}>
+                  <Pressable
+                    style={{
+                      flex: 1,
+                      minHeight: 32,
+                      borderRadius: 8,
+                      padding: 16,
+                      marginHorizontal: 4,
+                      alignItems: "center",
+                      backgroundColor: theme.colors.card,
+                    }}
+                  >
                     <FontAwesome
                       size={24}
                       name="bell"
@@ -127,7 +138,17 @@ const Teaching = () => {
                 </Link>
 
                 <Link href={"/schedule"} asChild>
-                  <Pressable style={styles.navButton}>
+                  <Pressable
+                    style={{
+                      flex: 1,
+                      minHeight: 32,
+                      borderRadius: 8,
+                      padding: 16,
+                      marginHorizontal: 4,
+                      alignItems: "center",
+                      backgroundColor: theme.colors.card,
+                    }}
+                  >
                     <FontAwesome
                       size={24}
                       name="calendar"
@@ -142,7 +163,17 @@ const Teaching = () => {
                 </Link>
               </View>
               <Link href={"/stats"} asChild>
-                <Pressable style={styles.statsButton}>
+                <Pressable
+                  style={{
+                    width: "100%",
+                    borderRadius: 8,
+                    padding: 24,
+                    gap: 12,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: theme.colors.card,
+                  }}
+                >
                   <FontAwesome
                     size={24}
                     name="pie-chart"
@@ -176,7 +207,11 @@ const Teaching = () => {
               lesson.status !== "finished"
           )}
           renderItem={({ item }) => <LessonItem lesson={item} forTeacher />}
-          contentContainerStyle={{ gap: 8 }}
+          contentContainerStyle={{
+            gap: 8,
+            backgroundColor: theme.colors.background,
+            flex: 1,
+          }}
           ListEmptyComponent={
             <View
               style={{

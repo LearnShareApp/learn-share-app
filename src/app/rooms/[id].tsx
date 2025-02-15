@@ -25,10 +25,10 @@ import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
 import { FontAwesome } from "@expo/vector-icons";
-import { LiveKit_URL } from "@env";
+import Constants from "expo-constants";
 registerGlobals();
 
-const wsURL = LiveKit_URL;
+const wsURL = Constants.expoConfig?.extra?.LiveKit_URL;
 
 export default function Lesson() {
   const { id, lesson_id } = useLocalSearchParams();
