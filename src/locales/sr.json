@@ -157,5 +157,7 @@
   "comment_placeholder": "Оставите коментар",
   "rate": "Оцена",
   "comment": "Коментар",
-  "category": "Категорија"
+  "category": "Категорија",
+  "lessons": "Уроци",
+  "students": "Ученици"
 }

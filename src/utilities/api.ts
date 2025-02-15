@@ -37,8 +37,9 @@ export interface Review {
   comment: string;
   rate: number;
   user_id: number;
-  user_name: string;
-  user_surname: string;
+  student_name: string;
+  student_surname: string;
+  student_avatar: string;
 }
 
 export interface ReviewResponse {
@@ -195,8 +196,7 @@ class ApiService {
     avatar: string;
   }): Promise<String> {
     const response = await this.api.patch("/api/user/profile", data);
-    console.log(data, response.statusText);
-    return "success";
+    return response.statusText;
   }
 
   async addSkill(data: AddSkillData): Promise<String> {

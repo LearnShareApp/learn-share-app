@@ -131,9 +131,8 @@ export default function BookLesson() {
         schedule_time_id: data.schedule_time_id,
       };
 
-      console.log("Sending request with data:", postData);
       await apiService.lessonRequest(postData);
-      Toast.show("Request sent successfully", {
+      Toast.show(t("request_success"), {
         type: "success",
         placement: "top",
         duration: 1500,

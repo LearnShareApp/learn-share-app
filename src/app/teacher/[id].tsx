@@ -376,6 +376,25 @@ const TeacherProfilePage = () => {
                 {t("book_lesson")}
               </Text>
             </Pressable>
+            <Pressable
+              onPress={() => setModalVisible(true)}
+              style={{
+                padding: 16,
+                borderWidth: 1,
+                borderColor: theme.colors.primary,
+                borderRadius: 8,
+                zIndex: 1000,
+              }}
+            >
+              <Text
+                style={{
+                  color: theme.colors.primary,
+                  textAlign: "center",
+                }}
+              >
+                {t("leave_review")}
+              </Text>
+            </Pressable>
             <Text style={[styles.reviewsTitle, { color: theme.colors.text }]}>
               {t("teacher_reviews")} ({teacher.common_reviews_count})
             </Text>
@@ -489,8 +508,7 @@ const TeacherProfilePage = () => {
                           >
                             <Text
                               style={[
-                                { fontSize: 16 },
-                                isSelected && { color: "#fff" },
+                                { fontSize: 16, color: theme.colors.text },
                               ]}
                             >
                               {num}
@@ -577,7 +595,7 @@ const StatsItem = ({
         {value}
       </Text>
       <Text style={[styles.labelText, { color: theme.colors.text }]}>
-        {value}
+        {label}
       </Text>
     </View>
   );

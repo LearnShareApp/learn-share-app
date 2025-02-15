@@ -164,5 +164,7 @@
   "comment_placeholder": "Ajouter un commentaire",
   "rate": "Note",
   "comment": "Commentaire",
-  "category": "Catégorie"
+  "category": "Catégorie",
+  "lessons": "Cours",
+  "students": "Étudiants"
 }

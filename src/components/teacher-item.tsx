@@ -37,7 +37,7 @@ const TeacherListItem = ({
 
   return (
     <Link
-      href={`/teacher/${teacher.teacher_id}?category=${skillToShow?.category_id}&review=1`}
+      href={`/teacher/${teacher.teacher_id}?category=${skillToShow?.category_id}`}
       asChild
     >
       <Pressable

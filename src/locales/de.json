@@ -167,5 +167,7 @@
   "comment_placeholder": "Kommentar hinzufügen",
   "rate": "Bewertung",
   "comment": "Kommentar",
-  "category": "Kategorie"
+  "category": "Kategorie",
+  "lessons": "Stunden",
+  "students": "Schüler"
 }

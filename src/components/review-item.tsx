@@ -1,18 +1,30 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Line from "./line";
 import { useTheme } from "../providers/theme-provider";
 import { Review } from "../utilities/api";
+import { useAvatar } from "../utilities/avatar-hook";
+
 const ReviewItem = ({ review }: { review: Review }) => {
   const { theme } = useTheme();
+  const { avatarSource } = useAvatar(review.student_avatar ?? null);
 
   return (
     <View style={[styles.white, { backgroundColor: theme.colors.card }]}>
       <View style={styles.top}>
         <View style={styles.horizontal}>
+          <Image
+            source={avatarSource}
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 16,
+              backgroundColor: "red",
+            }}
+          />
           <Text style={{ color: theme.colors.text }}>
-            {review.user_name} {review.user_surname}
+            {review.student_name} {review.student_surname}
           </Text>
         </View>
         <View style={styles.horizontal}>
@@ -47,7 +59,7 @@ const styles = StyleSheet.create({
   },
   horizontal: {
     flexDirection: "row",
-    gap: 4,
+    gap: 8,
     alignItems: "center",
   },
 });

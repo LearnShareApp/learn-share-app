@@ -166,5 +166,7 @@
   "comment_placeholder": "Добавить комментарий",
   "rate": "Оценка",
   "comment": "Комментарий",
-  "category": "Категория"
+  "category": "Категория",
+  "lessons": "Уроки",
+  "students": "Ученики"
 }

@@ -63,7 +63,7 @@ const Finish = () => {
         </Text>
       </TouchableOpacity>
 
-      {is_teacher && (
+      {!is_teacher && (
         <Link href={`/teacher/${user_id}?category=${category}&review=1`}>
           <TouchableOpacity style={styles.button}>
             <Text style={[styles.buttonText, { color: theme.colors.text }]}>

@@ -167,5 +167,7 @@
   "comment_placeholder": "Add a comment",
   "rate": "Rate",
   "comment": "Comment",
-  "category": "Category"
+  "category": "Category",
+  "lessons": "Lessons",
+  "students": "Students"
 }
