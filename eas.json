@@ -9,7 +9,11 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_URL": "http://adoe.ru:81",
+        "LiveKit_URL": "wss://learn-and-share-app-raalcu2w.livekit.cloud"
+      }
     },
     "production": {
       "autoIncrement": true

@@ -421,17 +421,20 @@ const TeacherProfilePage = () => {
                   { backgroundColor: theme.colors.card },
                 ]}
               >
-                {/* Заголовок формы */}
-                <Text
-                  style={{
-                    color: theme.colors.text,
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    marginBottom: 12,
-                  }}
-                >
-                  {t("leave_review")}
-                </Text>
+                <View style={styles.modalHeader}>
+                  <Text
+                    style={[styles.modalTitle, { color: theme.colors.text }]}
+                  >
+                    {t("leave_review")}
+                  </Text>
+                  <TouchableOpacity onPress={closeModal}>
+                    <FontAwesome
+                      name="times"
+                      size={20}
+                      color={theme.colors.text}
+                    />
+                  </TouchableOpacity>
+                </View>
 
                 {/* Поле выбора категории */}
                 <Text style={{ color: theme.colors.text }}>
@@ -509,6 +512,7 @@ const TeacherProfilePage = () => {
                             <Text
                               style={[
                                 { fontSize: 16, color: theme.colors.text },
+                                isSelected && { color: "white" },
                               ]}
                             >
                               {num}
@@ -704,12 +708,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     backgroundColor: "#fff",
   },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#C9A977",
-    borderRadius: 5,
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 12,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
