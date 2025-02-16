@@ -190,6 +190,22 @@ const TeacherProfilePage = () => {
     setModalVisible(false);
   };
 
+  // Уже имеется функция onSubmitReview выше. Добавляем ниже новые состояния:
+
+  const [complaintModalVisible, setComplaintModalVisible] = useState(false);
+  const [complaintText, setComplaintText] = useState("");
+
+  // Функция отправки жалобы
+  const onSubmitComplaint = () => {
+    Toast.show(t("complaint_sent") || "Жалоба отправлена", {
+      type: "success",
+      placement: "top",
+      duration: 1500,
+    });
+    setComplaintText("");
+    setComplaintModalVisible(false);
+  };
+
   if (loading) {
     return (
       <View
@@ -289,7 +305,7 @@ const TeacherProfilePage = () => {
               style={[
                 styles.white,
                 styles.mainCard,
-                { backgroundColor: theme.colors.card },
+                { backgroundColor: theme.colors.card, position: "relative" },
               ]}
             >
               <Image
@@ -318,6 +334,16 @@ const TeacherProfilePage = () => {
                   ))}
                 </View>
               </View>
+              <TouchableOpacity
+                style={styles.complaintButton}
+                onPress={() => setComplaintModalVisible(true)}
+              >
+                <FontAwesome
+                  name="exclamation-circle"
+                  size={20}
+                  color={theme.colors.primary}
+                />
+              </TouchableOpacity>
             </View>
             <View
               style={[styles.white, { backgroundColor: theme.colors.card }]}
@@ -570,6 +596,72 @@ const TeacherProfilePage = () => {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
+      <Modal
+        visible={complaintModalVisible}
+        transparent={true}
+        animationType="fade"
+      >
+        <TouchableWithoutFeedback
+          onPress={() => setComplaintModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View
+                style={[
+                  styles.modalContent,
+                  { backgroundColor: theme.colors.card },
+                ]}
+              >
+                <View style={styles.modalHeader}>
+                  <Text
+                    style={[styles.modalTitle, { color: theme.colors.text }]}
+                  >
+                    {t("complaint") || "Пожаловаться"}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setComplaintModalVisible(false)}
+                  >
+                    <FontAwesome
+                      name="times"
+                      size={20}
+                      color={theme.colors.text}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      color: theme.colors.text,
+                      borderColor: theme.colors.primary,
+                      height: 100,
+                      textAlignVertical: "top",
+                    },
+                  ]}
+                  onChangeText={(text) => setComplaintText(text)}
+                  value={complaintText}
+                  placeholder={
+                    t("complaint_placeholder") || "Введите ваш комментарий"
+                  }
+                  placeholderTextColor={theme.colors.text}
+                  multiline
+                />
+                <TouchableOpacity
+                  style={[
+                    styles.submitButton,
+                    { backgroundColor: theme.colors.primary },
+                  ]}
+                  onPress={onSubmitComplaint}
+                >
+                  <Text style={{ color: "white", textAlign: "center" }}>
+                    {t("submit_complaint") || "Отправить жалобу"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
@@ -728,6 +820,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 12,
     marginTop: 12,
+  },
+  complaintButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    padding: 8,
   },
 });
 

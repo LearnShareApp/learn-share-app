@@ -166,5 +166,13 @@
   "comment": "Commentaire",
   "category": "Catégorie",
   "lessons": "Cours",
-  "students": "Étudiants"
+  "students": "Étudiants",
+  "complaint_sent": "Bénéfice envoyé avec succès",
+  "complaint": "Bénéfice",
+  "complaint_description": "Décrivez votre bénéfice",
+  "complaint_placeholder": "Décrivez votre bénéfice",
+  "complaint_title": "Bénéfice",
+  "complaint_success": "Bénéfice envoyé avec succès",
+  "complaint_error": "Erreur lors de l'envoi du bénéfice",
+  "submit_complaint": "Soumettre une plainte"
 }

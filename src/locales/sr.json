@@ -159,5 +159,13 @@
   "comment": "Коментар",
   "category": "Категорија",
   "lessons": "Уроци",
-  "students": "Ученици"
+  "students": "Ученици",
+  "complaint_sent": "Жалоба је успешно послана",
+  "complaint": "Жалоба",
+  "complaint_description": "Опишите вашу жалобу",
+  "complaint_placeholder": "Опишите вашу жалобу",
+  "complaint_title": "Жалоба",
+  "complaint_success": "Жалоба је успешно послана",
+  "complaint_error": "Дошло је до грешке при слању жалобе",
+  "submit_complaint": "Пошаљите жалобу"
 }

@@ -169,5 +169,13 @@
   "comment": "Comment",
   "category": "Category",
   "lessons": "Lessons",
-  "students": "Students"
+  "students": "Students",
+  "complaint_sent": "Complaint sent successfully",
+  "complaint": "Complaint",
+  "complaint_description": "Describe your complaint",
+  "complaint_placeholder": "Describe your complaint",
+  "complaint_title": "Complaint",
+  "complaint_success": "Complaint sent successfully",
+  "complaint_error": "Error sending complaint",
+  "submit_complaint": "Submit complaint"
 }

@@ -169,5 +169,13 @@
   "comment": "Kommentar",
   "category": "Kategorie",
   "lessons": "Stunden",
-  "students": "Schüler"
+  "students": "Schüler",
+  "complaint_sent": "Beschwerde erfolgreich gesendet",
+  "complaint": "Beschwerde",
+  "complaint_description": "Beschreiben Sie Ihre Beschwerde",
+  "complaint_placeholder": "Beschreiben Sie Ihre Beschwerde",
+  "complaint_title": "Beschwerde",
+  "complaint_success": "Beschwerde erfolgreich gesendet",
+  "complaint_error": "Fehler beim Senden der Beschwerde",
+  "submit_complaint": "Beschwerde einreichen"
 }
