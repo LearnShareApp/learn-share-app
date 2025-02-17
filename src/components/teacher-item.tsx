@@ -22,6 +22,8 @@ const TeacherListItem = ({
     return null;
   }
 
+  // console.log(teacher)
+
   let skillToShow = teacher.skills[0];
 
   if (category) {
@@ -81,10 +83,10 @@ const TeacherListItem = ({
               color: theme.colors.text,
             }}
           >
-            {firstSkillRate ? (
+            {teacher.common_rate !== 0 ? (
               <>
                 <Text style={{ color: theme.colors.text }}>
-                  {firstSkillRate.toFixed(1)}
+                  {teacher.common_rate.toFixed(1)}
                 </Text>
                 <FontAwesome
                   size={24}

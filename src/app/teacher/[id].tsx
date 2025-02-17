@@ -322,7 +322,7 @@ const TeacherProfilePage = () => {
                 <View style={styles.skillsContainer}>
                   {teacher.skills.map((item) => (
                     <Link
-                      href={`/teacher/${teacher.user_id}?category=${item.category_id}`}
+                      href={`/teacher/${teacher.teacher_id}?category=${item.category_id}`}
                       key={item.skill_id}
                     >
                       <SkillBadge
@@ -333,7 +333,7 @@ const TeacherProfilePage = () => {
                     </Link>
                   ))}
                 </View>
-              </View>
+              </View> 
               <TouchableOpacity
                 style={styles.complaintButton}
                 onPress={() => setComplaintModalVisible(true)}
@@ -365,7 +365,7 @@ const TeacherProfilePage = () => {
             >
               <StatsItem
                 icon="star"
-                value={selectedSkill.rate.toFixed(1)}
+                value={selectedSkill.rate !== 0 ? selectedSkill.rate.toFixed(1) : '--'}
                 label={t("rate")}
                 iconColor="gold"
               />
@@ -739,6 +739,7 @@ const styles = StyleSheet.create({
   skillsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: 4,
   },
   rate: {
     flexDirection: "row",

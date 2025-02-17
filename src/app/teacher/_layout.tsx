@@ -26,6 +26,7 @@ export default function Layout() {
         name="[id]"
         options={{
           headerShown: true,
+          title: 'Loading...'
         }}
       />
       <Stack.Screen

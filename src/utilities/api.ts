@@ -91,6 +91,7 @@ export interface UserProfile {
   waiting_lessons: number;
   verification_lessons: number;
   finished_lessons: number;
+  registration_date: Date;
 }
 
 export interface TeacherSkill {
@@ -114,6 +115,7 @@ export interface TeacherProfile {
   finished_lessons: number;
   count_of_students: number;
   common_reviews_count: number;
+  common_rate: number;
   skills: TeacherSkill[];
 }
 
@@ -300,6 +302,7 @@ class ApiService {
     const response = await this.api.get<TeachersResponse>(
       `/api/teachers?${is_mine ? "is_mine=true" : ""}`
     );
+    // console.log(response)
     return response.data.teachers || [];
   }
 
