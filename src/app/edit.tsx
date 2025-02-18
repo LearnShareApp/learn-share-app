@@ -30,7 +30,6 @@ const profileSchema = zod.object({
     .string()
     .min(2, { message: "Фамилия должна содержать минимум 2 символа" })
     .optional(),
-  email: zod.string().email("Неверный формат email").optional(),
   birthdate: zod.string().optional(),
 });
 
@@ -49,7 +48,6 @@ const EditProfile = () => {
       avatar: profile?.avatar,
       name: profile?.name,
       surname: profile?.surname,
-      email: profile?.email,
       birthdate: profile?.birthdate,
     },
   });
@@ -57,7 +55,6 @@ const EditProfile = () => {
   const handleSave = async (data: ProfileFormData) => {
     try {
       const requestData = {
-        email: data.email ?? profile?.email ?? "",
         name: data.name ?? profile?.name ?? "",
         surname: data.surname ?? profile?.surname ?? "",
         birthdate: data.birthdate ?? profile?.birthdate ?? "",
@@ -196,32 +193,6 @@ const EditProfile = () => {
         )}
       />
 
-      <Controller
-        control={control}
-        name="email"
-        render={({
-          field: { value, onChange, onBlur },
-          fieldState: { error },
-        }) => (
-          <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: theme.colors.text }]}>
-              {t("email")}
-            </Text>
-            <TextInput
-              style={[styles.input, { color: theme.colors.text }]}
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              placeholder={profile?.email}
-              placeholderTextColor="#aaa"
-            />
-            {error && (
-              <Text style={{ color: theme.colors.error }}>{error.message}</Text>
-            )}
-          </View>
-        )}
-      />
-
       <TouchableOpacity
         activeOpacity={0.6}
         style={{
@@ -232,7 +203,7 @@ const EditProfile = () => {
         onPress={handleSubmit(handleSave)}
         disabled={formState.isSubmitting}
       >
-        <Text style={{ color: theme.colors.text, textAlign: "center" }}>
+        <Text style={{ color: "white", textAlign: "center" }}>
           {t("save_changes")}
         </Text>
       </TouchableOpacity>

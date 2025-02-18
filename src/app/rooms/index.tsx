@@ -85,7 +85,7 @@ const Rooms = () => {
             >
               <Text
                 style={{
-                  color: theme.colors.text,
+                  color: "white",
                   textAlign: "center",
                   fontSize: 16,
                 }}

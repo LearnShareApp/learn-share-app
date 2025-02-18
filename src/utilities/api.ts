@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
-import { API_URL } from "@env";
+import Constants from "expo-constants";
 
-const BACKEND_URL = API_URL;
+const BACKEND_URL = Constants.expoConfig?.extra?.API_URL;
 
 export interface LoginData {
   email: string;
@@ -23,6 +23,27 @@ export interface AddSkillData {
 
 export interface AddTimeData {
   datetime: Date;
+}
+
+export interface AddReview {
+  category_id: number;
+  comment: string;
+  rate: number;
+  teacher_id: number;
+}
+
+export interface Review {
+  id: number;
+  comment: string;
+  rate: number;
+  user_id: number;
+  student_name: string;
+  student_surname: string;
+  student_avatar: string;
+}
+
+export interface ReviewResponse {
+  reviews: Review[];
 }
 
 export interface LessonRequestData {
@@ -70,6 +91,7 @@ export interface UserProfile {
   waiting_lessons: number;
   verification_lessons: number;
   finished_lessons: number;
+  registration_date: Date;
 }
 
 export interface TeacherSkill {
@@ -92,6 +114,8 @@ export interface TeacherProfile {
   birthdate: string;
   finished_lessons: number;
   count_of_students: number;
+  common_reviews_count: number;
+  common_rate: number;
   skills: TeacherSkill[];
 }
 
@@ -168,15 +192,13 @@ class ApiService {
   }
 
   async updateProfile(data: {
-    email: string;
     name: string;
     surname: string;
     birthdate: string;
     avatar: string;
   }): Promise<String> {
     const response = await this.api.patch("/api/user/profile", data);
-    console.log(data, response.statusText);
-    return "success";
+    return response.statusText;
   }
 
   async addSkill(data: AddSkillData): Promise<String> {
@@ -186,6 +208,11 @@ class ApiService {
 
   async addTime(data: AddTimeData): Promise<String> {
     const response = await this.api.post("/api/teacher/schedule", data);
+    return response.statusText;
+  }
+
+  async addReview(data: AddReview): Promise<String> {
+    const response = await this.api.post("/api/review", data);
     return response.statusText;
   }
 
@@ -260,7 +287,7 @@ class ApiService {
   }
 
   async getLessons(): Promise<Lesson[]> {
-    const response = await this.api.get<LessonResponse>("/api/lessons");
+    const response = await this.api.get<LessonResponse>("/api/student/lessons");
     return response.data.lessons;
   }
 
@@ -275,12 +302,20 @@ class ApiService {
     const response = await this.api.get<TeachersResponse>(
       `/api/teachers?${is_mine ? "is_mine=true" : ""}`
     );
+    // console.log(response)
     return response.data.teachers || [];
   }
 
   async getTeacherById(id: string): Promise<TeacherProfile> {
     const response = await this.api.get<TeacherProfile>(`/api/teachers/${id}`);
     return response.data;
+  }
+
+  async getTeacherReviews(id: string): Promise<Review[]> {
+    const response = await this.api.get<ReviewResponse>(
+      `/api/teachers/${id}/reviews`
+    );
+    return response.data.reviews;
   }
 
   async request<T>(config: AxiosRequestConfig): Promise<T> {

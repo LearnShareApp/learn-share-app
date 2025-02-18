@@ -7,5 +7,5 @@
       "@env": ["node_modules/react-native-dotenv"]
     }
   },
-  "include": ["@types/env.d.ts"]
+  "include": ["@types/env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
 }

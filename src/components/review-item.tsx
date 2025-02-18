@@ -1,27 +1,35 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Line from "./line";
 import { useTheme } from "../providers/theme-provider";
-
-interface Review {
-  userName: string;
-  grade: number;
-  text: string;
-}
+import { Review } from "../utilities/api";
+import { useAvatar } from "../utilities/avatar-hook";
 
 const ReviewItem = ({ review }: { review: Review }) => {
   const { theme } = useTheme();
+  const { avatarSource } = useAvatar(review.student_avatar ?? null);
 
   return (
     <View style={[styles.white, { backgroundColor: theme.colors.card }]}>
       <View style={styles.top}>
         <View style={styles.horizontal}>
-          <Text style={{ color: theme.colors.text }}>{review.userName}</Text>
+          <Image
+            source={avatarSource}
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 16,
+              backgroundColor: "red",
+            }}
+          />
+          <Text style={{ color: theme.colors.text }}>
+            {review.student_name} {review.student_surname}
+          </Text>
         </View>
         <View style={styles.horizontal}>
           <Text style={{ color: theme.colors.text }}>
-            {review.grade.toFixed(1)}
+            {review.rate.toFixed(1)}
           </Text>
           <FontAwesome
             size={18}
@@ -31,7 +39,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
         </View>
       </View>
       <Line />
-      <Text style={{ color: theme.colors.text }}>{review.text}</Text>
+      <Text style={{ color: theme.colors.text }}>{review.comment}</Text>
     </View>
   );
 };
@@ -51,7 +59,7 @@ const styles = StyleSheet.create({
   },
   horizontal: {
     flexDirection: "row",
-    gap: 4,
+    gap: 8,
     alignItems: "center",
   },
 });

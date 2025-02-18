@@ -25,14 +25,19 @@ import { Toast } from "react-native-toast-notifications";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLanguage } from "../../providers/language-provider";
 import { FontAwesome } from "@expo/vector-icons";
-import { LiveKit_URL } from "@env";
+import Constants from "expo-constants";
 registerGlobals();
 
-const wsURL = LiveKit_URL;
+const wsURL = Constants.expoConfig?.extra?.LiveKit_URL;
 
 export default function Lesson() {
   const { id, lesson_id } = useLocalSearchParams();
+  const { user_id } = useLocalSearchParams();
+  const { category } = useLocalSearchParams();
+  const { is_teacher } = useLocalSearchParams();
+
   const { t } = useLanguage();
+
   const [isLoading, setIsLoading] = useState(true);
   const [roomToken, setRoomToken] = useState<string | null>(null);
   const [isCallActive, setIsCallActive] = useState(true);
@@ -83,7 +88,9 @@ export default function Lesson() {
     });
 
     setTimeout(() => {
-      router.replace(`/rooms/finish?lesson_id=${lesson_id}`);
+      router.replace(
+        `/rooms/finish?lesson_id=${lesson_id}&user_id=${user_id}&category=${category}$is_teacher=${is_teacher}`
+      );
     }, 3000);
   };
 

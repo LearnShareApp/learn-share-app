@@ -22,6 +22,8 @@ const TeacherListItem = ({
     return null;
   }
 
+  // console.log(teacher)
+
   let skillToShow = teacher.skills[0];
 
   if (category) {
@@ -37,7 +39,7 @@ const TeacherListItem = ({
 
   return (
     <Link
-      href={`/teacher/${teacher.user_id}?skill_id=${skillToShow?.skill_id}`}
+      href={`/teacher/${teacher.teacher_id}?category=${skillToShow?.category_id}`}
       asChild
     >
       <Pressable
@@ -81,9 +83,11 @@ const TeacherListItem = ({
               color: theme.colors.text,
             }}
           >
-            {firstSkillRate ? (
+            {teacher.common_rate !== 0 ? (
               <>
-                {firstSkillRate.toFixed(1)}
+                <Text style={{ color: theme.colors.text }}>
+                  {teacher.common_rate.toFixed(1)}
+                </Text>
                 <FontAwesome
                   size={24}
                   name="star"
@@ -92,7 +96,7 @@ const TeacherListItem = ({
               </>
             ) : (
               <>
-                {"--"}
+                <Text style={{ color: theme.colors.text }}>--</Text>
                 <FontAwesome
                   size={24}
                   name="star"

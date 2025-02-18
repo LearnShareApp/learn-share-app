@@ -11,6 +11,9 @@ const Finish = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const { lesson_id } = useLocalSearchParams();
+  const { user_id } = useLocalSearchParams();
+  const { category } = useLocalSearchParams();
+  const { is_teacher } = useLocalSearchParams();
 
   const lessonFinish = async () => {
     try {
@@ -52,13 +55,25 @@ const Finish = () => {
         {t("lesson_finished")}
       </Text>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: theme.colors.primary }]}
+        style={[styles.button, { backgroundColor: theme.colors.primary, width: '80%' }]}
         onPress={lessonFinish}
       >
-        <Text style={[styles.buttonText, { color: theme.colors.text }]}>
+        <Text style={[styles.buttonText, { color: 'white' }]}>
           {t("go_back_home")}
         </Text>
       </TouchableOpacity>
+
+      {!is_teacher && (
+        <Link href={`/teacher/${user_id}?category=${category}&review=1`} asChild>
+          <TouchableOpacity style={{borderWidth: 1, borderColor: theme.colors.primary, padding: 16,
+    borderRadius: 8,
+    width: '80%',}}>
+            <Text style={[styles.buttonText, { color: theme.colors.primary }]}>
+              {t("leave_review")}
+            </Text>
+          </TouchableOpacity>
+        </Link>
+      )}
     </View>
   );
 };
@@ -68,6 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 8,
   },
   button: {
     padding: 16,

@@ -28,9 +28,10 @@ const authSchema = zod.object({
 });
 
 const formatDateTime = (date: Date): string => {
-  return date.toLocaleString("srb-SRB", {
-    month: "2-digit",
-    day: "2-digit",
+  return date.toLocaleString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -74,13 +75,13 @@ export default function BookLesson() {
     const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        const teacherResponse = await apiService.getTeacherById(user_id);
+        const teacherResponse = await apiService.getTeacherById(teacher_id);
         if (!teacherResponse) {
           throw new Error("Teacher not found");
         }
         setTeacher(teacherResponse);
 
-        const timesResponse = await apiService.getTimeById(user_id);
+        const timesResponse = await apiService.getTimeById(teacher_id);
         const availableTimes = timesResponse.filter(
           (time) => time.is_available
         );
@@ -116,7 +117,7 @@ export default function BookLesson() {
   useEffect(() => {
     if (availableTimes.length > 0) {
       const items = availableTimes.map((time) => ({
-        label: formatDateTime(time.datetime),
+        label: formatDateTime(new Date(time.datetime)),
         value: time.schedule_time_id,
       }));
       setTimeItems(items);
@@ -131,9 +132,8 @@ export default function BookLesson() {
         schedule_time_id: data.schedule_time_id,
       };
 
-      console.log("Sending request with data:", postData);
       await apiService.lessonRequest(postData);
-      Toast.show("Request sent successfully", {
+      Toast.show(t("request_success"), {
         type: "success",
         placement: "top",
         duration: 1500,
