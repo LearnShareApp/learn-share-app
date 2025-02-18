@@ -333,7 +333,7 @@ const TeacherProfilePage = () => {
                     </Link>
                   ))}
                 </View>
-              </View> 
+              </View>
               <TouchableOpacity
                 style={styles.complaintButton}
                 onPress={() => setComplaintModalVisible(true)}
@@ -365,7 +365,11 @@ const TeacherProfilePage = () => {
             >
               <StatsItem
                 icon="star"
-                value={selectedSkill.rate !== 0 ? selectedSkill.rate.toFixed(1) : '--'}
+                value={
+                  selectedSkill.rate !== 0
+                    ? selectedSkill.rate.toFixed(1)
+                    : "--"
+                }
                 label={t("rate")}
                 iconColor="gold"
               />
@@ -588,7 +592,7 @@ const TeacherProfilePage = () => {
                   onPress={handleSubmit(onSubmitReview)}
                 >
                   <Text style={{ color: "white", textAlign: "center" }}>
-                    {t("submit_review") || "Отправить"}
+                    {t("submit_review")}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -616,7 +620,7 @@ const TeacherProfilePage = () => {
                   <Text
                     style={[styles.modalTitle, { color: theme.colors.text }]}
                   >
-                    {t("complaint") || "Пожаловаться"}
+                    {t("complaint")}
                   </Text>
                   <TouchableOpacity
                     onPress={() => setComplaintModalVisible(false)}
@@ -640,9 +644,7 @@ const TeacherProfilePage = () => {
                   ]}
                   onChangeText={(text) => setComplaintText(text)}
                   value={complaintText}
-                  placeholder={
-                    t("complaint_placeholder") || "Введите ваш комментарий"
-                  }
+                  placeholder={t("complaint_placeholder")}
                   placeholderTextColor={theme.colors.text}
                   multiline
                 />
@@ -654,7 +656,7 @@ const TeacherProfilePage = () => {
                   onPress={onSubmitComplaint}
                 >
                   <Text style={{ color: "white", textAlign: "center" }}>
-                    {t("submit_complaint") || "Отправить жалобу"}
+                    {t("submit_complaint")}
                   </Text>
                 </TouchableOpacity>
               </View>

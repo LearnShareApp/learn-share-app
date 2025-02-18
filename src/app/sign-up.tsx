@@ -18,7 +18,7 @@ import { useAuth } from "../providers/auth-provider";
 import { apiService } from "../utilities/api";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImageManipulator from "expo-image-manipulator";
 import { useLanguage } from "../providers/language-provider";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { useTheme } from "../providers/theme-provider";
@@ -94,7 +94,6 @@ const SignUp = () => {
   const [image, setImage] = useState<string | null>(null);
   const [base64Image, setBase64Image] = useState<string | null>(null);
 
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -110,22 +109,20 @@ const SignUp = () => {
         const manipResult = await ImageManipulator.manipulateAsync(
           imageUri,
           [{ resize: { width: 512, height: 512 } }],
-          { 
-            compress: 0.5, 
+          {
+            compress: 0.5,
             format: ImageManipulator.SaveFormat.JPEG,
-            base64: true
+            base64: true,
           }
-
         );
 
         setImage(manipResult.uri);
         setBase64Image(manipResult.base64 ?? "");
-
       } catch (error) {
-        console.error('Ошибка обработки изображения:', error);
-        Toast.show('Не удалось обработать изображение', {
-          type: 'error',
-          placement: 'top',
+        console.error("Ошибка обработки изображения:", error);
+        Toast.show("Не удалось обработать изображение", {
+          type: "error",
+          placement: "top",
           duration: 3000,
         });
       }
@@ -138,14 +135,6 @@ const SignUp = () => {
         <Text style={styles.title}>{t("welcome")}</Text>
         <Text style={styles.subtitle}>{t("sign_up")}</Text>
 
-        <View>
-        <TouchableOpacity onPress={pickImage}>
-          <Text style={{ color: theme.colors.primary, paddingTop: 16 }}>
-            Change photo
-          </Text>
-        </TouchableOpacity>
-
-        </View>
         <Controller
           control={control}
           name="name"

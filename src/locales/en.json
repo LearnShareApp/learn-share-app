@@ -177,5 +177,6 @@
   "complaint_title": "Complaint",
   "complaint_success": "Complaint sent successfully",
   "complaint_error": "Error sending complaint",
-  "submit_complaint": "Submit complaint"
+  "submit_complaint": "Submit complaint",
+  "cancel": "Cancel"
 }

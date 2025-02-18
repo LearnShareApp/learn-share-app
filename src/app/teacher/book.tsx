@@ -28,9 +28,10 @@ const authSchema = zod.object({
 });
 
 const formatDateTime = (date: Date): string => {
-  return date.toLocaleString("srb-SRB", {
-    month: "2-digit",
-    day: "2-digit",
+  return date.toLocaleString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -116,7 +117,7 @@ export default function BookLesson() {
   useEffect(() => {
     if (availableTimes.length > 0) {
       const items = availableTimes.map((time) => ({
-        label: formatDateTime(time.datetime),
+        label: formatDateTime(new Date(time.datetime)),
         value: time.schedule_time_id,
       }));
       setTimeItems(items);

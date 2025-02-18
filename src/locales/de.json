@@ -177,5 +177,6 @@
   "complaint_title": "Beschwerde",
   "complaint_success": "Beschwerde erfolgreich gesendet",
   "complaint_error": "Fehler beim Senden der Beschwerde",
-  "submit_complaint": "Beschwerde einreichen"
+  "submit_complaint": "Beschwerde einreichen",
+  "cancel": "Abbrechen"
 }

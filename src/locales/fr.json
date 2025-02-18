@@ -174,5 +174,9 @@
   "complaint_title": "Bénéfice",
   "complaint_success": "Bénéfice envoyé avec succès",
   "complaint_error": "Erreur lors de l'envoi du bénéfice",
-  "submit_complaint": "Soumettre une plainte"
+  "submit_complaint": "Soumettre une plainte",
+  "cancel": "Annuler",
+  "teach_step1_desc": "Créez une vidéo YouTube décrivant votre compétence",
+  "teach_step2_desc": "Soumettez une demande d'enregistrement",
+  "teach_step3_desc": "Nous prendrons un peu de temps pour vérifier votre demande"
 }

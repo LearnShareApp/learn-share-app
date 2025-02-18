@@ -203,7 +203,7 @@ const EditProfile = () => {
         onPress={handleSubmit(handleSave)}
         disabled={formState.isSubmitting}
       >
-        <Text style={{ color: theme.colors.text, textAlign: "center" }}>
+        <Text style={{ color: "white", textAlign: "center" }}>
           {t("save_changes")}
         </Text>
       </TouchableOpacity>
